@@ -1,8 +1,8 @@
 import React from "react";
-import Map from "./component/Map";
+import Accudent from "./page/Accident";
 
 function App() {
-  return <Map />;
+  return <Accudent />;
 }
 
 export default App;
