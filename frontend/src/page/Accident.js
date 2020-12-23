@@ -5,7 +5,6 @@ import Map from "../component/Map";
 export default function Accident() {
   return (
     <div className="Card " style={{ paddingTop: 35 }}>
-      <div className="row"></div>
       <div className="row">
         <div className="col-md-2"></div>
         <div
