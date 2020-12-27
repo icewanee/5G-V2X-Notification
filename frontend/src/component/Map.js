@@ -15,10 +15,10 @@ function location() {
     >
       <Marker
         position={{ lat: 13.746791, lng: 100.535458 }}
-        icon={{
+        /* icon={{
           url: "https://www.flaticon.com/svg/static/icons/svg/3338/3338951.svg",
           scaledSize: new window.google.maps.Size(50, 50),
-        }}
+        }}*/
       >
         <InfoWindow position={{ lat: 13.746791, lng: 100.535458 }}>
           <div>Siam</div>

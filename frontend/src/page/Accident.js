@@ -30,7 +30,12 @@ export default function Accident() {
                   borderRadius: 10,
                   height: 50,
                 }}
-              ></div>
+              >
+                <h3
+                  className="card-title"
+                  style={{ fontFamily: "Courier New" }}
+                ></h3>
+              </div>
             </div>
             <div className="col-md-2" style={{ display: "flex" }}>
               <button
