@@ -1,5 +1,5 @@
-import React from "react";
-import { Player, ControlBar, ClosedCaptionButton } from "video-react";
+import React, { Component } from "react";
+import { Player } from "video-react";
 import video from "../pictureNvideo/travel_car.mp4";
 
 export default function Home() {
@@ -14,7 +14,6 @@ export default function Home() {
         <div className="col-md-7"></div>
       </div>
       <div className="row">
-        <video />
         <a target="_blank" href="http://videezy.com">
           Free Broll provided by Videezy!
         </a>

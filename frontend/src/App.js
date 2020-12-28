@@ -4,6 +4,8 @@ import { Route, Switch, Router } from "react-router-dom";
 import history from "./history";
 import Accident from "./page/Accident";
 import Home from "./page/Home";
+import video from "./component/video";
+import PageNotFound from "./page/PageNotFound";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/accident" component={Accident} />
+          <Route path="/test" component={video} />
+          <Route component={PageNotFound} />
         </Switch>
       </div>
     </Router>
