@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Player } from "video-react";
-import video from "../pictureNvideo/travel_car.mp4";
+import Video from "../component/Video";
 
 export default function Home() {
   return (
@@ -13,7 +13,26 @@ export default function Home() {
         </div>
         <div className="col-md-7"></div>
       </div>
-      <div className="row">
+      <div
+        className="col-md-12"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div style={{}}>
+          <Video />
+        </div>
+      </div>
+      <div
+        className="col-md-12"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <a target="_blank" href="http://videezy.com">
           Free Broll provided by Videezy!
         </a>

@@ -1,22 +1,18 @@
 import React, { Component } from "react";
 import { Player } from "video-react";
-import video from "../pictureNvideo/travel_car.mp4";
+import VideoPlayer from "react-video-js-player";
+import player from "../pictureNvideo/travel_car.mp4";
 
-export default function Home() {
+export default function Video() {
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "50vw",
-        height: "50vh",
       }}
     >
-      <Player State={{ autoPlay: true }}>
-        <source src={video} />
-      </Player>
+      <VideoPlayer src={player} muted={true} loop={true} />
     </div>
   );
-  this.Player.autoPlay = true;
 }
