@@ -13,8 +13,8 @@ function App() {
       <div>
         <Switch>
           <Route exact path="/home" component={Home} />
-          <Route path="/accident" component={Accident} />
-          <Route path="/login" component={Login} />
+          <Route exact path="/accident" component={Accident} />
+          <Route path="/" component={Login} />
           <Route component={PageNotFound} />
         </Switch>
       </div>
