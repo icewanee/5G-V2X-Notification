@@ -18,16 +18,15 @@ export default function Accident() {
       <div
         className="Card "
         style={{
-          paddingTop: 40,
+          paddingTop: 0,
           backgroundColor: "#55cbf2",
           borderRadius: 30,
-          paddingBottom: 40,
+          paddingBottom: 25,
         }}
       >
         <div className="row">
-          <div className="col-md-1"></div>
           <div
-            className="col-md-10"
+            className="col-md-12"
             style={{
               display: "flex",
               justifyContent: "center",
@@ -36,9 +35,8 @@ export default function Accident() {
           >
             <Map />
           </div>
-          <div className="col-md-1"></div>
         </div>
-        <div className="row" style={{ paddingTop: 10 }}>
+        <div className="row" style={{ paddingTop: 25 }}>
           <div className="col-md-1"></div>
           <div className="col-md-10 ">
             <div className="row">
