@@ -4,7 +4,6 @@ import { Route, Switch, Router } from "react-router-dom";
 import history from "./history";
 import Accident from "./page/Accident";
 import Home from "./page/Home";
-import Video from "./component/Video";
 import PageNotFound from "./page/PageNotFound";
 import Login from "./page/Login";
 
@@ -16,7 +15,6 @@ function App() {
           <Route exact path="/home" component={Home} />
           <Route path="/accident" component={Accident} />
           <Route path="/login" component={Login} />
-          <Route path="/test" component={Video} />
           <Route component={PageNotFound} />
         </Switch>
       </div>

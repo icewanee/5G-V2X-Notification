@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Player } from "video-react";
 import red from "../pictureNvideo/redd.png";
 
 export default function Home() {
