@@ -13,7 +13,7 @@ function App() {
     <Router history={history}>
       <div>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/home" component={Home} />
           <Route path="/accident" component={Accident} />
           <Route path="/login" component={Login} />
           <Route path="/test" component={Video} />
