@@ -10,9 +10,19 @@ export default function Video() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        width: "80vw",
+        height: "80vh",
       }}
     >
-      <VideoPlayer src={player} muted={true} loop={true} />
+      <VideoPlayer
+        src={player}
+        muted={true}
+        loop={true}
+        style={{
+          width: "80vw",
+          height: "80vh",
+        }}
+      />
     </div>
   );
 }

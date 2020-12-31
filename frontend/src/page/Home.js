@@ -7,14 +7,14 @@ export default function Home() {
     <div className="Card ">
       <br />
       <div className="row">
-        <div className="col-md-5">
+        <div className="col-md-8">
           <h1 className="card-title" style={{ fontFamily: "Courier New" }}>
             - Welcome to 5G-V2X -
           </h1>
           <br />
+          <br />
         </div>
-        <div className="col-md-7"></div>
-
+        <div className="col-md-4"></div>
         <div
           className="col-md-12"
           style={{
@@ -23,9 +23,7 @@ export default function Home() {
             alignItems: "center",
           }}
         >
-          <div>
-            <Video />
-          </div>
+          <Video />
         </div>
         <div
           className="col-md-12"
