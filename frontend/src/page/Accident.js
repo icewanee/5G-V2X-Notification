@@ -60,14 +60,19 @@ export default function Accident() {
               <div className="col-md-2" style={{ display: "flex" }}>
                 <button
                   type="button"
-                  class="btn btn-dark"
+                  class="btn "
                   style={{
                     paddingLeft: 30,
                     paddingRight: 30,
+                    borderRadius: 30,
+                    fontSize: 18,
+                    backgroundColor: "#078ab5",
+                    border: " solid black",
+                    color: "white",
                     marginLeft: "auto",
                   }}
                 >
-                  back
+                  Back
                 </button>
               </div>
             </div>

@@ -25,16 +25,56 @@ export default function Home() {
         }}
       >
         <div className="row">
-          <div className="col-md-8 ">
+          <div className="col-md-7 ">
             <h1
               className="card-title"
-              style={{ fontFamily: "Courier New", paddingLeft: 30 }}
+              style={{
+                fontFamily: "Courier New",
+                fontSize: 45,
+                fontWeight: "bold",
+                paddingLeft: 30,
+              }}
             >
-              - Welcome to 5G-V2X -
+              Welcome to 5G-V2X
             </h1>
           </div>
-          <div className="col-md-2 "></div>
-          <div className="col-md-2 "></div>
+          <div className="col-md-5 ">
+            <button
+              type="button"
+              class="btn "
+              style={{
+                paddingLeft: 30,
+                paddingRight: 30,
+                paddingTop: 15,
+                paddingBottom: 15,
+                borderRadius: 50,
+                fontSize: 20,
+                backgroundColor: "#078ab5",
+                border: " solid white",
+                color: "white",
+              }}
+            >
+              Map
+            </button>{" "}
+            <button
+              type="button"
+              class="btn "
+              style={{
+                paddingLeft: 30,
+                paddingRight: 30,
+                paddingTop: 15,
+                paddingBottom: 15,
+                borderRadius: 50,
+                fontSize: 20,
+                backgroundColor: "#078ab5",
+                border: " solid white",
+                color: "white",
+                marginRight: "auto",
+              }}
+            >
+              Logout
+            </button>
+          </div>
         </div>
         <div className="row">
           <div className="col-md-10" style={{ width: "90vw", height: "60vh" }}>
