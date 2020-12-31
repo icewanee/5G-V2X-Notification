@@ -76,7 +76,12 @@ export default function Home() {
                     type="text"
                     id="userName"
                     className="field"
-                    style={{ width: 600, height: 50, borderRadius: 20 }}
+                    style={{
+                      width: 600,
+                      height: 50,
+                      borderRadius: 20,
+                      border: " solid white",
+                    }}
                     /*onChange={(e) => {
                     this.setState({ userName: e.target.value });
                   }}*/
@@ -89,7 +94,10 @@ export default function Home() {
               <div className="col-md-8">
                 <label
                   className="text"
-                  style={{ fontFamily: "Courier New", fontSize: 30 }}
+                  style={{
+                    fontFamily: "Courier New",
+                    fontSize: 30,
+                  }}
                 >
                   password
                   <br />
@@ -97,7 +105,12 @@ export default function Home() {
                     type="password"
                     id="password"
                     className="field"
-                    style={{ width: 600, height: 50, borderRadius: 20 }}
+                    style={{
+                      width: 600,
+                      height: 50,
+                      borderRadius: 20,
+                      border: " solid white",
+                    }}
                     /*onChange={(e) => {
                     this.setState({ password: e.target.value });
                   }}*/
