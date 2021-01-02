@@ -89,7 +89,6 @@ export class Accident extends Component {
     );
   }
   onClick = async (page) => {
-    console.log("jj");
     history.push(page);
   };
 }

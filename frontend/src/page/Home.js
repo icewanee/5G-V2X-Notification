@@ -54,6 +54,8 @@ export class Home extends Component {
                   paddingTop: 15,
                   paddingBottom: 15,
                   borderRadius: 50,
+                  marginLeft: 45,
+                  marginRight: 25,
                   fontSize: 20,
                   backgroundColor: "#078ab5",
                   border: " solid white",
@@ -96,7 +98,6 @@ export class Home extends Component {
     );
   }
   onClick = async (page) => {
-    console.log("jj");
     history.push(page);
   };
 }
