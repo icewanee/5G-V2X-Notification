@@ -30,16 +30,6 @@ module.exports = (app,setid,getid,client_redis,pushDataToKafka,setFirstTime,geti
         client_redis.keys('*', function (err, keys) {
           if (err) return console.log(err);
           if(keys){
-              // async.map(keys, function(key, cb) {
-              //     client_redis.get(key, function (error, value) {
-              //         if (error) return cb(error); 
-              //         cb(null, JSON.parse(value));
-              //     }); 
-              // }, function (error, results) {
-              //     if (error) return console.log(error);
-              //     console.log(results);
-              //     res.json({data:results});
-              // });
               res.json({data:keys});
       
           }

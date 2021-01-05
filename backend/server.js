@@ -15,75 +15,75 @@ const port = 4000;
 let isFirstTime = true
 
 //kafka
-const Producer = Kafka.Producer;
-const client = new Kafka.KafkaClient({kafkaHost: config.KafkaHost, idleConnection: 24 * 60 * 60 * 1000});
-const client_in_car = new Kafka.KafkaClient({kafkaHost: config.KafkaHostInCar, idleConnection: 24 * 60 * 60 * 1000});
-const producer = new Producer(client_in_car,  {requireAcks: 0, partitionerType: 2});
-const Consumer = Kafka.Consumer;
-const time = config.TimeDisappearAcs
+// const Producer = Kafka.Producer;
+// const client = new Kafka.KafkaClient({kafkaHost: config.KafkaHost, idleConnection: 24 * 60 * 60 * 1000});
+// const client_in_car = new Kafka.KafkaClient({kafkaHost: config.KafkaHostInCar, idleConnection: 24 * 60 * 60 * 1000});
+// const producer = new Producer(client_in_car,  {requireAcks: 0, partitionerType: 2});
+// const Consumer = Kafka.Consumer;
+// const time = config.TimeDisappearAcs
 
-let consumer = new Consumer(
-  client,
-  [{ topic: config.KafkaTopic, partition: 0 }],
-  {
-    autoCommit: true,
-    fetchMaxWaitMs: 1000,
-    fetchMaxBytes: 1024 * 1024,
-    encoding: 'utf8',
-    // fromOffset: false
-  }
-);
-consumer.on('message', async function(message) {
-  const data = JSON.parse(message.value);
-  const condition = data.condition;
-  console.log(data);
-  if(!isFirstTime && condition){
-    if(condition.trim() == "ACS"){
-      let value = {
-        'lat' : data.lat,
-        "lng" : data.lng
-      }
-      client_redis.setex(JSON.stringify(value),time,"", function(err, reply){
-        if(err){
-          console.log(err);
-        }
-        id = id +1;
-        console.log(reply);
-      });
-    }  
-    else {
-      console.log('kafka not in condition', data );
-    }
-  }
-})
+// let consumer = new Consumer(
+//   client,
+//   [{ topic: config.KafkaTopic, partition: 0 }],
+//   {
+//     autoCommit: true,
+//     fetchMaxWaitMs: 1000,
+//     fetchMaxBytes: 1024 * 1024,
+//     encoding: 'utf8',
+//     // fromOffset: false
+//   }
+// );
+// consumer.on('message', async function(message) {
+//   const data = JSON.parse(message.value);
+//   const condition = data.condition;
+//   console.log(data);
+//   if(!isFirstTime && condition){
+//     if(condition.trim() == "ACS"){
+//       let value = {
+//         'lat' : data.lat,
+//         "lng" : data.lng
+//       }
+//       client_redis.setex(JSON.stringify(value),time,"", function(err, reply){
+//         if(err){
+//           console.log(err);
+//         }
+//         id = id +1;
+//         console.log(reply);
+//       });
+//     }  
+//     else {
+//       console.log('kafka not in condition', data );
+//     }
+//   }
+// })
 
-consumer.on('error', function(error) {
-  console.log('error kafka consumer', error);
-});
+// consumer.on('error', function(error) {
+//   console.log('error kafka consumer', error);
+// });
 
 
-producer.on('ready',async function() {
+// producer.on('ready',async function() {
 
-  console.log('Kafka Producer is Ready');
-})
+//   console.log('Kafka Producer is Ready');
+// })
 
-producer.on('error', function(err) {
-  console.log(err);
-  console.log('Kafka Producer is error');
-  throw err;
-})
+// producer.on('error', function(err) {
+//   console.log(err);
+//   console.log('Kafka Producer is error');
+//   throw err;
+// })
 
 
 const pushDataToKafka =(dataToPush) => {
   let payloadToKafkaTopic = [{topic: config.KafkaTopicInCar, messages: JSON.stringify(dataToPush) }];
   console.log(payloadToKafkaTopic);
-  producer.send(payloadToKafkaTopic,(err,data) => {
-    if(err) {
-        console.log('kafka-producer failed')
-    }
+  // producer.send(payloadToKafkaTopic,(err,data) => {
+  //   if(err) {
+  //       console.log('kafka-producer failed')
+  //   }
 
-    console.log('kafka-producer success');
-  })
+  //   console.log('kafka-producer success');
+  // })
 };
 
  
