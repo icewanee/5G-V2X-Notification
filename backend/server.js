@@ -5,18 +5,11 @@ const methodOverride = require('method-override');
 const redis = require('redis');
 const Kafka = require('kafka-node');
 const config  = require('./config');
-const async = require("async");
 
 
 // Set Port
 const port = 4000;
-// Create Redis Client
-let client_redis = redis.createClient();
-let id = 0;
 
-client_redis.on('connect', function(){
-  console.log('Connected to Redis...');
-});
 
 // set isFirstTime
 let isFirstTime = true
@@ -63,6 +56,7 @@ consumer.on('message', async function(message) {
     }
   }
 })
+
 consumer.on('error', function(error) {
   console.log('error kafka consumer', error);
 });
@@ -107,58 +101,25 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 // methodOverride
 app.use(methodOverride('_method'));
+// Create Redis Client
+let client_redis = redis.createClient();
+let id = 0;
+const getid = ()=>{
+    return id
+}
+const setid = (newID)=>{
+    id = newID
+}
+const setFirstTime = ()=>{
+    isFirstTime = false
+}
+const getisFirstTime = ()=>{
+    return isFirstTime
+}
 
-app.get('/map', function(req, res, next){
-  //console.log(client_redis.hgetall())
-  if(isFirstTime){
-    //const url = `${config('CloundSever')}/accident`
-    //const res = await axios.get(url) //
-    let res = [{"lat": 123,"lng":123},{"lat":12,"lng":1}]
-    async.map(res, function(pos, cb) {
-      console.log(pos,id)
-      client_redis.setex(JSON.stringify(pos),time,"", function(err, reply){
-        if(err) return cb(err);
-        cb(null, "success 1st map");
-      });
-      id = id +1;
-   }, function (error, results) {
-      if (error) return console.log(error);
-      console.log(results);
-      isFirstTime = false
-   });
-  }
-  client_redis.keys('*', function (err, keys) {
-    if (err) return console.log(err);
-    if(keys){
-        // async.map(keys, function(key, cb) {
-        //     client_redis.get(key, function (error, value) {
-        //         if (error) return cb(error); 
-        //         cb(null, JSON.parse(value));
-        //     }); 
-        // }, function (error, results) {
-        //     if (error) return console.log(error);
-        //     console.log(results);
-        //     res.json({data:results});
-        // });
-        res.json({data:keys});
-
-    }
-  });   
-});
-// //for test only
-// app.get('/user', function(req, res, next){
-//   pushDataToKafka({
-//       'condition': 'set_account',
-//       'username': "driver"
-//   })
-// });
-
-app.post('/user', function(req, res, next){
-  let username = req.body.username;
-  pushDataToKafka({
-      'condition': 'set_account',
-      'username': username,
-  })
+client_redis.on('connect', function(){
+  console.log('Connected to Redis...');
+  require('./routes')(app,setid,getid,client_redis,pushDataToKafka,setFirstTime,getisFirstTime);
 });
 
 
