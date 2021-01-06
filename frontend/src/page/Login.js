@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
+// uninstall yet
+//import axios from "axios";
 import history from "../history";
 
 export class Login extends Component {
@@ -174,15 +175,47 @@ export class Login extends Component {
 
   onClickLogin = async (event) => {
     event.preventDefault();
+    //localStorage.setItem("isLogin", false);
+    //console.log(localStorage);
+    history.push("/home");
+    //window.location.reload();
+
+    /*onClickLogin = async (event) => {
+    event.preventDefault();
     let username = this.state.username;
     let password = this.state.password;
     console.log(this.state);
-    let data = await axios.post(`https://localhost:4000/login`, {
-      username: username,
-      password: password,
-    });
-    console.log(data);
+    try {
+      let data = await axios
+        .post(`https://localhost:4000/login`, {
+          username: username,
+          password: password,
+        })
+        .then((response) => {
+          console.log("response: ", response);
+          // do something about response
+          // islogin , username in localStorage
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      const response = await axios
+        .get("https://localhost:4000/loginRetrieveData")
+        .then((response) => {
+          console.log("response: ", response);
+          // do something about response
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+      //if usernams,passwd are correct
+    } catch (error) {
+      console.error(error);
+    }
     history.push("/home");
+    window.location.reload();*/
+
     /*let username = this.state.username;
     let password = this.state.password;
     let data = await Util.login(username, password);
