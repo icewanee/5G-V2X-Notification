@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import history from "../history";
 
 export class Login extends Component {
@@ -86,7 +87,7 @@ export class Login extends Component {
                     <br />
                     <input
                       type="text"
-                      id="userName"
+                      id="username"
                       className="field"
                       style={{
                         width: 600,
@@ -95,7 +96,7 @@ export class Login extends Component {
                         border: " solid white",
                       }}
                       onChange={(e) => {
-                        this.setState({ userName: e.target.value });
+                        this.setState({ username: e.target.value });
                       }}
                       required
                     />
@@ -173,6 +174,14 @@ export class Login extends Component {
 
   onClickLogin = async (event) => {
     event.preventDefault();
+    let username = this.state.username;
+    let password = this.state.password;
+    console.log(this.state);
+    let data = await axios.post(`https://localhost:4000/login`, {
+      username: username,
+      password: password,
+    });
+    console.log(data);
     history.push("/home");
     /*let username = this.state.username;
     let password = this.state.password;
