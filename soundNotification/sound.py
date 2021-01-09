@@ -1,20 +1,15 @@
 #need to install GPIO Zero in raspberry pi before using.
-
-from gpiozero import Button
-
-
-
+isAlert = False
 
 def soundAlert():
+    print("hh")
 # เวลาเริ่ม
 # เปิดเสียง
 # รอปุ่มกด
 # เวลาปิดเสียง
 
 
-def DrowsinessAlert():
- # drowsiness use this func to alert driver
- 
- #call soundAlert
- #รับค่าซ้ำตอนแจ้งเตือนอยู่
-
+def notification():
+    if(not isAlert):
+        isAlert = True
+        
