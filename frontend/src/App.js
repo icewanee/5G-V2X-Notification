@@ -24,8 +24,16 @@ class App extends Component {
       <Router history={history}>
         <div>
           <Switch>
-            <Route exact path="/home" component={Home} />
-            <Route exact path="/accident" component={Accident} />
+            {this.loggedIn() ? (
+              <Route exact path="/home" component={Login} />
+            ) : (
+              <Route exact path="/home" component={Home} />
+            )}
+            {this.loggedIn() ? (
+              <Route exact path="/accident" component={PageNotFound} />
+            ) : (
+              <Route exact path="/accident" component={Accident} />
+            )}
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
@@ -36,18 +44,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*{
-  this.loggedIn() ? (
-    <Route exact path="/home" component={Home} />
-  ) : (
-    <Route exact path="/home" component={PageNotFound} />
-  );
-}
-{
-  this.loggedIn() ? (
-    <Route exact path="/accident" component={Accident} />
-  ) : (
-    <Route exact path="/accident" component={PageNotFound} />
-  );
-}*/

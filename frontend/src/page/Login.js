@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-// uninstall yet
-//import axios from "axios";
+import axios from "axios";
 import history from "../history";
 
 export class Login extends Component {
@@ -173,26 +172,25 @@ export class Login extends Component {
     );
   }
 
-  onClickLogin = async (event) => {
+  /*onClickLogin = async (event) => {
     event.preventDefault();
     //localStorage.setItem("isLogin", false);
     //console.log(localStorage);
     history.push("/home");
-    //window.location.reload();
+    //window.location.reload();*/
 
-    /*onClickLogin = async (event) => {
+  /*onClickLogin = async (event) => {
     event.preventDefault();
     let username = this.state.username;
     let password = this.state.password;
     console.log(this.state);
     try {
-      let data = await axios
-        .post(`https://localhost:4000/login`, {
-          username: username,
-          password: password,
-        })
-        .then((response) => {
-          console.log("response: ", response);
+      const data = await axios.post(`http://127.0.0.1:4000/login`, {
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+          console.log("response: ", res);
           // do something about response
           // islogin , username in localStorage
         })
@@ -208,28 +206,37 @@ export class Login extends Component {
         .catch((err) => {
           console.error(err);
         });
-
+      //history.push("/home");
+      //window.location.reload();
       //if usernams,passwd are correct
     } catch (error) {
       console.error(error);
-    }
-    history.push("/home");
-    window.location.reload();*/
-
-    /*let username = this.state.username;
-    let password = this.state.password;
-    let data = await Util.login(username, password);
-    console.log(data);
-    if (!data.success) {
-      window.alert(data.message);
-      this.setState({ password: "" });
-    } else {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", data.user.username);
-
-      history.push("/post");
-      window.location.reload();
     }*/
+
+  onClickLogin = async (event) => {
+    event.preventDefault();
+    let username = this.state.username;
+    let password = this.state.password;
+    console.log(this.state);
+    await axios({
+      method: "POST",
+      url: "http://127.0.0.1:4000/login",
+      headers: {},
+      data: {
+        username: username,
+        password: password,
+      },
+    })
+      .then((res) => {
+        console.log("res", res.data.islogin);
+        localStorage.setItem("islogin", false);
+      })
+      .catch((err) => {
+        console.log("error in request", err);
+      });
+    ///////////////////////////////// retrieve data
+    history.push("/home");
+    window.location.reload();
   };
 }
 export default Login;

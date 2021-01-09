@@ -5,6 +5,7 @@ const methodOverride = require("method-override");
 const redis = require("redis");
 const Kafka = require("kafka-node");
 const config = require("./config");
+var cors = require("cors");
 
 // Set Port
 const port = 4000;
@@ -90,6 +91,8 @@ const app = express();
 // View Engine\
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+
+app.use(cors());
 
 // body-parser
 app.use(bodyParser.json());

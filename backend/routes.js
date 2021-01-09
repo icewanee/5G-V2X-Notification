@@ -15,7 +15,7 @@ module.exports = (
 ) => {
   app.get("/map", function (req, res) {
     //console.log(client_redis.hgetall())
-    if (getisFirstTime) {
+    if (getisFirstTime()) {
       //const url = `${config('CloundSever')}/accident`
       //const res = await axios.get(url) //
       let res = [
@@ -67,5 +67,17 @@ module.exports = (
       condition: "set_account",
       username: username,
     });
+  });
+
+  app.post("/", function (req, res) {
+    // do something w/ req.body or req.files
+  });
+
+  app.post("/login", async (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    console.log(username);
+    console.log(password);
+    res.json({ islogin: true, username: username });
   });
 };
