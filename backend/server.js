@@ -1,18 +1,16 @@
-const express = require('express');
-const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-const redis = require('redis');
-const Kafka = require('kafka-node');
-const config  = require('./config');
-
+const express = require("express");
+const exphbs = require("express-handlebars");
+const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
+const redis = require("redis");
+const Kafka = require("kafka-node");
+const config = require("./config");
 
 // Set Port
 const port = 4000;
 
-
 // set isFirstTime
-let isFirstTime = true
+let isFirstTime = true;
 
 //kafka
 // const Producer = Kafka.Producer;
@@ -50,7 +48,7 @@ let isFirstTime = true
 //         id = id +1;
 //         console.log(reply);
 //       });
-//     }  
+//     }
 //     else {
 //       console.log('kafka not in condition', data );
 //     }
@@ -60,7 +58,6 @@ let isFirstTime = true
 // consumer.on('error', function(error) {
 //   console.log('error kafka consumer', error);
 // });
-
 
 // producer.on('ready',async function() {
 
@@ -73,9 +70,10 @@ let isFirstTime = true
 //   throw err;
 // })
 
-
-const pushDataToKafka =(dataToPush) => {
-  let payloadToKafkaTopic = [{topic: config.KafkaTopicInCar, messages: JSON.stringify(dataToPush) }];
+const pushDataToKafka = (dataToPush) => {
+  let payloadToKafkaTopic = [
+    { topic: config.KafkaTopicInCar, messages: JSON.stringify(dataToPush) },
+  ];
   console.log(payloadToKafkaTopic);
   // producer.send(payloadToKafkaTopic,(err,data) => {
   //   if(err) {
@@ -86,44 +84,48 @@ const pushDataToKafka =(dataToPush) => {
   // })
 };
 
- 
-
 // Init app
 const app = express();
 
 // View Engine\
-app.engine('handlebars', exphbs({defaultLayout:'main'}));
-app.set('view engine', 'handlebars');
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // methodOverride
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 // Create Redis Client
 let client_redis = redis.createClient();
 let id = 0;
-const getid = ()=>{
-    return id
-}
-const setid = (newID)=>{
-    id = newID
-}
-const setFirstTime = ()=>{
-    isFirstTime = false
-}
-const getisFirstTime = ()=>{
-    return isFirstTime
-}
+const getid = () => {
+  return id;
+};
+const setid = (newID) => {
+  id = newID;
+};
+const setFirstTime = () => {
+  isFirstTime = false;
+};
+const getisFirstTime = () => {
+  return isFirstTime;
+};
 
-client_redis.on('connect', function(){
-  console.log('Connected to Redis...');
-  require('./routes')(app,setid,getid,client_redis,pushDataToKafka,setFirstTime,getisFirstTime);
+client_redis.on("connect", function () {
+  console.log("Connected to Redis...");
+  require("./routes")(
+    app,
+    setid,
+    getid,
+    client_redis,
+    pushDataToKafka,
+    setFirstTime,
+    getisFirstTime
+  );
 });
 
-
-
-app.listen(port, function(){
-  console.log('Server started on port '+port);
+app.listen(port, function () {
+  console.log("Server started on port " + port);
 });
