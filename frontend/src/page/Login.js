@@ -228,15 +228,24 @@ export class Login extends Component {
       },
     })
       .then((res) => {
-        console.log("res", res.data.islogin);
-        localStorage.setItem("islogin", false);
+        localStorage.setItem("islogin", res.data.islogin);
+        console.log(res);
+        console.log(localStorage);
+        if (localStorage.getItem("islogin") === "true") {
+          console.log("this", localStorage.getItem("islogin"));
+          history.push("/home");
+        } else window.location.reload();
       })
       .catch((err) => {
         console.log("error in request", err);
       });
-    ///////////////////////////////// retrieve data
-    history.push("/home");
-    window.location.reload();
+    //history.push("/home");
+    //window.location.reload();
   };
+
+  componentDidMount() {
+    localStorage.clear();
+    console.log("first", localStorage);
+  }
 }
 export default Login;

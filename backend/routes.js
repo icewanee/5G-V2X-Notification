@@ -53,21 +53,6 @@ module.exports = (
       }
     });
   });
-  // //for test only
-  // app.get('/user', function(req, res, next){
-  //   pushDataToKafka({
-  //       'condition': 'set_account',
-  //       'username': "driver"
-  //   })
-  // });
-
-  app.post("/user", function (req, res) {
-    let username = req.body.username;
-    pushDataToKafka({
-      condition: "set_account",
-      username: username,
-    });
-  });
 
   app.post("/", function (req, res) {
     // do something w/ req.body or req.files
@@ -78,6 +63,12 @@ module.exports = (
     let password = req.body.password;
     console.log(username);
     console.log(password);
+    //Tan
+    //if canlogin
+    pushDataToKafka({
+      condition: "set_account",
+      username: username,
+    });
     res.json({ islogin: true, username: username });
   });
 };

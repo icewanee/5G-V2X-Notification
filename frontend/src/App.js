@@ -16,7 +16,7 @@ class App extends Component {
   }
 
   loggedIn() {
-    return localStorage.getItem("isLogin");
+    return localStorage.getItem("islogin");
   }
 
   render() {
@@ -25,15 +25,16 @@ class App extends Component {
         <div>
           <Switch>
             {this.loggedIn() ? (
-              <Route exact path="/home" component={Login} />
+              <Route path="/home" component={Home} />
             ) : (
-              <Route exact path="/home" component={Home} />
+              <Route path="/home" component={Login} />
             )}
             {this.loggedIn() ? (
-              <Route exact path="/accident" component={PageNotFound} />
+              <Route path="/accident" component={Accident} />
             ) : (
-              <Route exact path="/accident" component={Accident} />
+              <Route path="/accident" component={PageNotFound} />
             )}
+
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
@@ -44,3 +45,13 @@ class App extends Component {
 }
 
 export default App;
+/*{localStorage.getItem("islogin") ? (
+              <Route exact path="/home" component={Home} />
+            ) : (
+              <Route exact path="/home" component={Login} />
+            )}
+            {localStorage.getItem("islogin") ? (
+              <Route exact path="/accident" component={Accident} />
+            ) : (
+              <Route exact path="/accident" component={PageNotFound} />
+            )}*/

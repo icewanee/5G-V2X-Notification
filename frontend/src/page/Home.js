@@ -98,6 +98,12 @@ export class Home extends Component {
     );
   }
   onClick = async (page) => {
+    //page.preventDefault();
+    if (page == "/") {
+      console.log(localStorage);
+      localStorage.setItem("islogin", false);
+      console.log(localStorage);
+    }
     history.push(page);
   };
 }
