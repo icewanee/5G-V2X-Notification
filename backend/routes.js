@@ -19,8 +19,8 @@ module.exports = (
       //const url = `${config('CloundSever')}/accident`
       //const res = await axios.get(url) //
       let res = [
-        { lat: 123, lng: 123 },
-        { lat: 12, lng: 1 },
+        { lat: 13.746791, lng: 100.535458 },
+        { lat: 13.74, lng: 100.535458 },
       ];
       let id = getid();
       async.map(
