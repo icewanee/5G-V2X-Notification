@@ -234,6 +234,7 @@ export class Login extends Component {
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
           history.push("/home");
+          window.location.reload();
         } else window.location.reload();
       })
       .catch((err) => {

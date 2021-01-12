@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { GoogleMap, withScriptjs, withGoogleMap } from "react-google-maps";
 import Map from "../component/Map";
 import history from "../history";
+import axios from "axios";
 
 export class Accident extends Component {
   constructor(props) {
@@ -91,5 +92,20 @@ export class Accident extends Component {
   onClick = async (page) => {
     history.push(page);
   };
+
+  componentDidMount() {
+    axios({
+      method: "GET",
+      url: "http://127.0.0.1:4000/map",
+      headers: {},
+      data: {},
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("error in request", err);
+      });
+  }
 }
 export default Accident;
