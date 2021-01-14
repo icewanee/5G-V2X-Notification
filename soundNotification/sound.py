@@ -1,18 +1,22 @@
 #import multiprocessing
 import time
+#import pygame
+#from pygame import mixer
+import keyboard 
 
-isAlert = False
 
 def soundAlert():
     print('sound  here')
-
+    #mixer.music.load('loving.mp3')
+    #mixer.music.play(-1)
+    keyboard.wait('Ctrl') 
 
 
 def startAlert():
     start = time.time()
     soundAlert()
     end = time.time()
-    total = start - end
+    total =  end - start
     print(total)
 # เปิดเสียง
 # รอปุ่มกด
@@ -23,6 +27,8 @@ def notification():
     if(not isAlert):
         isAlert = True
         startAlert()
+    return 0
 
-
-notification()
+isAlert = False
+#pygame.init()
+start = notification()
