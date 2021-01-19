@@ -132,3 +132,35 @@ client_redis.on("connect", function () {
 app.listen(port, function () {
   console.log("Server started on port " + port);
 });
+
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+//const soc = require("socket.io");
+//var io = soc.connect("http://localhost:3000");
+// รอการ connect จาก client
+
+io.on("connection", (socket) => {
+  console.log("user connected");
+
+  // เมื่อ Client ตัดการเชื่อมต่อ
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  // ส่งข้อมูลไปยัง Client ทุกตัวที่เขื่อมต่อแบบ Realtime
+  socket.on("sent-message", function (message) {
+    io.sockets.emit("new-message", message);
+  });
+});
+
+var t = 2;
+var test = [{ lat: 13.746791, lng: 100.535458 }];
+app.get("/uu", function (req, res) {
+  if (t == 2) {
+    test = [{ lat: 13, lng: 100 }];
+    t = 1;
+  } else {
+    test = [{ lat: 8, lng: 4 }];
+    t = 2;
+  }
+});

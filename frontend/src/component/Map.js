@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import socketIOClient from "socket.io-client";
 
 import {
   GoogleMap,
@@ -43,12 +44,36 @@ const location = (props) => {
 };
 
 const WrappedMap = withScriptjs(withGoogleMap(location));
+const ENDPOINT = "http://127.0.0.1:4000";
 
 export class Map extends Component {
   constructor(props) {
     super(props);
-    this.state = { accidentlocation: [] };
+    this.state = {
+      accidentlocation: [],
+      input: "",
+      message: [],
+    };
   }
+
+  response = () => {
+    const socket = socketIOClient(ENDPOINT);
+    //this.socket = openSocket("http://localhost:4000");
+    socket.on("new-message", (message) => {
+      console.log(message);
+    });
+    /*const { endpoint, message } = this.state;
+    const temp = message;
+    const socket = socketIOClient(endpoint);
+    socket.on("new-message", (messageNew) => {
+      temp.push(messageNew);
+      this.setState({ message: temp });
+      console.log("here", this.state);
+    });*/
+
+    console.log("gg");
+  };
+
   render() {
     return (
       <div style={{ width: "80vw", height: "65vh" }}>
@@ -79,6 +104,7 @@ export class Map extends Component {
       .catch((err) => {
         console.log("error in request", err);
       });
+    this.response();
   }
 }
 
@@ -106,3 +132,7 @@ export default Map;
       <Marker
         position={{ lat: 13.740522160240175, lng: 100.53447914292413 }}
       ></Marker>*/
+
+/*{props.message.map((x) => (
+        <Marker position={JSON.parse(x)}></Marker>
+      ))}*/
