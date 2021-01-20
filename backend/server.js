@@ -14,75 +14,43 @@ const port = 4000;
 let isFirstTime = true;
 
 //kafka
-// const Producer = Kafka.Producer;
-// const client = new Kafka.KafkaClient({kafkaHost: config.KafkaHost, idleConnection: 24 * 60 * 60 * 1000});
-// const client_in_car = new Kafka.KafkaClient({kafkaHost: config.KafkaHostInCar, idleConnection: 24 * 60 * 60 * 1000});
-// const producer = new Producer(client_in_car,  {requireAcks: 0, partitionerType: 2});
-// const Consumer = Kafka.Consumer;
-// const time = config.TimeDisappearAcs
+const time = config.TimeDisappearAcs;
+const Producer = Kafka.Producer;
+const client = new Kafka.KafkaClient({
+  kafkaHost: config.KafkaHost,
+  idleConnection: 24 * 60 * 60 * 1000,
+});
+const client_in_car = new Kafka.KafkaClient({
+  kafkaHost: config.KafkaHostInCar,
+  idleConnection: 24 * 60 * 60 * 1000,
+});
+const producer = new Producer(client_in_car, {
+  requireAcks: 0,
+  partitionerType: 2,
+});
 
-// let consumer = new Consumer(
-//   client,
-//   [{ topic: config.KafkaTopic, partition: 0 }],
-//   {
-//     autoCommit: true,
-//     fetchMaxWaitMs: 1000,
-//     fetchMaxBytes: 1024 * 1024,
-//     encoding: 'utf8',
-//     // fromOffset: false
-//   }
-// );
-// consumer.on('message', async function(message) {
-//   const data = JSON.parse(message.value);
-//   const condition = data.condition;
-//   console.log(data);
-//   if(!isFirstTime && condition){
-//     if(condition.trim() == "ACS"){
-//       let value = {
-//         'lat' : data.lat,
-//         "lng" : data.lng
-//       }
-//       client_redis.setex(JSON.stringify(value),time,"", function(err, reply){
-//         if(err){
-//           console.log(err);
-//         }
-//         id = id +1;
-//         console.log(reply);
-//       });
-//     }
-//     else {
-//       console.log('kafka not in condition', data );
-//     }
-//   }
-// })
+producer.on("ready", async function () {
+  console.log("Kafka Producer is Ready");
+});
 
-// consumer.on('error', function(error) {
-//   console.log('error kafka consumer', error);
-// });
-
-// producer.on('ready',async function() {
-
-//   console.log('Kafka Producer is Ready');
-// })
-
-// producer.on('error', function(err) {
-//   console.log(err);
-//   console.log('Kafka Producer is error');
-//   throw err;
-// })
+producer.on("error", function (err) {
+  console.log(err);
+  console.log("Kafka Producer is error");
+  throw err;
+});
 
 const pushDataToKafka = (dataToPush) => {
   let payloadToKafkaTopic = [
     { topic: config.KafkaTopicInCar, messages: JSON.stringify(dataToPush) },
   ];
   console.log(payloadToKafkaTopic);
-  // producer.send(payloadToKafkaTopic,(err,data) => {
-  //   if(err) {
-  //       console.log('kafka-producer failed')
-  //   }
+  producer.send(payloadToKafkaTopic, (err, data) => {
+    if (err) {
+      console.log("kafka-producer failed");
+    }
 
-  //   console.log('kafka-producer success');
-  // })
+    console.log("kafka-producer success");
+  });
 };
 
 // Init app
@@ -129,38 +97,82 @@ client_redis.on("connect", function () {
   );
 });
 
-app.listen(port, function () {
-  console.log("Server started on port " + port);
+//socket
+let server = require("http").Server(app);
+let io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+  transports: ["websocket", "polling", "flashsocket"],
 });
 
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
-//const soc = require("socket.io");
-//var io = soc.connect("http://localhost:3000");
-// รอการ connect จาก client
+server.listen(port, function () {
+  console.log("Server started on port " + port);
+});
 
 io.on("connection", (socket) => {
   console.log("user connected");
 
-  // เมื่อ Client ตัดการเชื่อมต่อ
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
 
-  // ส่งข้อมูลไปยัง Client ทุกตัวที่เขื่อมต่อแบบ Realtime
   socket.on("sent-message", function (message) {
-    io.sockets.emit("new-message", message);
+    console.log(message);
   });
 });
 
-var t = 2;
-var test = [{ lat: 13.746791, lng: 100.535458 }];
-app.get("/uu", function (req, res) {
-  if (t == 2) {
-    test = [{ lat: 13, lng: 100 }];
-    t = 1;
-  } else {
-    test = [{ lat: 8, lng: 4 }];
-    t = 2;
+const Consumer = Kafka.Consumer;
+
+let consumer = new Consumer(
+  client,
+  [{ topic: config.KafkaTopic, partition: 0 }],
+  {
+    autoCommit: true,
+    fetchMaxWaitMs: 1000,
+    fetchMaxBytes: 1024 * 1024,
+    encoding: "utf8",
+    // fromOffset: false
   }
+);
+consumer.on("message", async function (message) {
+  const data = JSON.parse(message.value);
+  const condition = data.condition;
+  console.log(data);
+  if (!isFirstTime && condition) {
+    if (condition.trim() == "ACS") {
+      let value = {
+        lat: Number(data.lat),
+        lng: Number(data.lng),
+      };
+      client_redis.setex(
+        JSON.stringify(value),
+        time,
+        "",
+        function (err, reply) {
+          if (err) {
+            console.log(err);
+          }
+          id = id + 1;
+          console.log(reply);
+        }
+      );
+      //redis ice
+      client_redis.keys("*", function (err, keys) {
+        if (err) return console.log(err);
+        if (keys) {
+          io.emit("sent-message", { data: keys });
+          console.log("hey");
+          //res.json({ data: keys });
+        }
+      });
+    } else {
+      console.log("kafka not in condition", data);
+    }
+  }
+});
+
+consumer.on("error", function (error) {
+  console.log("error kafka consumer", error);
 });

@@ -36,15 +36,29 @@ const location = (props) => {
         lng: Number(localStorage.getItem("currentLng")),
       }}
     >
+      <Marker
+        position={{
+          lat: Number(localStorage.getItem("currentLat")),
+          lng: Number(localStorage.getItem("currentLng")),
+        }}
+      ></Marker>
       {props.accidentlocation.map((x) => (
-        <Marker position={JSON.parse(x)}></Marker>
+        <Marker
+          position={JSON.parse(x)}
+          icon={{
+            url:
+              "https://www.flaticon.com/svg/static/icons/svg/3338/3338951.svg",
+            scaledSize: new window.google.maps.Size(50, 50),
+          }}
+        ></Marker>
       ))}
     </GoogleMap>
   );
 };
 
 const WrappedMap = withScriptjs(withGoogleMap(location));
-const ENDPOINT = "http://127.0.0.1:4000";
+const ENDPOINT = "http://localhost:4000";
+const socket = socketIOClient(ENDPOINT);
 
 export class Map extends Component {
   constructor(props) {
@@ -59,23 +73,21 @@ export class Map extends Component {
   response = () => {
     const socket = socketIOClient(ENDPOINT);
     //this.socket = openSocket("http://localhost:4000");
-    socket.on("new-message", (message) => {
-      console.log(message);
+    socket.on("sent-message", (message) => {
+      this.setState({ accidentlocation: message.data });
+      console.log("ice", this.state);
     });
-    /*const { endpoint, message } = this.state;
-    const temp = message;
-    const socket = socketIOClient(endpoint);
-    socket.on("new-message", (messageNew) => {
-      temp.push(messageNew);
-      this.setState({ message: temp });
-      console.log("here", this.state);
-    });*/
-
-    console.log("gg");
   };
 
   render() {
     return (
+      /*<button
+        onClick={() => {
+          socket.emit("sent-message", "hello");
+        }}
+      >
+        ff
+      </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap
           googleMapURL={
