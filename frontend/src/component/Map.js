@@ -76,13 +76,12 @@ export class Map extends Component {
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
           latlng: "13.8182656,100.4273664",
-          key: "AIzaSyDrwZUdXumTXoFT1bolnxsaoqn07KpdlTg",
+          key: "", // <-- put API key in here
         },
       })
       .then(function (response) {
         // console.log("tt", response.data.results[0].formatted_address);
         inforAlert(response.data.results[0].formatted_address);
-        console.log(this.props.a);
       })
       .catch(function (error) {
         console.log(error);
@@ -91,9 +90,7 @@ export class Map extends Component {
 
   response = () => {
     const socket = socketIOClient(ENDPOINT);
-    //this.socket = openSocket("http://localhost:4000");
     this.geocode(this.props.inforAlert);
-    console.log(this.props.a);
     socket.on("sent-message", (message) => {
       this.setState({ accidentlocation: message.data });
       console.log("ice", this.state);
