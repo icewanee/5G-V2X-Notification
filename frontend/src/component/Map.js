@@ -13,7 +13,7 @@ import {
 const location = (props) => {
   const success = (position) => {
     localStorage.setItem("currentLat", Number(position.coords.latitude));
-    localStorage.setItem("currentLng", position.coords.longitude);
+    localStorage.setItem("currentLng", Number(position.coords.longitude));
     console.log(localStorage);
   };
 
@@ -48,7 +48,7 @@ const location = (props) => {
           icon={{
             url:
               "https://www.flaticon.com/svg/static/icons/svg/3338/3338951.svg",
-            scaledSize: new window.google.maps.Size(50, 50),
+            scaledSize: new window.google.maps.Size(40, 40),
           }}
         ></Marker>
       ))}
@@ -70,9 +70,30 @@ export class Map extends Component {
     };
   }
 
+  geocode = async (inforAlert) => {
+    console.log("yes");
+    axios
+      .get("https://maps.googleapis.com/maps/api/geocode/json", {
+        params: {
+          latlng: "13.8182656,100.4273664",
+          key: "AIzaSyDrwZUdXumTXoFT1bolnxsaoqn07KpdlTg",
+        },
+      })
+      .then(function (response) {
+        // console.log("tt", response.data.results[0].formatted_address);
+        inforAlert(response.data.results[0].formatted_address);
+        console.log(this.props.a);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   response = () => {
     const socket = socketIOClient(ENDPOINT);
     //this.socket = openSocket("http://localhost:4000");
+    this.geocode(this.props.inforAlert);
+    console.log(this.props.a);
     socket.on("sent-message", (message) => {
       this.setState({ accidentlocation: message.data });
       console.log("ice", this.state);
@@ -90,9 +111,8 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap
-          googleMapURL={
-            "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-          } // <-- put API key in here
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // <-- put API key in here
+          /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}

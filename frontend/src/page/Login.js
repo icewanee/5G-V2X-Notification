@@ -34,7 +34,7 @@ export class Login extends Component {
         >
           <div className="row">
             <div className="col-md-7 ">
-              <h1
+              {/* <h1
                 className="card-title"
                 style={{
                   fontFamily: "Courier New",
@@ -44,7 +44,8 @@ export class Login extends Component {
                 }}
               >
                 Logo here
-              </h1>
+              </h1> */}
+              <br />
             </div>
             <div className="col-md-5 "></div>
           </div>
@@ -78,7 +79,14 @@ export class Login extends Component {
               </div>
               <div className="row">
                 <div className="col-md-2"></div>
-                <div className="col-md-8">
+                <div
+                  className="col-md-8"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <label
                     className="text"
                     style={{ fontFamily: "Courier New", fontSize: 30 }}
@@ -104,7 +112,14 @@ export class Login extends Component {
                 </div>
                 <div className="col-md-2"></div>
                 <div className="col-md-2"></div>
-                <div className="col-md-8">
+                <div
+                  className="col-md-8"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <label
                     className="text"
                     style={{
@@ -172,48 +187,16 @@ export class Login extends Component {
     );
   }
 
-  /*onClickLogin = async (event) => {
-    event.preventDefault();
-    //localStorage.setItem("isLogin", false);
-    //console.log(localStorage);
-    history.push("/home");
-    //window.location.reload();*/
-
-  /*onClickLogin = async (event) => {
-    event.preventDefault();
-    let username = this.state.username;
-    let password = this.state.password;
-    console.log(this.state);
-    try {
-      const data = await axios.post(`http://127.0.0.1:4000/login`, {
-        username: username,
-        password: password,
-      })
-      .then((res) => {
-          console.log("response: ", res);
-          // do something about response
-          // islogin , username in localStorage
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-      const response = await axios
-        .get("https://localhost:4000/loginRetrieveData")
-        .then((response) => {
-          console.log("response: ", response);
-          // do something about response
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-      //history.push("/home");
-      //window.location.reload();
-      //if usernams,passwd are correct
-    } catch (error) {
-      console.error(error);
-    }*/
-
   onClickLogin = async (event) => {
+    event.preventDefault();
+    localStorage.clear();
+    localStorage.setItem("islogin", "true");
+    console.log("hi");
+    history.push("/home");
+    //window.location.reload();
+  };
+
+  /*onClickLogin = async (event) => {
     event.preventDefault();
     let username = this.state.username;
     let password = this.state.password;
@@ -240,13 +223,11 @@ export class Login extends Component {
       .catch((err) => {
         console.log("error in request", err);
       });
-    //history.push("/home");
-    //window.location.reload();
   };
 
   componentDidMount() {
     localStorage.clear();
     console.log("first", localStorage);
-  }
+  }*/
 }
 export default Login;

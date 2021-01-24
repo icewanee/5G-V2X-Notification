@@ -6,8 +6,14 @@ import history from "../history";
 export class Accident extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { alert: "" };
   }
+
+  setAlert = (infor) => {
+    this.setState({ alert: infor });
+    console.log(infor);
+  };
+
   render() {
     return (
       <div
@@ -39,7 +45,7 @@ export class Accident extends Component {
                 alignItems: "center",
               }}
             >
-              <Map />
+              <Map inforAlert={this.setAlert} a="tt" />
             </div>
           </div>
           <div className="row" style={{ paddingTop: 25 }}>
@@ -58,7 +64,9 @@ export class Accident extends Component {
                     <h3
                       className="card-title"
                       style={{ fontFamily: "Courier New" }}
-                    ></h3>
+                    >
+                      {this.state.alert}
+                    </h3>
                   </div>
                 </div>
                 <div className="col-md-2" style={{ display: "flex" }}>
