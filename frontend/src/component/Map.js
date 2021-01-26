@@ -76,7 +76,7 @@ export class Map extends Component {
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
           latlng: "13.740522160240175,100.53447914292413",
-          key: "AIzaSyBpHG0KrCTjNbLwPhoiJpLpWb_vhSvU8h8", // <-- put API key in here
+          key: "", // <-- put API key in here
         },
       })
       .then(function (response) {
@@ -88,16 +88,16 @@ export class Map extends Component {
       });
   };
 
-  around = (dataLocation) => {
+  /* around = (dataLocation) => {
     console.log("kt", dataLocation);
     dataLocation.forEach((element) => {
       console.log("k", element);
     });
-  };
-  dislocation = (data) => {
+  };*/
+  /*dislocation = (data) => {
     this.setState({ accidentlocation: data });
     console.log(this.state);
-  };
+  };*/
 
   response = () => {
     const socket = socketIOClient(ENDPOINT);
@@ -105,8 +105,9 @@ export class Map extends Component {
     //display
     socket.on("sent-message", (message) => {
       this.setState({ accidentlocation: message.data });
-      this.dislocation(message.data);
-      this.around(this.state.accidentlocation);
+      console.log("socket");
+      /*this.dislocation(message.data);*/
+      /*this.around(this.state.accidentlocation);*/
       this.geocode(this.props.inforAlert);
     });
   };
@@ -122,7 +123,7 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // <-- put API key in hereAIzaSyBpHG0KrCTjNbLwPhoiJpLpWb_vhSvU8h8
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // <-- put API key in here
           /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
