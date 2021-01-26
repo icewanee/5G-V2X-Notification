@@ -28,6 +28,51 @@ const location = (props) => {
     navigator.geolocation.getCurrentPosition(success, error);
   }
 
+  // var latitude, longitude, accuracy;
+
+  // function setGeolocation() {
+  //   var geolocation = window.navigator.geolocation.watchPosition(
+  //     function (position) {
+  //       latitude = position.coords.latitude;
+  //       longitude = position.coords.longitude;
+  //       accuracy = position.coords.accuracy;
+  //       document.getElementById("result").innerHTML +=
+  //         "lat: " +
+  //         latitude +
+  //         ", " +
+  //         "lng: " +
+  //         longitude +
+  //         ", " +
+  //         "accuracy: " +
+  //         accuracy +
+  //         "<br />";
+  //     },
+  //     function () {
+  //       /*error*/
+  //     },
+  //     {
+  //       maximumAge: 250,
+  //       enableHighAccuracy: true,
+  //     }
+  //   );
+
+  //   window.setTimeout(
+  //     function () {
+  //       window.navigator.geolocation.clearWatch(geolocation);
+  //     },
+  //     5000 //stop checking after 5 seconds
+  //   );
+  // }
+
+  // setGeolocation();
+
+  // window.setInterval(
+  //   function () {
+  //     setGeolocation();
+  //   },
+  //   15000 //check every 15 seconds
+  // );
+
   return (
     <GoogleMap
       defaultZoom={15}
@@ -76,12 +121,22 @@ export class Map extends Component {
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
           latlng: "13.740522160240175,100.53447914292413",
-          key: "", // <-- put API key in here
+          key: "", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {
         console.log("tt", response.data.results);
-        inforAlert(response.data.results[0].formatted_address);
+        var str = response.data.results[0].formatted_address;
+        var last = str.indexOf(",");
+        var res = str.substr(0, last);
+        var alert = "Alert !! accident here : ";
+        if (res === "") {
+          res = res;
+        } else {
+          res = alert.concat(res);
+        }
+        inforAlert(res);
+        /*inforAlert(response.data.results[0].formatted_address);*/
       })
       .catch(function (error) {
         console.log(error);
@@ -94,19 +149,18 @@ export class Map extends Component {
       console.log("k", element);
     });
   };*/
-  /*dislocation = (data) => {
+  dislocation = (data) => {
     this.setState({ accidentlocation: data });
-    console.log(this.state);
-  };*/
+    console.log("dis", this.state);
+  };
 
   response = () => {
     const socket = socketIOClient(ENDPOINT);
     //current loca
     //display
     socket.on("sent-message", (message) => {
-      this.setState({ accidentlocation: message.data });
-      console.log("socket");
-      /*this.dislocation(message.data);*/
+      /* this.setState({ accidentlocation: message.data });*/
+      this.dislocation(message.data);
       /*this.around(this.state.accidentlocation);*/
       this.geocode(this.props.inforAlert);
     });
@@ -122,9 +176,8 @@ export class Map extends Component {
         ff
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
-        <WrappedMap
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // <-- put API key in here
-          /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/
+        <WrappedMap /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/ // <-- put API key in here
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`}
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
@@ -148,6 +201,9 @@ export class Map extends Component {
       });
     this.response();
   }
+  /*componentUnMount() {
+    Geolocation.clearWatch();
+  }*/
 }
 
 export default Map;

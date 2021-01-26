@@ -63,7 +63,7 @@ export class Accident extends Component {
                   >
                     <h3
                       className="card-title"
-                      style={{ fontFamily: "Courier New", fontSize: 15 }}
+                      style={{ fontFamily: "Courier New", fontSize: 20 }}
                     >
                       {this.state.alert}
                     </h3>
