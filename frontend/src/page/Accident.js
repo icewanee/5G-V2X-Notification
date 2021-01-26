@@ -45,7 +45,7 @@ export class Accident extends Component {
                 alignItems: "center",
               }}
             >
-              <Map inforAlert={this.setAlert} a="tt" />
+              <Map inforAlert={this.setAlert} />
             </div>
           </div>
           <div className="row" style={{ paddingTop: 25 }}>
@@ -63,7 +63,7 @@ export class Accident extends Component {
                   >
                     <h3
                       className="card-title"
-                      style={{ fontFamily: "Courier New" }}
+                      style={{ fontFamily: "Courier New", fontSize: 15 }}
                     >
                       {this.state.alert}
                     </h3>

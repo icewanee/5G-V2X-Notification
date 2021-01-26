@@ -75,12 +75,12 @@ export class Map extends Component {
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
-          latlng: "13.8182656,100.4273664",
-          key: "", // <-- put API key in here
+          latlng: "13.740522160240175,100.53447914292413",
+          key: "AIzaSyBpHG0KrCTjNbLwPhoiJpLpWb_vhSvU8h8", // <-- put API key in here
         },
       })
       .then(function (response) {
-        // console.log("tt", response.data.results[0].formatted_address);
+        console.log("tt", response.data.results);
         inforAlert(response.data.results[0].formatted_address);
       })
       .catch(function (error) {
@@ -88,12 +88,26 @@ export class Map extends Component {
       });
   };
 
+  around = (dataLocation) => {
+    console.log("kt", dataLocation);
+    dataLocation.forEach((element) => {
+      console.log("k", element);
+    });
+  };
+  dislocation = (data) => {
+    this.setState({ accidentlocation: data });
+    console.log(this.state);
+  };
+
   response = () => {
     const socket = socketIOClient(ENDPOINT);
-    this.geocode(this.props.inforAlert);
+    //current loca
+    //display
     socket.on("sent-message", (message) => {
       this.setState({ accidentlocation: message.data });
-      console.log("ice", this.state);
+      this.dislocation(message.data);
+      this.around(this.state.accidentlocation);
+      this.geocode(this.props.inforAlert);
     });
   };
 
@@ -108,7 +122,7 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // <-- put API key in here
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // <-- put API key in hereAIzaSyBpHG0KrCTjNbLwPhoiJpLpWb_vhSvU8h8
           /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
@@ -127,8 +141,6 @@ export class Map extends Component {
     })
       .then((res) => {
         this.setState({ accidentlocation: res.data.data });
-
-        console.log("gdhd", this.state.accidentlocation);
       })
       .catch((err) => {
         console.log("error in request", err);
