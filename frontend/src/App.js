@@ -16,14 +16,14 @@ class App extends Component {
   }
 
   loggedIn() {
-    //return true;
-    if (localStorage.getItem("islogin") === "true") {
+    return true;
+    /*if (localStorage.getItem("islogin") === "true") {
       console.log("hh");
       return true;
     } else {
       console.log("gg");
       return false;
-    }
+    }*/
   }
 
   render() {

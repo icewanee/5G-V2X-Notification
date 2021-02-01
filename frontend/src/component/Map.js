@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
+import { getDistance } from "geolib";
 
 import {
   GoogleMap,
@@ -14,7 +15,6 @@ const location = (props) => {
   const success = (position) => {
     localStorage.setItem("currentLat", Number(position.coords.latitude));
     localStorage.setItem("currentLng", Number(position.coords.longitude));
-    console.log(localStorage);
   };
 
   const error = () => {
@@ -110,6 +110,8 @@ export class Map extends Component {
     super(props);
     this.state = {
       accidentlocation: [],
+      currentLat: "",
+      currentLng: "",
       input: "",
       message: [],
     };
@@ -143,25 +145,44 @@ export class Map extends Component {
       });
   };
 
-  /* around = (dataLocation) => {
-    console.log("kt", dataLocation);
-    dataLocation.forEach((element) => {
+  around = (/*dataLocation*/) => {
+    var dis = getDistance(
+      {
+        latitude: localStorage.getItem("currentLat"),
+        longitude: localStorage.getItem("currentLng"),
+      },
+      { latitude: "13.740522160240175", longitude: "100.535458" }
+    );
+    return [Number(dis) / 1000, "element"];
+    /*dataLocation.forEach((element) => {
       console.log("k", element);
-    });
-  };*/
-  dislocation = (data) => {
+    });*/
+  };
+  displaylocation = (data) => {
     this.setState({ accidentlocation: data });
     console.log("dis", this.state);
   };
 
   response = () => {
+    console.log(this.state);
+    var distance = this.around();
+    console.log(distance);
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+      localStorage.setItem("currentLat", Number(position.coords.latitude));
+      localStorage.setItem("currentLng", Number(position.coords.longitude));
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+    });
+
     const socket = socketIOClient(ENDPOINT);
     //current loca
     //display
+
     socket.on("sent-message", (message) => {
-      /* this.setState({ accidentlocation: message.data });*/
-      this.dislocation(message.data);
-      /*this.around(this.state.accidentlocation);*/
+      this.setState({ accidentlocation: message.data });
+      var distance = this.around(this.state.accidentlocation);
+      this.displaylocation(message.data);
       this.geocode(this.props.inforAlert);
     });
   };
