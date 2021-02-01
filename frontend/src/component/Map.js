@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
 import { getDistance } from "geolib";
+import orange from "../pictureNvideo/orangeAcci.png";
+import red from "../pictureNvideo/redAcci.png";
 
 import {
   GoogleMap,
@@ -82,6 +84,10 @@ const location = (props) => {
       }}
     >
       <Marker
+        icon={{
+          url: red,
+          scaledSize: new window.google.maps.Size(40, 40),
+        }}
         position={{
           lat: Number(localStorage.getItem("currentLat")),
           lng: Number(localStorage.getItem("currentLng")),
@@ -91,8 +97,7 @@ const location = (props) => {
         <Marker
           position={JSON.parse(x)}
           icon={{
-            url:
-              "https://www.flaticon.com/svg/static/icons/svg/3338/3338951.svg",
+            url: orange,
             scaledSize: new window.google.maps.Size(40, 40),
           }}
         ></Marker>

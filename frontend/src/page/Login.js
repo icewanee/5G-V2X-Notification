@@ -187,16 +187,16 @@ export class Login extends Component {
     );
   }
 
-  onClickLogin = async (event) => {
+  /*onClickLogin = async (event) => {
     event.preventDefault();
     localStorage.clear();
     localStorage.setItem("islogin", "true");
     console.log("hi");
     history.push("/home");
     //window.location.reload();
-  };
+  };*/
 
-  /*onClickLogin = async (event) => {
+  onClickLogin = async (event) => {
     event.preventDefault();
     let username = this.state.username;
     let password = this.state.password;
@@ -223,7 +223,7 @@ export class Login extends Component {
       .catch((err) => {
         console.log("error in request", err);
       });
-  };*/
+  };
 
   /*componentDidMount() {
     localStorage.clear();
