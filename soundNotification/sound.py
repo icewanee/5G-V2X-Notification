@@ -1,15 +1,22 @@
-#import multiprocessing
+#from multiprocessing import Process
+import multiprocessing 
 import time
-#import pygame
-#from pygame import mixer
+from playsound import playsound
 import keyboard 
+
+def sound():
+    print("here")
+    playsound('loving.mp3')
+    return
 
 
 def soundAlert():
     print('sound  here')
-    #mixer.music.load('loving.mp3')
-    #mixer.music.play(-1)
-    keyboard.wait('Ctrl') 
+    p = multiprocessing.Process(target=sound)
+    p.start()
+    print('please press Ctrl button to stop the sound')
+    keyboard.wait('Ctrl')
+    p.terminate()
 
 
 def startAlert():
@@ -29,6 +36,7 @@ def notification():
         startAlert()
     return 0
 
-isAlert = False
-#pygame.init()
-start = notification()
+if __name__ == '__main__':
+    isAlert = False
+    #pygame.init()
+    start = notification()
