@@ -19,10 +19,12 @@ const Producer = Kafka.Producer;
 const client = new Kafka.KafkaClient({
   kafkaHost: config.KafkaHost,
   idleConnection: 24 * 60 * 60 * 1000,
+  // sasl: {mechanism: 'plain', username:config.UsernameOnCln , password: config.PasswordOnCln},
 });
 const client_in_car = new Kafka.KafkaClient({
   kafkaHost: config.KafkaHostInCar,
   idleConnection: 24 * 60 * 60 * 1000,
+  // sasl: {mechanism: 'plain', username:config.UsernameOnCln , password: config.PasswordOnCln}
 });
 const producer = new Producer(client_in_car, {
   requireAcks: 0,
