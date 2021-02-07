@@ -4,7 +4,7 @@ import socketIOClient from "socket.io-client";
 import { getDistance } from "geolib";
 import orange from "../pictureNvideo/orangeAcci.png";
 import red from "../pictureNvideo/redAcci.png";
-
+import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
 import {
   GoogleMap,
   withScriptjs,
@@ -30,51 +30,6 @@ const location = (props) => {
     navigator.geolocation.getCurrentPosition(success, error);
   }
 
-  // var latitude, longitude, accuracy;
-
-  // function setGeolocation() {
-  //   var geolocation = window.navigator.geolocation.watchPosition(
-  //     function (position) {
-  //       latitude = position.coords.latitude;
-  //       longitude = position.coords.longitude;
-  //       accuracy = position.coords.accuracy;
-  //       document.getElementById("result").innerHTML +=
-  //         "lat: " +
-  //         latitude +
-  //         ", " +
-  //         "lng: " +
-  //         longitude +
-  //         ", " +
-  //         "accuracy: " +
-  //         accuracy +
-  //         "<br />";
-  //     },
-  //     function () {
-  //       /*error*/
-  //     },
-  //     {
-  //       maximumAge: 250,
-  //       enableHighAccuracy: true,
-  //     }
-  //   );
-
-  //   window.setTimeout(
-  //     function () {
-  //       window.navigator.geolocation.clearWatch(geolocation);
-  //     },
-  //     5000 //stop checking after 5 seconds
-  //   );
-  // }
-
-  // setGeolocation();
-
-  // window.setInterval(
-  //   function () {
-  //     setGeolocation();
-  //   },
-  //   15000 //check every 15 seconds
-  // );
-
   return (
     <GoogleMap
       defaultZoom={15}
@@ -93,15 +48,52 @@ const location = (props) => {
           lng: Number(localStorage.getItem("currentLng")),
         }}
       ></Marker>
-      {props.accidentlocation.map((x) => (
+      <MarkerClusterer
+        averageCenter={true}
+        enableRetinaIcons={true}
+        defaultMaxZoom={12}
+        gridSize={60}
+      >
         <Marker
-          position={JSON.parse(x)}
           icon={{
             url: orange,
             scaledSize: new window.google.maps.Size(40, 40),
           }}
+          position={{
+            lat: 13.740522160240175,
+            lng: 100.53447914292413,
+          }}
         ></Marker>
-      ))}
+        <Marker
+          icon={{
+            url: orange,
+            scaledSize: new window.google.maps.Size(40, 40),
+          }}
+          position={{
+            lat: 13.77,
+            lng: 100.55,
+          }}
+        ></Marker>
+        <Marker
+          icon={{
+            url: orange,
+            scaledSize: new window.google.maps.Size(40, 40),
+          }}
+          position={{
+            lat: 13.775,
+            lng: 100.555,
+          }}
+        ></Marker>
+        {props.accidentlocation.map((x) => (
+          <Marker
+            position={JSON.parse(x)}
+            icon={{
+              url: orange,
+              scaledSize: new window.google.maps.Size(40, 40),
+            }}
+          ></Marker>
+        ))}
+      </MarkerClusterer>
     </GoogleMap>
   );
 };
@@ -159,36 +151,43 @@ export class Map extends Component {
       { latitude: "13.740522160240175", longitude: "100.535458" }
     );
     return [Number(dis) / 1000, "element"];
-    /*dataLocation.forEach((element) => {
+    /*dataLocation.forEach((element) => { 
+      // .slice().reverse().forEach()
       console.log("k", element);
     });*/
   };
-  displaylocation = (data) => {
+  /*displaylocation = (data) => {
     this.setState({ accidentlocation: data });
     console.log("dis", this.state);
-  };
+  };*/
 
   response = () => {
     console.log(this.state);
     var distance = this.around();
     console.log(distance);
 
+    /*this.interval = setInterval(
+      () => this.setState({ time: Date.now() }),
+      5000,
+      console.log("ha")
+    );*/
+
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("sent-message", (message) => {
+      this.setState({ accidentlocation: message.data });
+      console.log(message);
+      //var distance = this.around(this.state.accidentlocation);
+      //this.displaylocation(message.data);// not used
+      //this.geocode(this.props.inforAlert); // add distance.lat distance.lng
+    });
+  };
+
+  uploadcurrentlo = () => {
     navigator.geolocation.getCurrentPosition(function (position) {
       localStorage.setItem("currentLat", Number(position.coords.latitude));
       localStorage.setItem("currentLng", Number(position.coords.longitude));
       console.log("Latitude is :", position.coords.latitude);
       console.log("Longitude is :", position.coords.longitude);
-    });
-
-    const socket = socketIOClient(ENDPOINT);
-    //current loca
-    //display
-
-    socket.on("sent-message", (message) => {
-      this.setState({ accidentlocation: message.data });
-      var distance = this.around(this.state.accidentlocation);
-      this.displaylocation(message.data);
-      this.geocode(this.props.inforAlert);
     });
   };
 
@@ -203,7 +202,7 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/ // <-- put API key in here
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`}
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=geometry,drawing,places`} // add &libraries=geometry,drawing,places
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
@@ -225,10 +224,26 @@ export class Map extends Component {
       .catch((err) => {
         console.log("error in request", err);
       });
+
     this.response();
   }
   /*componentUnMount() {
     Geolocation.clearWatch();
+  }*/
+
+  /*componentDidMount() {
+    this.interval = setInterval(
+      () => this.setState({ time: Date.now() }),
+      1000
+    );
+  }*/
+  /*componentDidUpdate() {
+    /*clearInterval(this.interval);*/
+  //let current location run here ?
+  /* setInterval(() => {
+      this.uploadcurrentlo();
+      /*this.response();*/
+  /*}, 3000);
   }*/
 }
 

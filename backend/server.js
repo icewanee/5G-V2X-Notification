@@ -135,7 +135,7 @@ let consumer = new Consumer(
     fetchMaxWaitMs: 1000,
     fetchMaxBytes: 1024 * 1024,
     encoding: "utf8",
-    // fromOffset: false
+    // fromOffset: false,
   }
 );
 consumer.on("message", async function (message) {
@@ -166,7 +166,7 @@ consumer.on("message", async function (message) {
         if (keys) {
           io.emit("sent-message", { data: keys });
           console.log("hey");
-          //res.json({ data: keys });
+          // res.json({ data: keys });
         }
       });
     } else {
