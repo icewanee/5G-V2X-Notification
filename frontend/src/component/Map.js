@@ -53,8 +53,8 @@ const location = (props) => {
         enableRetinaIcons={true}
         defaultMaxZoom={12}
         minimumClusterSize={1}
-        defaultMinimumClusterSize={2}
-        // gridSize={60}
+        defaultMinimumClusterSize={1}
+        gridSize={60}
       >
         {props.accidentlocation.map((x) => (
           <Marker
@@ -87,7 +87,6 @@ export class Map extends Component {
   }
 
   geocode = async (inforAlert, locationDis) => {
-    console.log("yes");
     var lat = JSON.parse(locationDis)["lat"];
     var lng = JSON.parse(locationDis)["lng"];
     axios
@@ -98,7 +97,7 @@ export class Map extends Component {
         },
       })
       .then(function (response) {
-        console.log("tt", response.data.results);
+        // console.log("tt", response.data.results);
         var str = response.data.results[0].formatted_address;
         var last = str.indexOf(",");
         var res = str.substr(0, last);
@@ -140,7 +139,7 @@ export class Map extends Component {
           if (distance <= 20 && !isnear) {
             {
               isnear = true;
-              console.log("around", isnear, typeof element, distance);
+              console.log("around", isnear, element, distance);
 
               ans = element;
             }
@@ -158,16 +157,6 @@ export class Map extends Component {
   };*/
 
   response = () => {
-    console.log(this.state);
-    // var distance = this.around();
-    // console.log(distance);
-
-    /*this.interval = setInterval(
-      () => this.setState({ time: Date.now() }),
-      5000,
-      console.log("ha")
-    );*/
-
     const socket = socketIOClient(ENDPOINT);
     socket.on("sent-message", (message) => {
       this.setState({ accidentlocation: message.data });
@@ -178,7 +167,6 @@ export class Map extends Component {
       if (locationDis) {
         this.geocode(this.props.inforAlert, locationDis);
       }
-      //this.geocode(this.props.inforAlert); // add distance.lat distance.lng
     });
   };
 
@@ -231,20 +219,13 @@ export class Map extends Component {
     Geolocation.clearWatch();
   }*/
 
-  /*componentDidMount() {
-    this.interval = setInterval(
-      () => this.setState({ time: Date.now() }),
-      1000
-    );
-  }*/
-  /*componentDidUpdate() {
+  componentDidUpdate() {
     /*clearInterval(this.interval);*/
-  //let current location run here ?
-  /* setInterval(() => {
+    //let current location run here ?
+    setInterval(() => {
       this.uploadcurrentlo();
-      /*this.response();*/
-  /*}, 3000);
-  }*/
+    }, 4000);
+  }
 }
 
 export default Map;
