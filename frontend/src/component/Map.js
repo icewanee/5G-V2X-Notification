@@ -52,38 +52,10 @@ const location = (props) => {
         averageCenter={true}
         enableRetinaIcons={true}
         defaultMaxZoom={12}
-        gridSize={60}
+        minimumClusterSize={1}
+        defaultMinimumClusterSize={2}
+        // gridSize={60}
       >
-        <Marker
-          icon={{
-            url: orange,
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-          position={{
-            lat: 13.740522160240175,
-            lng: 100.53447914292413,
-          }}
-        ></Marker>
-        <Marker
-          icon={{
-            url: orange,
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-          position={{
-            lat: 13.77,
-            lng: 100.55,
-          }}
-        ></Marker>
-        <Marker
-          icon={{
-            url: orange,
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-          position={{
-            lat: 13.775,
-            lng: 100.555,
-          }}
-        ></Marker>
         {props.accidentlocation.map((x) => (
           <Marker
             position={JSON.parse(x)}
@@ -114,13 +86,15 @@ export class Map extends Component {
     };
   }
 
-  geocode = async (inforAlert) => {
+  geocode = async (inforAlert, locationDis) => {
     console.log("yes");
+    var lat = JSON.parse(locationDis)["lat"];
+    var lng = JSON.parse(locationDis)["lng"];
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
-          latlng: "13.740522160240175,100.53447914292413",
-          key: "", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
+          latlng: String(lat) + "," + String(lng), //"13.740522160240175,100.53447914292413",
+          key: "AIzaSyBAf19DEL2Tu3eWhZ5-1YS4x8xdI5I-cUM", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {
@@ -128,7 +102,7 @@ export class Map extends Component {
         var str = response.data.results[0].formatted_address;
         var last = str.indexOf(",");
         var res = str.substr(0, last);
-        var alert = "Alert !! accident here : ";
+        var alert = "accident alert: ";
         if (res === "") {
           res = res;
         } else {
@@ -142,20 +116,42 @@ export class Map extends Component {
       });
   };
 
-  around = (/*dataLocation*/) => {
-    var dis = getDistance(
-      {
-        latitude: localStorage.getItem("currentLat"),
-        longitude: localStorage.getItem("currentLng"),
-      },
-      { latitude: "13.740522160240175", longitude: "100.535458" }
-    );
-    return [Number(dis) / 1000, "element"];
-    /*dataLocation.forEach((element) => { 
-      // .slice().reverse().forEach()
-      console.log("k", element);
-    });*/
+  around = (dataLocation) => {
+    var min = 0;
+    var ans = false;
+    var distance = 0;
+    let isnear = false;
+    dataLocation
+      .slice()
+      .reverse()
+      .forEach((element) => {
+        var dis = getDistance(
+          {
+            latitude: localStorage.getItem("currentLat"),
+            longitude: localStorage.getItem("currentLng"),
+          },
+          {
+            latitude: Number(JSON.parse(element)["lat"]),
+            longitude: Number(JSON.parse(element)["lng"]),
+          }
+        );
+        distance = Number(dis) / 1000;
+        if (!isnear) {
+          if (distance <= 20 && !isnear) {
+            {
+              isnear = true;
+              console.log("around", isnear, typeof element, distance);
+
+              ans = element;
+            }
+          } else if (min >= distance) {
+            min = distance;
+          }
+        }
+      });
+    return ans;
   };
+
   /*displaylocation = (data) => {
     this.setState({ accidentlocation: data });
     console.log("dis", this.state);
@@ -163,8 +159,8 @@ export class Map extends Component {
 
   response = () => {
     console.log(this.state);
-    var distance = this.around();
-    console.log(distance);
+    // var distance = this.around();
+    // console.log(distance);
 
     /*this.interval = setInterval(
       () => this.setState({ time: Date.now() }),
@@ -176,8 +172,12 @@ export class Map extends Component {
     socket.on("sent-message", (message) => {
       this.setState({ accidentlocation: message.data });
       console.log(message);
-      //var distance = this.around(this.state.accidentlocation);
+      let locationDis = this.around(this.state.accidentlocation);
       //this.displaylocation(message.data);// not used
+      console.log("h", locationDis);
+      if (locationDis) {
+        this.geocode(this.props.inforAlert, locationDis);
+      }
       //this.geocode(this.props.inforAlert); // add distance.lat distance.lng
     });
   };
@@ -275,3 +275,34 @@ export default Map;
 /*{props.message.map((x) => (
         <Marker position={JSON.parse(x)}></Marker>
       ))}*/
+
+// <Marker
+//     icon={{
+//       url: orange,
+//       scaledSize: new window.google.maps.Size(40, 40),
+//     }}
+//     position={{
+//       lat: 13.740522160240175,
+//       lng: 100.53447914292413,
+//     }}
+//   ></Marker>
+//   <Marker
+//     icon={{
+//       url: orange,
+//       scaledSize: new window.google.maps.Size(40, 40),
+//     }}
+//     position={{
+//       lat: 13.77,
+//       lng: 100.55,
+//     }}
+//   ></Marker>
+//   <Marker
+//     icon={{
+//       url: orange,
+//       scaledSize: new window.google.maps.Size(40, 40),
+//     }}
+//     position={{
+//       lat: 13.775,
+//       lng: 100.555,
+//     }}
+//   ></Marker>
