@@ -19,12 +19,12 @@ const Producer = Kafka.Producer;
 const client = new Kafka.KafkaClient({
   kafkaHost: config.KafkaHost,
   idleConnection: 24 * 60 * 60 * 1000,
-  // sasl: {mechanism: 'plain', username:config.UsernameOnCln , password: config.PasswordOnCln},
+  sasl: {mechanism: 'plain', username:config.KafkaUsernameOnCln , password: config.KafkaPasswordOnCln},
 });
 const client_in_car = new Kafka.KafkaClient({
   kafkaHost: config.KafkaHostInCar,
   idleConnection: 24 * 60 * 60 * 1000,
-  // sasl: {mechanism: 'plain', username:config.UsernameOnCln , password: config.PasswordOnCln}
+  sasl: {mechanism: 'plain', username:config.KafkaUsernameInCar , password: config.KafkaPasswordInCar},
 });
 const producer = new Producer(client_in_car, {
   requireAcks: 0,
@@ -135,7 +135,7 @@ let consumer = new Consumer(
     fetchMaxWaitMs: 1000,
     fetchMaxBytes: 1024 * 1024,
     encoding: "utf8",
-    // fromOffset: false
+    fromOffset: false
   }
 );
 consumer.on("message", async function (message) {
@@ -145,8 +145,8 @@ consumer.on("message", async function (message) {
   if (!isFirstTime && condition) {
     if (condition.trim() == "ACS") {
       let value = {
-        lat: Number(data.lat),
-        lng: Number(data.lng),
+        "lat": Number(data.lat),
+        "lng": Number(data.lng),
       };
       client_redis.setex(
         JSON.stringify(value),
@@ -164,7 +164,7 @@ consumer.on("message", async function (message) {
       client_redis.keys("*", function (err, keys) {
         if (err) return console.log(err);
         if (keys) {
-          io.emit("sent-message", { data: keys });
+          // io.emit("sent-message", { data: keys });
           console.log("hey");
           //res.json({ data: keys });
         }

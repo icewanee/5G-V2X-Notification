@@ -4,6 +4,7 @@ import socketIOClient from "socket.io-client";
 import { getDistance } from "geolib";
 import orange from "../pictureNvideo/orangeAcci.png";
 import red from "../pictureNvideo/redAcci.png";
+import { config } from "../config/config";
 
 import {
   GoogleMap,
@@ -128,7 +129,7 @@ export class Map extends Component {
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
           latlng: "13.740522160240175,100.53447914292413",
-          key: "", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
+          key: config.googleMapAPI, // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {
@@ -203,7 +204,7 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/ // <-- put API key in here
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`}
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${config.googleMapAPI}&callback=initMap`}
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
