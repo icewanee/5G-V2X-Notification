@@ -34,8 +34,12 @@ const location = (props) => {
     <GoogleMap
       defaultZoom={15}
       defaultCenter={{
-        lat: Number(localStorage.getItem("currentLat")),
-        lng: Number(localStorage.getItem("currentLng")),
+        lat: Number(
+          props.currentLat
+        ) /*Number(localStorage.getItem("currentLat"))*/,
+        lng: Number(
+          props.currentLng
+        ) /*Number(localStorage.getItem("currentLng"))*/,
       }}
     >
       <Marker
@@ -44,17 +48,22 @@ const location = (props) => {
           scaledSize: new window.google.maps.Size(40, 40),
         }}
         position={{
-          lat: Number(localStorage.getItem("currentLat")),
-          lng: Number(localStorage.getItem("currentLng")),
+          lat: Number(
+            props.currentLat
+          ) /*Number(localStorage.getItem("currentLat"))*/,
+          lng: Number(
+            props.currentLng
+          ) /*Number(localStorage.getItem("currentLng"))*/,
         }}
       ></Marker>
       <MarkerClusterer
-        averageCenter={true}
-        enableRetinaIcons={true}
+        // averageCenter={false}
+        // enableRetinaIcons={false}
         defaultMaxZoom={12}
-        minimumClusterSize={1}
-        defaultMinimumClusterSize={1}
-        gridSize={60}
+        minimumClusterSize={0}
+        ignoreHidden={true}
+        // defaultMinimumClusterSize={1}
+        // gridSize={1}
       >
         {props.accidentlocation.map((x) => (
           <Marker
@@ -84,6 +93,7 @@ export class Map extends Component {
       input: "",
       message: [],
     };
+    this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
   }
 
   geocode = async (inforAlert, locationDis) => {
@@ -93,7 +103,7 @@ export class Map extends Component {
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
           latlng: String(lat) + "," + String(lng), //"13.740522160240175,100.53447914292413",
-          key: "AIzaSyBAf19DEL2Tu3eWhZ5-1YS4x8xdI5I-cUM", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
+          key: "", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {
@@ -126,8 +136,12 @@ export class Map extends Component {
       .forEach((element) => {
         var dis = getDistance(
           {
-            latitude: localStorage.getItem("currentLat"),
-            longitude: localStorage.getItem("currentLng"),
+            latitude: Number(
+              this.state.currentLat
+            ) /*localStorage.getItem("currentLat")*/,
+            longitude: Number(
+              this.state.currentLng
+            ) /*localStorage.getItem("currentLng")*/,
           },
           {
             latitude: Number(JSON.parse(element)["lat"]),
@@ -163,7 +177,7 @@ export class Map extends Component {
       console.log(message);
       let locationDis = this.around(this.state.accidentlocation);
       //this.displaylocation(message.data);// not used
-      console.log("h", locationDis);
+      console.log("h", this.state.accidentlocation);
       if (locationDis) {
         this.geocode(this.props.inforAlert, locationDis);
       }
@@ -171,9 +185,15 @@ export class Map extends Component {
   };
 
   uploadcurrentlo = () => {
+    var re = this;
     navigator.geolocation.getCurrentPosition(function (position) {
       localStorage.setItem("currentLat", Number(position.coords.latitude));
       localStorage.setItem("currentLng", Number(position.coords.longitude));
+      re.setState({
+        currentLat: Number(position.coords.latitude),
+        currentLng: Number(position.coords.longitude),
+      });
+
       console.log("Latitude is :", position.coords.latitude);
       console.log("Longitude is :", position.coords.longitude);
     });
@@ -190,11 +210,13 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/ // <-- put API key in here
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=geometry,drawing,places`} // add &libraries=geometry,drawing,places
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`} // add &libraries=geometry,drawing,places
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
           accidentlocation={this.state.accidentlocation}
+          currentLat={this.state.currentLat}
+          currentLng={this.state.currentLng}
         />
       </div>
     );
@@ -215,17 +237,13 @@ export class Map extends Component {
 
     this.response();
   }
-  /*componentUnMount() {
-    Geolocation.clearWatch();
-  }*/
 
-  componentDidUpdate() {
-    /*clearInterval(this.interval);*/
-    //let current location run here ?
-    setInterval(() => {
-      this.uploadcurrentlo();
-    }, 4000);
-  }
+  // componentDidUpdate() {
+  //   setInterval(() => {
+  //     this.uploadcurrentlo();
+  //     console.log("haha");
+  //   }, 4000);
+  // }
 }
 
 export default Map;
