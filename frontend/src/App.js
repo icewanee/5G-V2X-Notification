@@ -41,7 +41,7 @@ class App extends Component {
             ) : (
               <Route path="/accident" component={PageNotFound} />
             )}
-
+            <Route path="/test" component={Accident} />
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>

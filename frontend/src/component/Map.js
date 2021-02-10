@@ -6,6 +6,7 @@ import orange from "../pictureNvideo/orangeAcci.png";
 import red from "../pictureNvideo/redAcci.png";
 import { config } from "../config/config";
 
+import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
 import {
   GoogleMap,
   withScriptjs,
@@ -31,57 +32,16 @@ const location = (props) => {
     navigator.geolocation.getCurrentPosition(success, error);
   }
 
-  // var latitude, longitude, accuracy;
-
-  // function setGeolocation() {
-  //   var geolocation = window.navigator.geolocation.watchPosition(
-  //     function (position) {
-  //       latitude = position.coords.latitude;
-  //       longitude = position.coords.longitude;
-  //       accuracy = position.coords.accuracy;
-  //       document.getElementById("result").innerHTML +=
-  //         "lat: " +
-  //         latitude +
-  //         ", " +
-  //         "lng: " +
-  //         longitude +
-  //         ", " +
-  //         "accuracy: " +
-  //         accuracy +
-  //         "<br />";
-  //     },
-  //     function () {
-  //       /*error*/
-  //     },
-  //     {
-  //       maximumAge: 250,
-  //       enableHighAccuracy: true,
-  //     }
-  //   );
-
-  //   window.setTimeout(
-  //     function () {
-  //       window.navigator.geolocation.clearWatch(geolocation);
-  //     },
-  //     5000 //stop checking after 5 seconds
-  //   );
-  // }
-
-  // setGeolocation();
-
-  // window.setInterval(
-  //   function () {
-  //     setGeolocation();
-  //   },
-  //   15000 //check every 15 seconds
-  // );
-
   return (
     <GoogleMap
       defaultZoom={15}
       defaultCenter={{
-        lat: Number(localStorage.getItem("currentLat")),
-        lng: Number(localStorage.getItem("currentLng")),
+        lat: Number(
+          props.currentLat
+        ) /*Number(localStorage.getItem("currentLat"))*/,
+        lng: Number(
+          props.currentLng
+        ) /*Number(localStorage.getItem("currentLng"))*/,
       }}
     >
       <Marker
@@ -90,19 +50,33 @@ const location = (props) => {
           scaledSize: new window.google.maps.Size(40, 40),
         }}
         position={{
-          lat: Number(localStorage.getItem("currentLat")),
-          lng: Number(localStorage.getItem("currentLng")),
+          lat: Number(
+            props.currentLat
+          ) /*Number(localStorage.getItem("currentLat"))*/,
+          lng: Number(
+            props.currentLng
+          ) /*Number(localStorage.getItem("currentLng"))*/,
         }}
       ></Marker>
-      {props.accidentlocation.map((x) => (
-        <Marker
-          position={JSON.parse(x)}
-          icon={{
-            url: orange,
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-        ></Marker>
-      ))}
+      <MarkerClusterer
+        // averageCenter={false}
+        // enableRetinaIcons={false}
+        defaultMaxZoom={12}
+        minimumClusterSize={0}
+        ignoreHidden={true}
+        // defaultMinimumClusterSize={1}
+        // gridSize={1}
+      >
+        {props.accidentlocation.map((x) => (
+          <Marker
+            position={JSON.parse(x)}
+            icon={{
+              url: orange,
+              scaledSize: new window.google.maps.Size(40, 40),
+            }}
+          ></Marker>
+        ))}
+      </MarkerClusterer>
     </GoogleMap>
   );
 };
@@ -121,23 +95,25 @@ export class Map extends Component {
       input: "",
       message: [],
     };
+    this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
   }
 
-  geocode = async (inforAlert) => {
-    console.log("yes");
+  geocode = async (inforAlert, locationDis) => {
+    var lat = JSON.parse(locationDis)["lat"];
+    var lng = JSON.parse(locationDis)["lng"];
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
-          latlng: "13.740522160240175,100.53447914292413",
+          latlng: String(lat) + "," + String(lng), //"13.740522160240175,100.53447914292413",          
           key: config.googleMapAPI, // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {
-        console.log("tt", response.data.results);
+        // console.log("tt", response.data.results);
         var str = response.data.results[0].formatted_address;
         var last = str.indexOf(",");
         var res = str.substr(0, last);
-        var alert = "Alert !! accident here : ";
+        var alert = "accident alert: ";
         if (res === "") {
           res = res;
         } else {
@@ -151,45 +127,74 @@ export class Map extends Component {
       });
   };
 
-  around = (/*dataLocation*/) => {
-    var dis = getDistance(
-      {
-        latitude: localStorage.getItem("currentLat"),
-        longitude: localStorage.getItem("currentLng"),
-      },
-      { latitude: "13.740522160240175", longitude: "100.535458" }
-    );
-    return [Number(dis) / 1000, "element"];
-    /*dataLocation.forEach((element) => {
-      console.log("k", element);
-    });*/
+  around = (dataLocation) => {
+    var min = 0;
+    var ans = false;
+    var distance = 0;
+    let isnear = false;
+    dataLocation
+      .slice()
+      .reverse()
+      .forEach((element) => {
+        var dis = getDistance(
+          {
+            latitude: Number(
+              this.state.currentLat
+            ) /*localStorage.getItem("currentLat")*/,
+            longitude: Number(
+              this.state.currentLng
+            ) /*localStorage.getItem("currentLng")*/,
+          },
+          {
+            latitude: Number(JSON.parse(element)["lat"]),
+            longitude: Number(JSON.parse(element)["lng"]),
+          }
+        );
+        distance = Number(dis) / 1000;
+        if (!isnear) {
+          if (distance <= 20 && !isnear) {
+              isnear = true;
+              console.log("around", isnear, element, distance);
+              ans = element
+          } else if (min >= distance) {
+            min = distance;
+          }
+        }
+      });
+    return ans;
   };
-  displaylocation = (data) => {
+
+  /*displaylocation = (data) => {
     this.setState({ accidentlocation: data });
     console.log("dis", this.state);
-  };
+  };*/
 
   response = () => {
-    console.log(this.state);
-    var distance = this.around();
-    console.log(distance);
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("sent-message", (message) => {
+      this.setState({ accidentlocation: message.data });
+      console.log(message);
+      let locationDis = this.around(this.state.accidentlocation);
+      //this.displaylocation(message.data);// not used
+      console.log("h", this.state.accidentlocation);
+      if (locationDis) {
+        this.geocode(this.props.inforAlert, locationDis);
+      }
+    });
+  };
 
+  uploadcurrentlo = () => {
+    var re = this;
     navigator.geolocation.getCurrentPosition(function (position) {
       localStorage.setItem("currentLat", Number(position.coords.latitude));
       localStorage.setItem("currentLng", Number(position.coords.longitude));
+      re.setState({
+        currentLat: Number(position.coords.latitude),
+        currentLng: Number(position.coords.longitude),
+      });
+
       console.log("Latitude is :", position.coords.latitude);
       console.log("Longitude is :", position.coords.longitude);
-    });
-
-    const socket = socketIOClient(ENDPOINT);
-    //current loca
-    //display
-
-    socket.on("sent-message", (message) => {
-      this.setState({ accidentlocation: message.data });
-      var distance = this.around(this.state.accidentlocation);
-      this.displaylocation(message.data);
-      this.geocode(this.props.inforAlert);
     });
   };
 
@@ -209,6 +214,8 @@ export class Map extends Component {
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
           accidentlocation={this.state.accidentlocation}
+          currentLat={this.state.currentLat}
+          currentLng={this.state.currentLng}
         />
       </div>
     );
@@ -216,7 +223,7 @@ export class Map extends Component {
   componentDidMount() {
     axios({
       method: "GET",
-      url: "http://127.0.0.1:4000/map",
+      url: "http://localhost:4000/map",
       headers: {},
       data: {},
     })
@@ -226,11 +233,16 @@ export class Map extends Component {
       .catch((err) => {
         console.log("error in request", err);
       });
+
     this.response();
   }
-  /*componentUnMount() {
-    Geolocation.clearWatch();
-  }*/
+
+  // componentDidUpdate() {
+  //   setInterval(() => {
+  //     this.uploadcurrentlo();
+  //     console.log("haha");
+  //   }, 4000);
+  // }
 }
 
 export default Map;
@@ -261,3 +273,34 @@ export default Map;
 /*{props.message.map((x) => (
         <Marker position={JSON.parse(x)}></Marker>
       ))}*/
+
+// <Marker
+//     icon={{
+//       url: orange,
+//       scaledSize: new window.google.maps.Size(40, 40),
+//     }}
+//     position={{
+//       lat: 13.740522160240175,
+//       lng: 100.53447914292413,
+//     }}
+//   ></Marker>
+//   <Marker
+//     icon={{
+//       url: orange,
+//       scaledSize: new window.google.maps.Size(40, 40),
+//     }}
+//     position={{
+//       lat: 13.77,
+//       lng: 100.55,
+//     }}
+//   ></Marker>
+//   <Marker
+//     icon={{
+//       url: orange,
+//       scaledSize: new window.google.maps.Size(40, 40),
+//     }}
+//     position={{
+//       lat: 13.775,
+//       lng: 100.555,
+//     }}
+//   ></Marker>
