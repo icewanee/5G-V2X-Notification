@@ -1,10 +1,10 @@
 const async = require("async");
 const config = require("./config");
 var http = require('http');
-http.post = require('http-post');
+const axios = require('axios')
 
 const time = config.TimeDisappearAcs;
-
+const car_id = config.CarID
 module.exports = (
   app,
   setid,
@@ -24,10 +24,6 @@ module.exports = (
         path : '/api/car/accident', // the rest of the url with parameters if needed
         method : 'GET' // do GET
       };
-      // var options = {
-      //     host: config.CloundSever,
-      //     path: '/api/car/accident'
-      // }
       var data = '';
       let json
       var request = http.request(options, function (res) {
@@ -98,26 +94,31 @@ module.exports = (
     let username1 = req.body.username;
     let password1 = req.body.password;
     console.log(username1,password1);
-    // http.post(`${config.CloundSever}/api/car/login`, { username: username1, password: password1 }, function(res){
-    //   response.setEncoding('utf8');
-    //   res.on('data', function(chunk) {
-    //     console.log(chunk);
-    //     if(chunk.success){
-    //       pushDataToKafka({
-    //         condition: "set_account",
-    //         username: username1,
-    //       });
-    //       res.json({ islogin: true, username: username });
-    //     }
-    //     else{
-    //       res.json({ islogin: false, username: username });
-    //     }
-    //   });
-    // });
-    pushDataToKafka({
-              condition: "set_account",
-              username: username1,
-            });
-    res.json({ islogin: true, username: username1 });
+    await axios({
+      method: "POST",
+      url: "http://127.0.0.1:8080/api/car/login",
+      headers: {},
+      data: { username: username1, password: password1, car_id: car_id },
+    })
+      .then((response) => {
+
+        if(response && response.data && response.data.success){
+            pushDataToKafka({
+                      condition: "set_account",
+                      username: username1,
+                    });
+            res.json({ islogin: true, username: username1 });
+        }
+        else{
+          console.log(response.data.message)
+          res.json({ islogin: false, message: response.data.message });
+        }
+        
+      })
+      .catch((err) => {
+        console.log("error in request", err.response.data);
+        res.json({ islogin: false, message: err.response.data.message });
+      });
+
   });
 };

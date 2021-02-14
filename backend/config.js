@@ -11,6 +11,7 @@ const config = {
   KafkaPasswordInCar: process.env.PASSWORD_KAFKA_IN_CAR,
   KafkaUsernameOnCln: process.env.USERNAME_KAFKA_ON_CLN,
   KafkaPasswordOnCln: process.env.PASSWORD_KAFKA_ON_CLN,
+  CarID: process.env.CAR_ID,
 };
 
 module.exports = config;
