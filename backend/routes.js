@@ -46,8 +46,8 @@ module.exports = (
                         let t = Math.ceil((now - new Date(pos.time))/1000)
                         console.log(t)
                         let value = {
-                          "lat": Number(pos.latitude),
-                          "lng": Number(pos.longitude),
+                          "lat": Number(pos.lat),
+                          "lng": Number(pos.lng),
                         };
                         if(t < time && t >0){
                         client_redis.setex(
