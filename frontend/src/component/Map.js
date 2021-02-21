@@ -4,8 +4,9 @@ import socketIOClient from "socket.io-client";
 import { getDistance } from "geolib";
 import orange from "../pictureNvideo/orangeAcci.png";
 import red from "../pictureNvideo/redAcci.png";
+import { config } from "../config/config";
+
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
-// import { MarkerClusterer } from "@react-google-maps/api";
 import {
   GoogleMap,
   withScriptjs,
@@ -58,36 +59,14 @@ const location = (props) => {
         }}
       ></Marker>
       <MarkerClusterer
-        defaultMaxZoom={15}
-        ignoreHidden={true}
-        // setValues={10}
-        defaultGridSize={60}
-        defaultMinimumClusterSize={0}
         // averageCenter={false}
-        // setzIndex={0}
-        enableRetinaIcons={true}
-        MinimumClusterSize={0}
+        // enableRetinaIcons={false}
+        defaultMaxZoom={12}
+        minimumClusterSize={0}
+        ignoreHidden={true}
+        // defaultMinimumClusterSize={1}
+        // gridSize={1}
       >
-        <Marker
-          icon={{
-            url: orange,
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-          position={{
-            lat: 13.77,
-            lng: 100.55,
-          }}
-        />
-        <Marker
-          icon={{
-            url: orange,
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-          position={{
-            lat: 13.7,
-            lng: 100.55,
-          }}
-        />
         {props.accidentlocation.map((x) => (
           <Marker
             position={JSON.parse(x)}
@@ -95,7 +74,7 @@ const location = (props) => {
               url: orange,
               scaledSize: new window.google.maps.Size(40, 40),
             }}
-          />
+          ></Marker>
         ))}
       </MarkerClusterer>
     </GoogleMap>
@@ -125,8 +104,8 @@ export class Map extends Component {
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
-          latlng: String(lat) + "," + String(lng), //"13.740522160240175,100.53447914292413",
-          key: "AIzaSyDn7dJCMiEJ6WpiHBazNhzpTv9rIriG5K0", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
+          latlng: String(lat) + "," + String(lng), //"13.740522160240175,100.53447914292413",          
+          key: config.googleMapAPI, // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {
@@ -174,12 +153,9 @@ export class Map extends Component {
         distance = Number(dis) / 1000;
         if (!isnear) {
           if (distance <= 20 && !isnear) {
-            {
               isnear = true;
               console.log("around", isnear, element, distance);
-
-              ans = element;
-            }
+              ans = element
           } else if (min >= distance) {
             min = distance;
           }
@@ -233,7 +209,7 @@ export class Map extends Component {
       </button>*/
       <div style={{ width: "80vw", height: "65vh" }}>
         <WrappedMap /*googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`} // <-- put API key in here*/ // <-- put API key in here
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDn7dJCMiEJ6WpiHBazNhzpTv9rIriG5K0&callback=initMap`} // add &libraries=geometry,drawing,places
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${config.googleMapAPI}&callback=initMap`}
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
@@ -247,7 +223,7 @@ export class Map extends Component {
   componentDidMount() {
     axios({
       method: "GET",
-      url: "http://127.0.0.1:4000/map",
+      url: "http://localhost:4000/map",
       headers: {},
       data: {},
     })

@@ -1,9 +1,10 @@
 const async = require("async");
 const config = require("./config");
-const express = require("express");
+var http = require('http');
+const axios = require('axios')
 
 const time = config.TimeDisappearAcs;
-
+const car_id = config.CarID
 module.exports = (
   app,
   setid,
@@ -14,37 +15,68 @@ module.exports = (
   getisFirstTime
 ) => {
   app.get("/map", function (req, res) {
-    //console.log(client_redis.hgetall())
+    console.log(getisFirstTime(),"/map")
     if (getisFirstTime()) {
-      //const url = `${config('CloundSever')}/accident`
-      //const res = await axios.get(url) //
-      let res = [
-        { lat: 13.746791, lng: 100.535458 },
-        { lat: 13.74, lng: 100.535458 },
-      ];
-      let id = getid();
-      async.map(
-        res,
-        function (pos, cb) {
-          console.log(pos, id);
-          client_redis.setex(
-            JSON.stringify(pos),
-            time,
-            "",
-            function (err, reply) {
-              if (err) return cb(err);
-              cb(null, "success 1st map");
+      setFirstTime();
+      var options = {
+        host : 'localhost',
+        port : 8080,
+        path : '/api/car/accident', // the rest of the url with parameters if needed
+        method : 'GET' // do GET
+      };
+      var data = '';
+      let json
+      var request = http.request(options, function (res) {
+          res.on('data', function (chunk) {
+              data += chunk;
+              // console.log("data", data)
+          });
+          res.on('end', function () {
+              json = JSON.parse(data);
+              if(!json.success){
+                console.log(data.message)
+                
+              } else{
+              if(json.data != []){
+                let now = new Date()
+                async.map(
+                      json.data,
+                      function (pos, cb) {
+                        //console.log(pos, id);
+                        let t = Math.ceil((now - new Date(pos.time))/1000)
+                        console.log(t)
+                        let value = {
+                          "lat": Number(pos.lat),
+                          "lng": Number(pos.lng),
+                        };
+                        if(t < time && t >0){
+                        client_redis.setex(
+                          JSON.stringify(value),
+                          time-t,
+                          "",
+                          function (err, reply) {
+                            if (err) return cb(err);
+                            cb(null, "success 1st map");
+                          }
+                        );
+                        }
+                      },
+                      function (error, results) {
+                        if (error) return console.log(error);
+                        console.log(results);
+                        // setid(id);
+                      }
+                      
+                    );
+              }
             }
-          );
-          id = id + 1;
-        },
-        function (error, results) {
-          if (error) return console.log(error);
-          console.log(results);
-          setFirstTime();
-          setid(id);
-        }
-      );
+          });
+      });
+      request.on('error', function (e) {
+          console.log("error /map",e.message);
+      });
+      request.end();
+      
     }
     client_redis.keys("*", function (err, keys) {
       if (err) return console.log(err);
@@ -59,16 +91,34 @@ module.exports = (
   });
 
   app.post("/login", async (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
-    console.log(username);
-    console.log(password);
-    //Tan
-    //if canlogin
-    pushDataToKafka({
-      condition: "set_account",
-      username: username,
-    });
-    res.json({ islogin: true, username: username });
+    let username1 = req.body.username;
+    let password1 = req.body.password;
+    console.log(username1,password1);
+    await axios({
+      method: "POST",
+      url: "http://127.0.0.1:8080/api/car/login",
+      headers: {},
+      data: { username: username1, password: password1, car_id: car_id },
+    })
+      .then((response) => {
+
+        if(response && response.data && response.data.success){
+            pushDataToKafka({
+                      condition: "set_account",
+                      username: username1,
+                    });
+            res.json({ islogin: true, username: username1 });
+        }
+        else{
+          console.log(response.data.message)
+          res.json({ islogin: false, message: response.data.message });
+        }
+        
+      })
+      .catch((err) => {
+        console.log("error in request", err.response.data);
+        res.json({ islogin: false, message: err.response.data.message });
+      });
+
   });
 };
