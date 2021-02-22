@@ -38,9 +38,10 @@ export class ClusterMap extends React.PureComponent {
   }
 
   getClusters = () => {
+    // console.log("check", this.props.accidentlocation);
     const clusters = supercluster(this.props.accidentlocation, {
       minZoom: 0,
-      maxZoom: 16,
+      maxZoom: 19,
       radius: 60,
     });
 
@@ -92,7 +93,7 @@ export class ClusterMap extends React.PureComponent {
         onChange={this.handleMapChange}
         yesIWantToUseGoogleMapApiInternals
         bootstrapURLKeys={{
-          key: "",
+          key: "AIzaSyDn7dJCMiEJ6WpiHBazNhzpTv9rIriG5K0",
           libraries: ["visualization"],
         }}
       >
@@ -172,38 +173,38 @@ export class MapN extends Component {
     var ans = false;
     var distance = 0;
     let isnear = false;
-    dataLocation
-      .slice()
-      .reverse()
-      .forEach((element) => {
-        var dis = getDistance(
-          {
-            latitude: Number(
-              this.state.currentLat
-            ) /*localStorage.getItem("currentLat")*/,
-            longitude: Number(
-              this.state.currentLng
-            ) /*localStorage.getItem("currentLng")*/,
-          },
-          {
-            latitude: Number(JSON.parse(element)["lat"]),
-            longitude: Number(JSON.parse(element)["lng"]),
-          }
-        );
-        distance = Number(dis) / 1000;
-        if (!isnear) {
-          if (distance <= 20 && !isnear) {
-            {
-              isnear = true;
-              console.log("around", isnear, element, distance);
-
-              ans = element;
-            }
-          } else if (min >= distance) {
-            min = distance;
-          }
+    dataLocation.reverse().forEach((element) => {
+      // .toString()
+      // .slice()
+      var dis = getDistance(
+        {
+          latitude: Number(
+            this.state.currentLat
+          ) /*localStorage.getItem("currentLat")*/,
+          longitude: Number(
+            this.state.currentLng
+          ) /*localStorage.getItem("currentLng")*/,
+        },
+        {
+          latitude: Number(JSON.parse(element)["lat"]),
+          longitude: Number(JSON.parse(element)["lng"]),
         }
-      });
+      );
+      distance = Number(dis) / 1000;
+      console.log("distance", distance, dis);
+      if (!isnear) {
+        if (distance <= 20 && !isnear) {
+          {
+            isnear = true;
+            console.log("around", isnear, element, distance);
+
+            ans = element;
+          }
+        } else if (min >= distance) {
+          min = distance;
+        }
+      }
+    });
     return ans;
   };
 
@@ -211,9 +212,21 @@ export class MapN extends Component {
     console.log("message");
     const socket = socketIOClient(ENDPOINT);
     socket.on("sent-message", (message) => {
-      this.setState({ accidentlocation: message.data });
-      console.log(message);
-      let locationDis = this.around(this.state.accidentlocation);
+      console.log("message", message);
+      var modMessage = [];
+      message.data.forEach((element) => {
+        modMessage.push(JSON.parse(element));
+      });
+      // modMessage.push({
+      //   lat: 13.877647,
+      //   lng: 100.4,
+      // });
+      this.setState({ accidentlocation: modMessage });
+      // message.data.push(`{
+      //   "lat": 13.877647,
+      //   "lng": 100.4,
+      // }`);
+      var locationDis = this.around(message.data); //this.state.accidentlocation
       //this.displaylocation(message.data);// not used
       console.log("h", this.state.accidentlocation);
       if (locationDis) {
@@ -232,14 +245,14 @@ export class MapN extends Component {
         currentLng: Number(position.coords.longitude),
       });
 
-      console.log("Latitude is :", position.coords.latitude);
-      console.log("Longitude is :", position.coords.longitude);
+      // console.log("Latitude is :", position.coords.latitude);
+      // console.log("Longitude is :", position.coords.longitude);
     });
   };
 
   render() {
     return (
-      <div style={{ width: "80vw", height: "65vh" }}>
+      <div style={{ width: "87vw", height: "65vh" }}>
         <ClusterMap
           accidentlocation={this.state.accidentlocation}
           here={{ lat: this.state.currentLat, lng: this.state.currentLng }}
@@ -258,35 +271,40 @@ export class MapN extends Component {
       data: {},
     })
       .then((res) => {
-        this.setState({ accidentlocation: res.data.data });
+        // this.setState({ accidentlocation: res.data.data });
+        var modMessage = [];
+        res.data.data.forEach((element) => {
+          modMessage.push(JSON.parse(element));
+        });
+        this.setState({ accidentlocation: modMessage });
       })
       .catch((err) => {
         console.log("error in request", err);
       });
-    this.setState({
-      accidentlocation: [
-        {
-          lat: 13.77,
-          lng: 100.55,
-        },
-        {
-          lat: 13.75,
-          lng: 100.55,
-        },
-        {
-          lat: 13.74,
-          lng: 100.55,
-        },
-      ],
-    });
+    // this.setState({
+    //   accidentlocation: [
+    //     {
+    //       lat: 13.77,
+    //       lng: 100.55,
+    //     },
+    //     {
+    //       lat: 13.75,
+    //       lng: 100.55,
+    //     },
+    //     {
+    //       lat: 13.74,
+    //       lng: 100.55,
+    //     },
+    //   ],
+    // });
     this.response();
   }
 
   componentDidUpdate() {
     setInterval(() => {
       this.uploadcurrentlo();
-      console.log("haha");
-    }, 8000);
+      // console.log("haha");
+    }, 30000);
   }
 }
 
