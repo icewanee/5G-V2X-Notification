@@ -51,7 +51,7 @@ export class Login extends Component {
             <div className="col-md-5 "></div>
           </div>
           <br />
-          <div className="Card box" style={{ width: "87vw", height: "60vh" }}>
+          <div className="Card box" style={{ width: "87vw", height: "62vh" }}>
             <br />
             <form
               className="needs-validation"
@@ -70,7 +70,7 @@ export class Login extends Component {
                     className="card-title"
                     style={{
                       fontFamily: "Courier New",
-                      fontSize: 45,
+                      fontSize: 46,
                       fontWeight: "bold",
                     }}
                   >

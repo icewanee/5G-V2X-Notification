@@ -90,7 +90,7 @@ export class Home extends Component {
               className="col-md-10"
               style={{ width: "90vw", height: "60vh" }}
             >
-              <img src={red} style={{ width: "87vw", height: "60vh" }} />
+              <img src={red} style={{ width: "87vw", height: "62vh" }} />
             </div>
           </div>
         </div>

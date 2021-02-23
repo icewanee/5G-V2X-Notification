@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { GoogleMap, withScriptjs, withGoogleMap } from "react-google-maps";
-import Map from "../component/Map";
+import MapN from "../component/MapN";
 import history from "../history";
 
 export class Accident extends Component {
@@ -45,7 +45,7 @@ export class Accident extends Component {
                 alignItems: "center",
               }}
             >
-              <Map inforAlert={this.setAlert} />
+              <MapN inforAlert={this.setAlert} />
             </div>
           </div>
           <div className="row" style={{ paddingTop: 25 }}>
