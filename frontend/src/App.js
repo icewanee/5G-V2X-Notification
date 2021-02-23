@@ -8,6 +8,7 @@ import Accident from "./page/Accident";
 import Home from "./page/Home";
 import PageNotFound from "./page/PageNotFound";
 import Login from "./page/Login";
+import MapN from "./component/MapN";
 
 class App extends Component {
   constructor(props) {

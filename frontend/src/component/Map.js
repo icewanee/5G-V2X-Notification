@@ -7,6 +7,7 @@ import red from "../pictureNvideo/redAcci.png";
 import { config } from "../config/config";
 
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
+// import { MarkerClusterer } from "@react-google-maps/api";
 import {
   GoogleMap,
   withScriptjs,
@@ -59,14 +60,36 @@ const location = (props) => {
         }}
       ></Marker>
       <MarkerClusterer
-        // averageCenter={false}
-        // enableRetinaIcons={false}
-        defaultMaxZoom={12}
-        minimumClusterSize={0}
+        defaultMaxZoom={15}
         ignoreHidden={true}
-        // defaultMinimumClusterSize={1}
-        // gridSize={1}
+        // setValues={10}
+        defaultGridSize={60}
+        defaultMinimumClusterSize={0}
+        // averageCenter={false}
+        // setzIndex={0}
+        enableRetinaIcons={true}
+        MinimumClusterSize={0}
       >
+        <Marker
+          icon={{
+            url: orange,
+            scaledSize: new window.google.maps.Size(40, 40),
+          }}
+          position={{
+            lat: 13.77,
+            lng: 100.55,
+          }}
+        />
+        <Marker
+          icon={{
+            url: orange,
+            scaledSize: new window.google.maps.Size(40, 40),
+          }}
+          position={{
+            lat: 13.7,
+            lng: 100.55,
+          }}
+        />
         {props.accidentlocation.map((x) => (
           <Marker
             position={JSON.parse(x)}
@@ -74,7 +97,7 @@ const location = (props) => {
               url: orange,
               scaledSize: new window.google.maps.Size(40, 40),
             }}
-          ></Marker>
+          />
         ))}
       </MarkerClusterer>
     </GoogleMap>

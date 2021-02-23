@@ -135,13 +135,14 @@ let consumer = new Consumer(
     fetchMaxWaitMs: 1000,
     fetchMaxBytes: 1024 * 1024,
     encoding: "utf8",
-    fromOffset: false
+    fromOffset: false,
   }
 );
 consumer.on("message", async function (message) {
   const data = JSON.parse(message.value);
   const condition = data.condition;
   console.log(data);
+
   if (!isFirstTime && condition) {
     if (condition.trim() == "ACS") {
       let value = {
@@ -161,17 +162,28 @@ consumer.on("message", async function (message) {
         }
       );
       //redis ice
-      client_redis.keys("*", function (err, keys) {
-        if (err) return console.log(err);
-        if (keys) {
-          // io.emit("sent-message", { data: keys });
-          console.log("hey");
-          // res.json({ data: keys });
-        }
-      });
+      // client_redis.keys("*", function (err, keys) {
+      //   if (err) return console.log(err);
+      //   if (keys) {
+      //     console.log("soc");
+      //     io.emit("sent-message", { data: keys });
+      //     console.log("hey");
+      //     // res.json({ data: keys });
+      //   }
+      // });
     } else {
       console.log("kafka not in condition", data);
     }
+    //redis ice
+    client_redis.keys("*", function (err, keys) {
+      if (err) return console.log(err);
+      if (keys) {
+        console.log("soc");
+        io.emit("sent-message", { data: keys });
+        console.log("hey");
+        // res.json({ data: keys });
+      }
+    });
   }
 });
 
