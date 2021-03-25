@@ -5,21 +5,18 @@ const axios = require('axios')
 
 const time = config.TimeDisappearAcs;
 const car_id = config.CarID;
-const dds_topic = config.KafkaDdsTopic;
-const acd_topic = config.KafkaAICTopic;
-const username_topic = config.KafkaUsernameTopic;
-let res_start = ''
-let islogin = false
-let musicName = "Confident"
+const dds_topic = config.DdsTopic;
+const acd_topic = config.ActTopic;
+let timeLogin;
+let islogin = false;
 module.exports = (
   app,
   client_redis,
   pushDataToKafka,
   setFirstTime,
   getisFirstTime,
-  getPos,
+  pushDataToKafkaOnCln,
   setUsername,
-  io,
 ) => {
   app.get("/map", function (req, res) {
     console.log(getisFirstTime(),"/map")
@@ -96,57 +93,47 @@ module.exports = (
   app.post("/", function (req, res) {
     // do something w/ req.body or req.files
   });
+
   app.post("/newAccident", function (req, res) {
-    if(islogin) {
-      pushDataToKafka(acd_topic,{
-        condition: 'AIC',
+    if(!islogin) {
+      return
+    }
+    pushDataToKafkaOnCln(acd_topic,{
+        carID: car_id,
+        condition: 'ACS',
+        time: (new Date()).toISOString(),
     });
-    }
   });
-  app.post("/dds", function (req, res) {
-    // if(islogin){
-      res_start = new Date()
-      io.emit('alert_sound',{ data: musicName })
-      console.log("DDS_post")
-      res.json({successful:true})
-    // }
-    // else{
-    //   console.log("Driver isn't login")
-        // res.json({successful:false})
-    // }
-  });
-  app.post("/selectedSong", function (req, res) {
-    let name = req.body.musicName 
-    musicName = name
-    if(music == null || music == ""){
-      res.json({successful:false})
-    }
-    res.json({successful:true})
-  });
+
   app.post("/newDrowsiness", function (req, res) {
-    // if(islogin) {
-      let d = new Date()
-      let response_time1 =  Math.abs(d - res_start)/1000
-      res_start = ""
-      pushDataToKafka(dds_topic,{
-        condition: 'DIC',
-        response_time: response_time1,
-      });
-      res.json({successful:true})
-    // }
-    // else{
-    //   res.json({successful:false})
-    // }
-  });
-  app.get("/position", function (req, res) {
-    // do something w/ req.body or req.files
-    console.log("get position")
-    pos = getPos()
-    if(pos["lat"]== undefined ||pos["lat"]== 0 || pos["lng"]== undefined || pos["lng"]== 0){
-      res.json({successful:false, data: null})
+    if(!islogin) {
+      return
     }
-    res.json({successful:true, data: pos})
+    let d = new Date()
+    let response_time = req.body.res_time;
+    let response_time1 =  Math.abs(new Date(response_time) - d)
+    let work_sec = Math.abs(d- timeLogin)
+    pushDataToKafkaOnCln(dds_topic,{
+        carID: car_id,
+        condition: 'DDS',
+        time: d.toISOString(),
+        response_time: response_time1,
+        working_time: Math.ceil(work_sec/3600000),
+    });
+    
   });
+
+  app.post("/selectMusic", function (req, res) {
+    let no = req.body.music;
+    pushDataToKafka("select_music",{
+        username: username1,
+        carID: car_id,
+        lat: lat1,
+        lng: lng1,
+        condition: 'select',
+    });
+  });
+
   app.post("/login", async (req, res) => {
     let username1 = req.body.username;
     let password1 = req.body.password;
@@ -160,12 +147,10 @@ module.exports = (
       .then((response) => {
 
         if(response && response.data && response.data.success){
-            pushDataToKafka(username_topic,{
-                      condition: "set_account",
-                      username: username1,
-            });
             setUsername(username1)
+            timeLogin = new Date()
             islogin = true
+            console.log("Login at",timeLogin.toISOString())
             res.json({ islogin: true, username: username1 });
         }
         else{
@@ -180,10 +165,13 @@ module.exports = (
       });
 
   });
+
   app.post("/logout", async (req, res) => {
+    let username1 = req.body.username;
     console.log(username1,": logout");
     islogin = false
     setUsername("")
     res.json({ islogin: false, message: "logout" })
+
   });
 };
