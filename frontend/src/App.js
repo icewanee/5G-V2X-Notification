@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Route, Switch, Router } from "react-router-dom";
-//uninstall yet
-//import axios from "axios";
+import socketIOClient from "socket.io-client";
 import history from "./history";
 import Accident from "./page/Accident";
-import Home from "./page/Home";
+import Home from "./redesign/Home";
 import PageNotFound from "./page/PageNotFound";
-import Login from "./page/Login";
+import Login from "./redesign/Login";
 import MapN from "./component/MapN";
+import Playlist from "./page/Playlist";
+import axios from "axios";
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +28,14 @@ class App extends Component {
     }
   }
 
+  alertDrowsy() {
+    var d = new Date();
+    var start = d.getTime();
+    var end = d.getTime();
+    var response = start - end;
+    return response;
+  }
+
   render() {
     return (
       <Router history={history}>
@@ -42,13 +51,43 @@ class App extends Component {
             ) : (
               <Route path="/accident" component={PageNotFound} />
             )}
-            <Route path="/test" component={Accident} />
+            {this.loggedIn() ? (
+              <Route path="/playlist" component={Playlist} />
+            ) : (
+              <Route path="/playlist" component={PageNotFound} />
+            )}
+            <Route path="/test" component={Home} />
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
         </div>
       </Router>
     );
+  }
+  componentDidMount() {
+    const socket = socketIOClient("http://localhost:4000");
+    socket.on("alert_sound", (message) => {
+      console.log("message", message);
+      if (message == "request to alert") {
+        console.log("pop up");
+        var response = this.alertDrowsy;
+        axios({
+          method: "POST",
+          url: "http://127.0.0.1:4000/newDrowsiness", // change
+          headers: {},
+          data: {
+            username: "local username",
+            response: response,
+          },
+        })
+          .then((res) => {
+            window.location.reload();
+          })
+          .catch((err) => {
+            console.log("error in request", err);
+          });
+      }
+    });
   }
 }
 
