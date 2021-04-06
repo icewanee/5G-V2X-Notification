@@ -1,28 +1,26 @@
 import React, { Component } from "react";
-// import { useState } from "react";
 import axios from "axios";
 import { Form, Input, Button, Layout, Menu, Modal } from "antd";
+import MapN from "../component/MapN";
 import { Row, Col } from "antd";
-import red from "../pictureNvideo/redd.png";
-import map from "../pictureNvideo/map.jpg";
-import playlist from "../pictureNvideo/playlist.jpg";
 
 import "../App.css";
 import history from "../history";
 
-export class Home extends Component {
+export class Accident extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: localStorage.username,
-      setIsModalVisible: false,
-    };
+    this.state = { username: localStorage.username, setIsModalVisible: false };
   }
+
+  setAlert = (infor) => {
+    this.setState({ alert: infor });
+    console.log(infor);
+  };
 
   render() {
     const { Header, Footer, Sider, Content } = Layout;
     const { SubMenu } = Menu;
-
     return (
       <div
         style={{
@@ -62,54 +60,15 @@ export class Home extends Component {
             >
               <Row>
                 <Col
-                  span={12}
+                  span={24}
                   style={{
-                    height: "80vh",
+                    // height: "100vh",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    onClick={() => this.onClick("/accident")}
-                    style={{
-                      height: "60vh",
-                      width: "35vw",
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      // backgroundImage: "url(../pictureNvideo/map.jpg)",
-                      backgroundImage: `url(${map})`,
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    {/* <img src={map} style={{ width: "100%", height: "100%" }} /> */}
-                    Map
-                  </Button>
-                </Col>
-                <Col
-                  span={12}
-                  style={{
-                    height: "80vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    style={{
-                      height: "60vh",
-                      width: "35vw",
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      backgroundImage: `url(${playlist})`,
-
-                      backgroundSize: "cover",
-                      color: "white",
-                    }}
-                    onClick={() => this.onClick("/playlist")}
-                  >
-                    Playlist
-                  </Button>
+                  <MapN inforAlert={this.setAlert} />
                 </Col>
               </Row>
             </Content>
@@ -130,9 +89,6 @@ export class Home extends Component {
                 defaultOpenKeys={["sub1"]}
                 style={{ height: "100%" }}
               >
-                <Menu.Item key="1" onClick={() => this.onClick("/home")}>
-                  Home
-                </Menu.Item>
                 <Menu.Item key="2" onClick={() => this.showModal()}>
                   SOS
                 </Menu.Item>
@@ -146,24 +102,20 @@ export class Home extends Component {
                   <p>Some contents...</p>
                   <p>Some contents...</p>
                 </Modal>
-                <Menu.Item key="3" onClick={() => this.onClick("/accident")}>
-                  Map
+                <Menu.Item key="1" onClick={() => this.onClick("/home")}>
+                  Home
                 </Menu.Item>
-                <Menu.Item key="4" onClick={() => this.onClick("/playlist")}>
+                <Menu.Item key="3" onClick={() => this.onClick("/playlist")}>
                   Playlist
                 </Menu.Item>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Menu.Item key="5" onClick={() => this.onClick("/")}>
+                <Menu.Item key="4" onClick={() => this.onClick("/")}>
                   Logout
                 </Menu.Item>
                 {/* <Footer>Footer</Footer> */}
               </Menu>
             </Sider>
           </Layout>
+
           {/* <Footer>Footer</Footer> */}
         </Layout>
       </div>
@@ -211,4 +163,4 @@ export class Home extends Component {
     }
   };
 }
-export default Home;
+export default Accident;

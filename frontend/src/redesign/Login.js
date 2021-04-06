@@ -11,6 +11,19 @@ export class Login extends Component {
   }
 
   render() {
+    const tailLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+        },
+        sm: {
+          offset: 20,
+          span: 4,
+          // span: 24,
+        },
+      },
+    };
+
     const onFinish = (values) => {
       console.log("Success:", values);
       this.onClickLogin(values);
@@ -79,7 +92,7 @@ export class Login extends Component {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item {...tailLayout}>
               <Button
                 type="primary"
                 htmlType="submit"
@@ -87,9 +100,11 @@ export class Login extends Component {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  // alignSelf: "flex-end",
+                  width: "100%",
                 }}
               >
-                Submit
+                Log in
               </Button>
             </Form.Item>
           </Form>
@@ -114,6 +129,7 @@ export class Login extends Component {
     })
       .then((res) => {
         localStorage.setItem("islogin", res.data.islogin);
+        localStorage.setItem("ีusername", username);
         console.log(res);
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
