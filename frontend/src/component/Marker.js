@@ -35,7 +35,7 @@ export const Here = () => (
     style={{
       position: "absolute",
       transform: "translate(-50%, -100%)",
-      zIndex: "9999",
+      zIndex: "1",
     }}
   >
     <img src={red} height="44px" width="44px" alt="I'm here" />
