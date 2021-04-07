@@ -126,7 +126,7 @@ export class Map extends Component {
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
           latlng: String(lat) + "," + String(lng), //"13.740522160240175,100.53447914292413",
-          key: "AIzaSyDn7dJCMiEJ6WpiHBazNhzpTv9rIriG5K0", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
+          key: "", // <-- put API key in hereprocess.env.REACT_APP_GOOGLE_KEY
         },
       })
       .then(function (response) {

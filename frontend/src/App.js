@@ -16,9 +16,8 @@ import { Form, Input, Button, Layout, Menu, Modal } from "antd";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { setIsModalVisible: false, audioPlay: false };
+    this.state = { setIsModalVisible: false, currentLat: "", currentLng: "" };
   }
-
   audio = new Audio(confident);
   loggedIn() {
     //return true;
@@ -49,20 +48,14 @@ class App extends Component {
           <Modal
             title="Drowsiness alert"
             visible={this.state.setIsModalVisible}
-            onOk={() => this.handleOk()}
+            onOk={() => this.audio.play}
             onCancel={() => this.handleCancel()}
           >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <audio ref="audio_tag" autoPlay={true} controls={true}>
+              <source type="audio/mp3" src={confident} />
+            </audio>
           </Modal>
-          {/* <audio
-            ref="audio_tag"
-            autoPlay={this.state.audioPlay}
-            controls={true}
-          >
-            <source type="audio/mp3" src={confident} />
-          </audio> */}
+
           <Switch>
             {this.loggedIn() ? (
               <Route path="/home" component={Home} />
@@ -86,7 +79,7 @@ class App extends Component {
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
-          {/* <button onClick={() => this.showModal()}>sound test</button> */}
+          <button onClick={() => this.showModal()}>sound test</button>
         </div>
       </Router>
     );
@@ -132,16 +125,27 @@ class App extends Component {
       }
     });
   }
+
+  uploadcurrentlo = () => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      //   localStorage.setItem("currentLat", Number(position.coords.latitude));
+      //   localStorage.setItem("currentLng", Number(position.coords.longitude));
+      console.log(Number(position.coords.latitude));
+      this.setState({
+        currentLat: Number(position.coords.latitude),
+        currentLng: Number(position.coords.longitude),
+      });
+    });
+    const Socket = socketIOClient("http://localhost:4000");
+    let response = { lat: this.state.currentLat, lng: this.state.currentLng };
+    Socket.emit("position", response);
+  };
+
+  componentDidUpdate() {
+    setInterval(() => {
+      this.uploadcurrentlo();
+    }, 30000);
+  }
 }
 
 export default App;
-/*{localStorage.getItem("islogin") ? (
-              <Route exact path="/home" component={Home} />
-            ) : (
-              <Route exact path="/home" component={Login} />
-            )}
-            {localStorage.getItem("islogin") ? (
-              <Route exact path="/accident" component={Accident} />
-            ) : (
-              <Route exact path="/accident" component={PageNotFound} />
-            )}*/
