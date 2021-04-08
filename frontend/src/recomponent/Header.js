@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Layout } from "antd";
 
 import "../App.css";
+import history from "../history";
 
 export class Header extends Component {
   constructor(props) {
@@ -30,5 +31,16 @@ export class Header extends Component {
       </Header>
     );
   }
+  onClick = async (page) => {
+    //page.preventDefault();
+    if (page == "/") {
+      console.log(localStorage);
+      localStorage.setItem("islogin", false);
+      console.log(localStorage);
+      history.push(page);
+    } else {
+      history.push(page);
+    }
+  };
 }
 export default Header;

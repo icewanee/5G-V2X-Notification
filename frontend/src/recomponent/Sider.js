@@ -48,9 +48,11 @@ export class Sider extends Component {
             onOk={() => this.handleOk()}
             onCancel={() => this.handleCancel()}
           >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <p>
+              Police (General Emergency Call) <div>191</div>
+            </p>
+            <p>Ambulance and Rescue 1554</p>
+            <p>Medical Emergency Call 1669</p>
           </Modal>
           <Menu.Item key="3" onClick={() => this.onClick("/accident")}>
             Map
