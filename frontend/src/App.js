@@ -12,7 +12,7 @@ import Playlist from "./redesign/Playlist";
 import axios from "axios";
 import confident from "../src/song/confident_demi.mp3";
 import { Form, Input, Button, Layout, Menu, Modal } from "antd";
-
+import { config } from "./config/config";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -108,7 +108,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const socket = socketIOClient("http://localhost:4000");
+    const socket = socketIOClient("http://"+config.baseURL+":4000");
     socket.on("alert_sound", (message) => {
       console.log("message", message);
       if (message == "request to alert") {
@@ -116,7 +116,7 @@ class App extends Component {
         var response = this.alertDrowsy();
         axios({
           method: "POST",
-          url: "http://127.0.0.1:4000/newDrowsiness", // change
+          url: "http://"+config.baseURL+":4000/newDrowsiness", // change
           headers: {},
           data: {
             username: "local username",
@@ -130,7 +130,18 @@ class App extends Component {
             console.log("error in request", err);
           });
       }
+      socket.on("eyeNotFound",(message) =>{
+        
+      })
     });
+    // const socket2 = socketIOClient("http://"+config.ddsURL+":4000");
+    // socket2.on("eyes_not_found", (message) => {
+    //   console.log("message", message);
+    //   if (message == "request to alert") {
+    //     console.log("pop up");
+      
+    //   }
+    // });
   }
 }
 

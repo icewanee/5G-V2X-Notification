@@ -3,11 +3,13 @@ import axios from "axios";
 import { Form, Input, Button } from "antd";
 import "../App.css";
 import history from "../history";
-
+import { config } from "../config/config";
 export class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      alert: "",
+    };
   }
 
   render() {
@@ -91,7 +93,9 @@ export class Login extends Component {
             >
               <Input.Password />
             </Form.Item>
-
+            <Form.Item>
+              <h6 style={{ color: "#db1f2a",}}>{this.state.alert}</h6>
+            </Form.Item>
             <Form.Item {...tailLayout}>
               <Button
                 type="primary"
@@ -120,7 +124,7 @@ export class Login extends Component {
     let password = event["password"];
     await axios({
       method: "POST",
-      url: "http://127.0.0.1:4000/login",
+      url: "http://"+config.baseURL+":4000/login",
       headers: {},
       data: {
         username: username,
@@ -134,9 +138,13 @@ export class Login extends Component {
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
+          this.setState({ alert:""});
           history.push("/home");
           window.location.reload();
-        } else window.location.reload();
+        } else {
+          window.location.reload();
+          this.setState({ alert: res.data.message});
+        }
       })
       .catch((err) => {
         console.log("error in request", err);

@@ -1,6 +1,5 @@
 const async = require("async");
 const config = require("./config");
-var http = require('http');
 const axios = require('axios')
 
 const time = config.TimeDisappearAcs;
@@ -25,65 +24,54 @@ module.exports = (
     console.log(getisFirstTime(),"/map")
     if (getisFirstTime()) {
       setFirstTime();
-      var options = {
-        host : 'localhost',
-        port : 8080,
-        path : '/api/car/accident', // the rest of the url with parameters if needed
-        method : 'GET' // do GET
-      };
-      var data = '';
-      let json
-      var request = http.request(options, function (res) {
-          res.on('data', function (chunk) {
-              data += chunk;
-              // console.log("data", data)
-          });
-          res.on('end', function () {
-              json = JSON.parse(data);
-              if(!json.success){
-                console.log(data.message)
-                
-              } else{
-              if(json.data != []){
-                let now = new Date()
-                async.map(
-                      json.data,
-                      function (pos, cb) {
-                        //console.log(pos, id);
-                        let t = Math.ceil((now - new Date(pos.detail.time))/1000)
-                        console.log(t)
-                        let value = {
-                          "lat": Number(pos.coordinate.lat),
-                          "lng": Number(pos.coordinate.lng),
-                        };
-                        if(t < time && t >0){
-                        client_redis.setex(
-                          JSON.stringify(value),
-                          time-t,
-                          "",
-                          function (err, reply) {
-                            if (err) return cb(err);
-                            cb(null, "success 1st map");
-                          }
-                        );
+      await axios({
+        method: "GET",
+        url: "http://"+config.CloundSever+":8080/api/car/accident",
+      })
+        .then((response) => {
+  
+          if(response && response.data && response.data.success){
+              let now = new Date()
+              async.map(
+                    json.data,
+                    function (pos, cb) {
+                      //console.log(pos, id);
+                      let t = Math.ceil((now - new Date(pos.detail.time))/1000)
+                      console.log(t)
+                      let value = {
+                        "lat": Number(pos.coordinate.lat),
+                        "lng": Number(pos.coordinate.lng),
+                      };
+                      if(t < time && t >0){
+                      client_redis.setex(
+                        JSON.stringify(value),
+                        time-t,
+                        "",
+                        function (err, reply) {
+                          if (err) return cb(err);
+                          cb(null, "success 1st map");
                         }
-                      },
-                      function (error, results) {
-                        if (error) return console.log(error);
-                        console.log(results);
-                        // setid(id);
+                      );
                       }
-                      
-                    );
-              }
-            }
-          });
-      });
-      request.on('error', function (e) {
-          console.log("error /map",e.message);
-      });
-      request.end();
-      
+                    },
+                    function (error, results) {
+                      if (error) return console.log(error);
+                      console.log(results);
+                      // setid(id);
+                    }
+                  
+                );
+          }
+          else{
+            console.log(response.data.message)
+            // res.json({ islogin: false, message: response.data.message });
+          }
+          
+        })
+        .catch((err) => {
+          console.log("error in request /api/car/accident", err.response.data);
+          // res.json({ islogin: false, message: err.response.data.message });
+        });
     }
     client_redis.keys("*", function (err, keys) {
       if (err) return console.log(err);
@@ -107,6 +95,18 @@ module.exports = (
     // if(islogin){
       res_start = new Date()
       io.emit('alert_sound',{ data: musicName })
+      console.log("DDS_post")
+      res.json({successful:true})
+    // }
+    // else{
+    //   console.log("Driver isn't login")
+        // res.json({successful:false})
+    // }
+  });
+  app.post("/eyeNotFound", function (req, res) {
+    // if(islogin){
+      res_start = new Date()
+      io.emit('eyeNotFound',{ data: "Drowsiness detection system : not found eye" })
       console.log("DDS_post")
       res.json({successful:true})
     // }
@@ -153,7 +153,7 @@ module.exports = (
     console.log(username1,password1);
     await axios({
       method: "POST",
-      url: "http://127.0.0.1:8080/api/car/login",
+      url: "http://"+config.CloundSever+":8080/api/car/login",
       headers: {},
       data: { username: username1, password: password1, car_id: car_id },
     })

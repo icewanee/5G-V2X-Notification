@@ -1,5 +1,6 @@
 export const config = {
     googleMapAPI: process.env.REACT_APP_MAP_API_KEY || "",
-    baseURL: process.env.REACT_APP_BASE_URL || "",
+    baseURL: process.env.REACT_APP_THIS_BACKEND || "",
+    ddsURL:process.env.REACT_APP_DDS || "",
   };
   
