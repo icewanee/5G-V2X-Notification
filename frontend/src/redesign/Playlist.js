@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Form, Input, Button, Layout, Menu, Row, Col, Modal } from "antd";
-import { Table, Tag, Space } from "antd";
-import { PlayCircleOutlined } from "@ant-design/icons";
+import { Layout, Menu, Row, Col } from "antd";
+import { Table, Tag, Spaceม, notification, Typography, Space } from "antd";
+import {
+  FontSizeOutlined,
+  PlayCircleOutlined,
+  SmallDashOutlined,
+} from "@ant-design/icons";
 import red from "../pictureNvideo/redd.png";
 import confident from "../song/confident_demi.mp3";
+import loveMyself from "../song/LoveMyself_Hailee.mp3";
+import moneyOnMyMind from "../song/MoneyOnMyMind_Sam.mp3";
+import wakeMeUp from "../song/WakeMeUp_Avicii.mp3";
+import warmBlood from "../song/WarmBlood_Carly.mp3";
+import Header from "../recomponent/Header";
+import Sider from "../recomponent/Sider";
 
 import "../App.css";
 import history from "../history";
@@ -12,12 +22,24 @@ import history from "../history";
 export class Playlist extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: localStorage.username, setIsModalVisible: false };
+    this.state = {};
   }
 
   render() {
-    const { Header, Footer, Sider, Content } = Layout;
+    const { Footer, Content } = Layout;
     const { SubMenu } = Menu;
+    const { Text, Link } = Typography;
+    const openNotification = (text) => {
+      notification.open({
+        message: "Notification",
+        description: "Alert sound is changed  ( using : " + text + " )",
+        onClick: (text) => {
+          console.log("Notification Clicked!");
+          this.selectedSong(text);
+        },
+      });
+    };
+
     const columns = [
       {
         title: "",
@@ -33,13 +55,16 @@ export class Playlist extends Component {
         title: "Song",
         dataIndex: "Song",
         key: "Song",
-        render: (text) => <a onClick={() => this.selectedSong(text)}>{text}</a>,
+        render: (text) => (
+          <Link onClick={() => openNotification(text)}>{text}</Link>
+        ),
       },
       {
         title: "Artist",
         dataIndex: "Artist",
         key: "Artist",
-        render: (text) => <a onClick={() => this.selectedSong(text)}>{text}</a>,
+        render: (text) =>
+          text /*<a onClick={() => this.selectedSong(text)}></a>,*/,
       },
       {
         title: "",
@@ -75,28 +100,28 @@ export class Playlist extends Component {
         // picture: "red",
         Song: "Warm Blood",
         Artist: "Carly Rae Jepsen",
-        icon: "Warm Blood",
+        icon: warmBlood,
       },
       {
         key: "3",
         // picture: "red",
         Song: "Money On My Mind",
         Artist: "Sam Smith",
-        icon: "Money On My Mind",
+        icon: moneyOnMyMind,
       },
       {
         key: "4",
         // picture: "red",
         Song: "Love Myself",
         Artist: "Hailee Steinfeld",
-        icon: "Love Myself",
+        icon: loveMyself,
       },
       {
         key: "5",
         // picture: "red",
         Song: "Wake Me Up",
         Artist: "Avicii",
-        icon: "Wake Me Up",
+        icon: wakeMeUp,
       },
     ];
     return (
@@ -110,53 +135,19 @@ export class Playlist extends Component {
         }}
       >
         <Layout>
-          <Header
-            style={{
-              // height: "100vh",
-              display: "flex",
-              // justifyContent: "center",
-              alignItems: "center",
-              // backgroundColor: "#c6d5ad",
-            }}
-          >
-            <h3
-              style={{ color: "white" }}
-              onClick={() => this.onClick("/home")}
-            >
-              Welcome to 5G-V2X {this.state.username}
-            </h3>
-          </Header>
+          <Header />
           <Layout
             className="site-layout-background"
             // style={{ padding: "24px 0" }}
           >
             <Content
               style={{
-                height: "100%",
+                height: "100vh",
                 backgroundColor: "#c6d5ad",
               }}
             >
               <br />
               <Row>
-                {/* <Col
-                  span={24}
-                  style={{
-                    // height: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <br /> <br /> <br />
-                  <br />
-                  <h4
-                    style={{
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Music playlist
-                  </h4>
-                </Col> */}
                 <Col
                   span={24}
                   style={{
@@ -167,105 +158,34 @@ export class Playlist extends Component {
                   }}
                 >
                   <Table
-                    style={{ width: "70vw" }}
+                    style={{ width: "60vw" }}
                     columns={columns}
                     dataSource={data}
-                    title={() => "Music playlist"}
+                    title={() => (
+                      <h4
+                        style={{
+                          // height: "100vh",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        Music playlist
+                      </h4>
+                    )}
+                    // scroll={{ x: 0, y: 350 }}
+                    size={"Small"}
+                    pagination={(true, { defaultPageSize: 4 })}
                   />
                 </Col>
               </Row>
             </Content>
-            <Sider
-              className="site-layout-background"
-              width={200}
-              style={{
-                //   display: "flex",
-                //   justifyContent: "center",
-                //   alignItems: "center",
-                backgroundColor: "white",
-                height: "100%",
-              }}
-            >
-              <Menu
-                mode="inline"
-                defaultSelectedKeys={["1"]}
-                defaultOpenKeys={["sub1"]}
-                style={{ height: "100%" }}
-              >
-                <Menu.Item key="1" onClick={() => this.onClick("/home")}>
-                  Home
-                </Menu.Item>
-                <Menu.Item
-                  style={{ background: "#e03d4d" }}
-                  key="2"
-                  onClick={() => this.showModal()}
-                >
-                  SOS
-                </Menu.Item>
-                <Modal
-                  title="Emergency accident report"
-                  visible={this.state.setIsModalVisible}
-                  onOk={() => this.handleOk()}
-                  onCancel={() => this.handleCancel()}
-                >
-                  <p>Emergency call</p>
-                  <p>Police (General Emergency Call) 191</p>
-                  {/* <p>Some contents...</p> */}
-                </Modal>
-
-                <Menu.Item key="3" onClick={() => this.onClick("/accident")}>
-                  Map
-                </Menu.Item>
-                <Menu.Item key="4" onClick={() => this.onClick("/playlist")}>
-                  Playlist
-                </Menu.Item>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Footer></Footer>
-                <Menu.Item key="5" onClick={() => this.onClick("/")}>
-                  Logout
-                </Menu.Item>
-              </Menu>
-            </Sider>
+            <Sider />
           </Layout>
-
-          {/* <Footer>Footer</Footer> */}
         </Layout>
       </div>
     );
   }
-
-  showModal = () => {
-    this.setState({ setIsModalVisible: true });
-    console.log("showmo");
-    console.log(this.state.setIsModalVisible);
-  };
-  handleOk = () => {
-    this.setState({ setIsModalVisible: false });
-    //  (page == "accidentAlert") {
-    //   axios({
-    //     method: "POST",
-    //     url: "http://127.0.0.1:4000/newAccident", // change
-    //     headers: {},
-    //     data: {
-    //       username: "local username",
-    //       location: "retrieve but do on app.js",
-    //     },
-    //   })
-    //     .then((res) => {
-    //       window.location.reload();
-    //     })
-    //     .catch((err) => {
-    //       console.log("error in request", err);
-    //     });
-  };
-
-  handleCancel = () => {
-    this.setState({ setIsModalVisible: false });
-  };
 
   review = (text) => {
     console.log(text);
@@ -290,6 +210,7 @@ export class Playlist extends Component {
   };
   onClick = async (page) => {
     //page.preventDefault();
+
     if (page == "/") {
       console.log(localStorage);
       localStorage.setItem("islogin", false);
