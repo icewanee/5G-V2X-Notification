@@ -133,16 +133,16 @@ export class Login extends Component {
     })
       .then((res) => {
         localStorage.setItem("islogin", res.data.islogin);
-        localStorage.setItem("ีusername", username);
+        localStorage.setItem("username", username);
         console.log(res);
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
           this.setState({ alert:""});
           history.push("/home");
-          window.location.reload();
+          // window.location.reload();
         } else {
-          window.location.reload();
+          // window.location.reload();
           this.setState({ alert: res.data.message});
         }
       })

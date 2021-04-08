@@ -11,7 +11,7 @@ import MapN from "./component/MapN";
 import Playlist from "./redesign/Playlist";
 import axios from "axios";
 import confident from "../src/song/confident_demi.mp3";
-import { Form, Input, Button, Layout, Menu, Modal } from "antd";
+import { Form, Input, Button, Layout, Menu, Modal,message } from "antd";
 import { config } from "./config/config";
 class App extends Component {
   constructor(props) {
@@ -40,8 +40,12 @@ class App extends Component {
     var response = start - end;
     return response;
   }
+  warning  = (text) => {
+    message.warning(text);
+  };
 
   render() {
+   
     return (
       <Router history={history}>
         <div>
@@ -104,7 +108,7 @@ class App extends Component {
     const socket = socketIOClient("http://"+config.baseURL+":4000");
     socket.on("alert_sound", (message) => {
       console.log("message", message);
-      if (message == "request to alert") {
+      // if (message == "request to alert") {
         console.log("pop up");
         var response = this.alertDrowsy();
         axios({
@@ -122,18 +126,17 @@ class App extends Component {
           .catch((err) => {
             console.log("error in request", err);
           });
-      }
-      socket.on("eyeNotFound",(message) =>{
-        
-      })
+    //}
+      
     });
+    socket.on("eyeNotFound",(message) =>{
+      console.log(message);
+      this.warning("This system can't detect eye");
+    })
     // const socket2 = socketIOClient("http://"+config.ddsURL+":4000");
     // socket2.on("eyes_not_found", (message) => {
-    //   console.log("message", message);
-    //   if (message == "request to alert") {
-    //     console.log("pop up");
-      
-    //   }
+    //    console.log(message);
+    //    this.warning("This system can't detect eye");
     // });
   }
 
@@ -147,7 +150,7 @@ class App extends Component {
         currentLng: Number(position.coords.longitude),
       });
     });
-    const Socket = socketIOClient("http://localhost:4000");
+    const Socket = socketIOClient("http://"+config.baseURL+":4000");
     let response = { lat: this.state.currentLat, lng: this.state.currentLng };
     Socket.emit("position", response);
   };

@@ -5,7 +5,7 @@ import alertPic from "../pictureNvideo/alert.png";
 import alertBPic from "../pictureNvideo/alertB.png";
 import sos from "../pictureNvideo/sos.png";
 import axios from "axios";
-
+import { config } from "../config/config";
 export class Home extends Component {
   constructor(props) {
     super(props);
@@ -153,9 +153,10 @@ export class Home extends Component {
       history.push(page);
     }
     if (page == "accidentAlert") {
+      console.log("new Accident")
       axios({
         method: "POST",
-        url: "http://127.0.0.1:4000/newAccident", // change
+        url: "http://"+config.baseURL+":4000/newAccident", // change
         headers: {},
         data: {
           username: "local username",

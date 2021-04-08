@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Layout, Menu, Row, Col } from "antd";
-import { Table, Tag, Spaceม, notification, Typography, Space } from "antd";
+import { Table, Tag, notification, Typography, Space ,Popconfirm, message} from "antd";
 import {
   FontSizeOutlined,
   PlayCircleOutlined,
@@ -15,6 +15,7 @@ import wakeMeUp from "../song/WakeMeUp_Avicii.mp3";
 import warmBlood from "../song/WarmBlood_Carly.mp3";
 import Header from "../recomponent/Header";
 import Sider from "../recomponent/Sider";
+import { config } from "../config/config";
 
 import "../App.css";
 import history from "../history";
@@ -22,22 +23,35 @@ import history from "../history";
 export class Playlist extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      // visible:false,
+    };
   }
+  
+  
+  
 
   render() {
     const { Footer, Content } = Layout;
     const { SubMenu } = Menu;
     const { Text, Link } = Typography;
+    // const confirm = (text)=> {
+    //   console.log(text);
+    //   this.selectedSong(text);
+    //   message.success('Alert sound:'+text);
+    // }
+    // const showPopconfirm = () => {
+    //   this.setState(visible,);
+    // };
     const openNotification = (text) => {
-      notification.open({
-        message: "Notification",
-        description: "Alert sound is changed  ( using : " + text + " )",
-        onClick: (text) => {
-          console.log("Notification Clicked!");
-          this.selectedSong(text);
-        },
-      });
+      // notification.open({
+      //   message: "Notification",
+      //   description: "Alert sound is changed  ( using : " + text + " )",
+      //   onClick: () => {
+      //     console.log("Notification Clicked!");
+      //     this.selectedSong(text);
+      //   },
+      // });
     };
 
     const columns = [
@@ -56,7 +70,14 @@ export class Playlist extends Component {
         dataIndex: "Song",
         key: "Song",
         render: (text) => (
-          <Link onClick={() => openNotification(text)}>{text}</Link>
+          <Popconfirm
+          title={"Are you sure to change alert song to "+text+" ?"}
+          onConfirm={()=>this.selectedSong(text)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <a href="#">{text}</a>
+        </Popconfirm>
         ),
       },
       {
@@ -94,6 +115,7 @@ export class Playlist extends Component {
         Song: "Confident",
         Artist: "Demi Lovato",
         icon: confident,
+        
       },
       {
         key: "2",
@@ -191,11 +213,11 @@ export class Playlist extends Component {
     console.log(text);
   };
 
-  selectedSong = (text) => {
-    console.log(text);
-    axios({
+  selectedSong = async(text) => {
+    console.log("selected: "+text);
+    await axios({
       method: "POST",
-      url: "http://127.0.0.1:4000/selectedSong", // change
+      url: "http://"+config.baseURL+":4000/selectedSong", // change
       headers: {},
       data: {
         musicName: text,

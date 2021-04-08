@@ -124,7 +124,7 @@ export class ClusterMap extends React.PureComponent {
     );
   }
 }
-const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = "http://"+config.baseURL+":4000";
 const socket = socketIOClient(ENDPOINT);
 export class Map extends Component {
   constructor(props) {
@@ -211,7 +211,7 @@ export class Map extends Component {
   response = () => {
     console.log("message",this.state.currentLat,this.state.currentLng );
     const socket = socketIOClient(ENDPOINT);
-    socket.on("sent-message", (message) => {
+    socket.on("sent_message", (message) => {
       console.log("message",this.state.currentLat,this.state.currentLng, message);
       var modMessage = [];
       message.data.forEach((element) => {
