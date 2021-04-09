@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Layout, Menu, Row, Col } from "antd";
-import { Table, Tag, notification, Typography, Space ,Popconfirm, message} from "antd";
+import {
+  Table,
+  Tag,
+  notification,
+  Typography,
+  Space,
+  Popconfirm,
+  message,
+} from "antd";
 import {
   FontSizeOutlined,
   PlayCircleOutlined,
@@ -27,9 +35,6 @@ export class Playlist extends Component {
       // visible:false,
     };
   }
-  
-  
-  
 
   render() {
     const { Footer, Content } = Layout;
@@ -71,13 +76,13 @@ export class Playlist extends Component {
         key: "Song",
         render: (text) => (
           <Popconfirm
-          title={"Are you sure to change alert song to "+text+" ?"}
-          onConfirm={()=>this.selectedSong(text)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <a href="#">{text}</a>
-        </Popconfirm>
+            title={"Are you sure to change alert song to " + text + " ?"}
+            onConfirm={() => this.selectedSong(text)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <a href="#">{text}</a>
+          </Popconfirm>
         ),
       },
       {
@@ -115,7 +120,6 @@ export class Playlist extends Component {
         Song: "Confident",
         Artist: "Demi Lovato",
         icon: confident,
-        
       },
       {
         key: "2",
@@ -202,7 +206,10 @@ export class Playlist extends Component {
                 </Col>
               </Row>
             </Content>
-            <Sider />
+            <Sider
+              currentLat={this.props.currentLat}
+              currentLng={this.props.currentLng}
+            />
           </Layout>
         </Layout>
       </div>
@@ -213,11 +220,11 @@ export class Playlist extends Component {
     console.log(text);
   };
 
-  selectedSong = async(text) => {
-    console.log("selected: "+text);
+  selectedSong = async (text) => {
+    console.log("selected: " + text);
     await axios({
       method: "POST",
-      url: "http://"+config.baseURL+":4000/selectedSong", // change
+      url: "http://" + config.baseURL + ":4000/selectedSong", // change
       headers: {},
       data: {
         musicName: text,

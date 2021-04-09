@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Form, Input, Button, Layout, Menu, Modal } from "antd";
+import { Form, Input, Button, Layout, Menu, Modal, notification } from "antd";
 import MapN from "../component/MapN";
 import { Row, Col } from "antd";
 import Header from "../recomponent/Header";
@@ -18,11 +18,22 @@ export class Accident extends Component {
   setAlert = (infor) => {
     this.setState({ alert: infor });
     console.log(infor);
+    this.openNotification(infor);
   };
 
   render() {
     const { Footer, Content } = Layout;
     const { SubMenu } = Menu;
+
+    const openNotification = (infor) => {
+      notification.open({
+        message: "Accident alert",
+        description: "New accident at" + infor,
+        onClick: () => {
+          console.log("Notification Clicked!");
+        },
+      });
+    };
     return (
       <div
         style={{
@@ -59,7 +70,10 @@ export class Accident extends Component {
                 </Col>
               </Row>
             </Content>
-            <Sider />
+            <Sider
+              currentLat={this.props.currentLat}
+              currentLng={this.props.currentLng}
+            />
           </Layout>
 
           {/* <Footer>Footer</Footer> */}

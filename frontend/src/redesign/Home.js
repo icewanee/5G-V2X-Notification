@@ -15,9 +15,7 @@ import history from "../history";
 export class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: localStorage.username,
-    };
+    this.state = {};
   }
 
   render() {
@@ -98,7 +96,10 @@ export class Home extends Component {
                 </Col>
               </Row>
             </Content>
-            <Sider />
+            <Sider
+              currentLat={this.props.currentLat}
+              currentLng={this.props.currentLng}
+            />
           </Layout>
           {/* <Footer>Footer</Footer> */}
         </Layout>

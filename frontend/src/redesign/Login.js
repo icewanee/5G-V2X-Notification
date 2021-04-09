@@ -94,7 +94,7 @@ export class Login extends Component {
               <Input.Password />
             </Form.Item>
             <Form.Item>
-              <h6 style={{ color: "#db1f2a",}}>{this.state.alert}</h6>
+              <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
             </Form.Item>
             <Form.Item {...tailLayout}>
               <Button
@@ -122,9 +122,13 @@ export class Login extends Component {
     // event.preventDefault();
     let username = event["username"];
     let password = event["password"];
+    console.log(username);
     await axios({
       method: "POST",
-      url: "http://"+config.baseURL+":4000/login",
+      url:
+        "http://" +
+        config.baseURL +
+        ":4000/login" /*"http://127.0.0.1:4000/login" */,
       headers: {},
       data: {
         username: username,
@@ -132,18 +136,19 @@ export class Login extends Component {
       },
     })
       .then((res) => {
+        console.log(res);
         localStorage.setItem("islogin", res.data.islogin);
         localStorage.setItem("username", username);
-        console.log(res);
+
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
-          this.setState({ alert:""});
+          this.setState({ alert: "" });
           history.push("/home");
           // window.location.reload();
         } else {
           // window.location.reload();
-          this.setState({ alert: res.data.message});
+          this.setState({ alert: res.data.message });
         }
       })
       .catch((err) => {

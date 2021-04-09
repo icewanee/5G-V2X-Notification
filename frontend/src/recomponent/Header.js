@@ -7,9 +7,7 @@ import history from "../history";
 export class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: localStorage.username,
-    };
+    this.state = {};
   }
 
   render() {
@@ -26,7 +24,7 @@ export class Header extends Component {
         }}
       >
         <h3 style={{ color: "white" }} onClick={() => this.onClick("/home")}>
-          Welcome to 5G-V2X {this.state.username}
+          Welcome to 5G-V2X {localStorage.getItem("username")}
         </h3>
       </Header>
     );

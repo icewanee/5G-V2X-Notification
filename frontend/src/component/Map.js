@@ -124,7 +124,7 @@ export class ClusterMap extends React.PureComponent {
     );
   }
 }
-const ENDPOINT = "http://"+config.baseURL+":4000";
+const ENDPOINT = "http://" + config.baseURL + ":4000";
 const socket = socketIOClient(ENDPOINT);
 export class Map extends Component {
   constructor(props) {
@@ -140,7 +140,7 @@ export class Map extends Component {
   }
 
   geocode = async (inforAlert, locationDis) => {
-    console.log("message",this.state.currentLat,this.state.currentLng );
+    console.log("message", this.state.currentLat, this.state.currentLng);
 
     var lat = JSON.parse(locationDis)["lat"];
     var lng = JSON.parse(locationDis)["lng"];
@@ -196,10 +196,10 @@ export class Map extends Component {
       console.log("distance", distance, dis);
       if (!isnear) {
         if (distance <= 20 && !isnear) {
-            isnear = true;
-            console.log("around", isnear, element, distance);
+          isnear = true;
+          console.log("around", isnear, element, distance);
 
-            ans = element;
+          ans = element;
         } else if (min >= distance) {
           min = distance;
         }
@@ -209,10 +209,15 @@ export class Map extends Component {
   };
 
   response = () => {
-    console.log("message",this.state.currentLat,this.state.currentLng );
+    console.log("message", this.state.currentLat, this.state.currentLng);
     const socket = socketIOClient(ENDPOINT);
     socket.on("sent_message", (message) => {
-      console.log("message",this.state.currentLat,this.state.currentLng, message);
+      console.log(
+        "message",
+        this.state.currentLat,
+        this.state.currentLng,
+        message
+      );
       var modMessage = [];
       message.data.forEach((element) => {
         modMessage.push(JSON.parse(element));
@@ -238,16 +243,16 @@ export class Map extends Component {
   uploadcurrentlo = () => {
     var re = this;
     navigator.geolocation.getCurrentPosition(function (position) {
-        // localStorage.setItem("currentLat", Number(position.coords.latitude));
-        // localStorage.setItem("currentLng", Number(position.coords.longitude));
+      // localStorage.setItem("currentLat", Number(position.coords.latitude));
+      // localStorage.setItem("currentLng", Number(position.coords.longitude));
       re.setState({
         currentLat: Number(position.coords.latitude),
         currentLng: Number(position.coords.longitude),
       });
-      socket.emit("position",{
+      socket.emit("position", {
         lat: this.state.currentLat,
         lng: this.state.currentLng,
-      })
+      });
       // console.log("Latitude is :", position.coords.latitude);
       // console.log("Longitude is :", position.coords.longitude);
     });
