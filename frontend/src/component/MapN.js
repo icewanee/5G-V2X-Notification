@@ -250,7 +250,7 @@ export class MapN extends Component {
 
   render() {
     return (
-      <div style={{ width: "87vw", height: "65vh" }}>
+      <div style={{ width: "90vw", height: "80vh" }}>
         <ClusterMap
           accidentlocation={this.state.accidentlocation}
           here={{ lat: this.state.currentLat, lng: this.state.currentLng }}
@@ -298,12 +298,12 @@ export class MapN extends Component {
     this.response();
   }
 
-  // componentDidUpdate() {
-  //   setInterval(() => {
-  //     this.uploadcurrentlo();
-  //     // console.log("haha");
-  //   }, 30000);
-  // }
+  componentDidUpdate() {
+    setInterval(() => {
+      this.uploadcurrentlo();
+      // console.log("haha");
+    }, 30000);
+  }
 }
 
 export default MapN;

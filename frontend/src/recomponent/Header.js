@@ -24,7 +24,7 @@ export class Header extends Component {
         }}
       >
         <h3 style={{ color: "white" }} onClick={() => this.onClick("/home")}>
-          Welcome to 5G-V2X {localStorage.getItem("username")}
+          Welcome to 5G-V2X : {localStorage.getItem("username")}
         </h3>
       </Header>
     );

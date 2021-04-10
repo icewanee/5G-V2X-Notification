@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Route, Switch, Router } from "react-router-dom";
 import socketIOClient from "socket.io-client";
@@ -11,6 +11,14 @@ import MapN from "./component/MapN";
 import Playlist from "./redesign/Playlist";
 import axios from "axios";
 import confident from "../src/song/confident_demi.mp3";
+import loveMyself from "../src/song/LoveMyself_Hailee.mp3";
+import moneyOnMyMind from "../src/song/MoneyOnMyMind_Sam.mp3";
+import wakeMeUp from "../src/song/WakeMeUp_Avicii.mp3";
+import warmBlood from "../src/song/WarmBlood_Carly.mp3";
+// import AudioPlayer from "react-audio-element";
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
+
 import { Form, Input, Button, Layout, Menu, Modal, message } from "antd";
 import { config } from "./config/config";
 class App extends Component {
@@ -53,6 +61,12 @@ class App extends Component {
   warning = (text) => {
     message.warning(text);
   };
+  resetsong() {
+    {
+      // document.getElementById("player").load();
+      console.log(document.getElementById("player"));
+    }
+  }
 
   render() {
     return (
@@ -63,22 +77,37 @@ class App extends Component {
             visible={this.state.setIsModalVisible}
             onOk={() => this.handleOk()}
             onCancel={() => this.handleOk()}
+            // closable={false}
             // cancelButtonProps={{ style: { display: "none" } }}
             footer={null}
           >
+            {/* <AudioPlayer
+              autoPlay
+              src={localStorage.getItem("song")}
+              onPlay={(e) => console.log("onPlay")}
+              autoPlay={true}
+              showJumpControls={false}
+              showFilledProgress={false}
+              showSkipControls={false}
+              showDownloadProgress={false}
+              onPause={() => this.handleOk()}
+              // other props here
+            /> */}
+            {/* <AudioPlayer src={localStorage.getItem("song")} autoPlay /> */}
             <audio
               id="player"
-              src={confident}
+              // ref={myRef}
+              src={localStorage.getItem("song")}
               autoPlay={true}
               controls={true}
               onPause={() => this.handleOk()}
+              controlslist="nodownload"
             ></audio>
-            {/* <button onclick="document.getElementById('player').play()">
-                Play
-              </button>
-              <button onclick="document.getElementById('player').pause()">
-                Pause
-              </button> */}
+            {/*<button onclick={this.resetsong()}>Play</button> */}
+
+            {/* <button onclick="document.getElementById('player').pause()">
+            //     Pause
+            //   </button> */}
           </Modal>
 
           <Switch>
@@ -148,15 +177,7 @@ class App extends Component {
                 )}
               />
             )}
-            <Route
-              path="/test"
-              render={() => (
-                <Home
-                  currentLat={this.state.currentLat}
-                  currentLng={this.state.currentLng}
-                />
-              )}
-            />
+            <Route path="/test" component={Accident} />
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>

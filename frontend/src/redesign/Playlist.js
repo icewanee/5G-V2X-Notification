@@ -102,6 +102,7 @@ export class Playlist extends Component {
               // ref="audio_tag"
               autoPlay={this.state.audioPlay}
               controls={true}
+              controlslist="nodownload"
             >
               <source type="audio/mp3" src={icon} />
             </audio>
@@ -220,7 +221,22 @@ export class Playlist extends Component {
     console.log(text);
   };
 
+  setSong = (text) => {
+    if (text == "Confident") {
+      localStorage.setItem("song", confident);
+    } else if (text == "Warm Blood") {
+      localStorage.setItem("song", warmBlood);
+    } else if (text == "Money On My Mind") {
+      localStorage.setItem("song", moneyOnMyMind);
+    } else if (text == "Love Myself") {
+      localStorage.setItem("song", loveMyself);
+    } else if (text == "Wake Me Up") {
+      localStorage.setItem("song", wakeMeUp);
+    }
+  };
+
   selectedSong = async (text) => {
+    this.setSong(text);
     console.log("selected: " + text);
     await axios({
       method: "POST",
@@ -231,7 +247,7 @@ export class Playlist extends Component {
       },
     })
       .then((res) => {
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => {
         console.log("error in request", err);

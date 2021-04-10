@@ -4,6 +4,8 @@ import { Form, Input, Button } from "antd";
 import "../App.css";
 import history from "../history";
 import { config } from "../config/config";
+import confident from "../song/confident_demi.mp3";
+
 export class Login extends Component {
   constructor(props) {
     super(props);
@@ -139,7 +141,7 @@ export class Login extends Component {
         console.log(res);
         localStorage.setItem("islogin", res.data.islogin);
         localStorage.setItem("username", username);
-
+        localStorage.setItem("song", confident);
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
