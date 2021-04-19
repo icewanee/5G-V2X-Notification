@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Layout, Menu, Row, Col } from "antd";
+import { Layout, Menu, Row, Col, Card, Radio } from "antd";
 import {
   Table,
   Tag,
@@ -22,7 +22,7 @@ import moneyOnMyMind from "../song/MoneyOnMyMind_Sam.mp3";
 import wakeMeUp from "../song/WakeMeUp_Avicii.mp3";
 import warmBlood from "../song/WarmBlood_Carly.mp3";
 import Header from "../recomponent/Header";
-import Sider from "../recomponent/Sider";
+import Sider from "../recomponent/MySider";
 import { config } from "../config/config";
 
 import "../App.css";
@@ -33,6 +33,7 @@ export class Playlist extends Component {
     super(props);
     this.state = {
       // visible:false,
+      value: 1,
     };
   }
 
@@ -48,45 +49,60 @@ export class Playlist extends Component {
     // const showPopconfirm = () => {
     //   this.setState(visible,);
     // };
-    const openNotification = (text) => {
-      // notification.open({
-      //   message: "Notification",
-      //   description: "Alert sound is changed  ( using : " + text + " )",
-      //   onClick: () => {
-      //     console.log("Notification Clicked!");
-      //     this.selectedSong(text);
-      //   },
-      // });
-    };
+    // const openNotification = (text) => {
+    // notification.open({
+    //   message: "Notification",
+    //   description: "Alert sound is changed  ( using : " + text + " )",
+    //   onClick: () => {
+    //     console.log("Notification Clicked!");
+    //     this.selectedSong(text);
+    //   },
+    // });
+    // };
+    // const [value, setValue] = React.useState(1);
 
+    const onChange = (e) => {
+      let selected = "";
+      if (e.target.value == "1") {
+        selected = "Confident";
+      } else if (e.target.value == "2") {
+        selected = "Warm blood";
+      } else if (e.target.value == "3") {
+        selected = "Money on my mind";
+      } else if (e.target.value == "4") {
+        selected = "Love my self";
+      } else if (e.target.value == "5") {
+        selected = "Wake me up";
+      }
+      this.selectedSong(e.target.value);
+      console.log("radio checked");
+      this.setState({ value: e.target.value });
+      notification.open({
+        message: <h4>Notification</h4>,
+        description: "Alert sound is changed to " + selected,
+        onClick: () => {
+          console.log("Notification Clicked!");
+        },
+      });
+      // setValue(e.target.value);
+    };
     const columns = [
       {
-        title: "",
-        dataIndex: "picture",
-        key: "picture",
-        render: (pic) => {
-          <div>
-            <img src={pic} />
-          </div>;
-        },
-      },
-      {
-        title: "Song",
+        title: <div style={{ fontSize: "20px" }}>Song</div>,
         dataIndex: "Song",
         key: "Song",
-        render: (text) => (
-          <Popconfirm
-            title={"Are you sure to change alert song to " + text + " ?"}
-            onConfirm={() => this.selectedSong(text)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <a href="#">{text}</a>
-          </Popconfirm>
-        ),
+        render: (text) => text,
+        // <Popconfirm
+        //   title={"Are you sure to change alert song to " + text + " ?"}
+        //   onConfirm={() => this.selectedSong(text)}
+        //   okText="Yes"
+        //   cancelText="No"
+        // >
+        //   <a href="#">{text}</a>
+        // </Popconfirm>
       },
       {
-        title: "Artist",
+        title: <div style={{ fontSize: "20px" }}>Artist</div>,
         dataIndex: "Artist",
         key: "Artist",
         render: (text) =>
@@ -112,6 +128,33 @@ export class Playlist extends Component {
           // </div>
         ),
       },
+      {
+        title: "",
+        // <div style={{ fontSize: "20px" }}>Select</div>
+        dataIndex: "number",
+        key: "number",
+        render: (number) => (
+          <div>
+            <Radio.Group
+              size="large"
+              onChange={onChange}
+              value={this.state.value}
+              style={{
+                // height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              defaultValue="1"
+              buttonStyle="solid"
+            >
+              <Radio.Button style={{ borderRadius: 30 }} value={number}>
+                select
+              </Radio.Button>
+            </Radio.Group>
+          </div>
+        ),
+      },
     ];
 
     const data = [
@@ -121,6 +164,7 @@ export class Playlist extends Component {
         Song: "Confident",
         Artist: "Demi Lovato",
         icon: confident,
+        number: "1",
       },
       {
         key: "2",
@@ -128,6 +172,7 @@ export class Playlist extends Component {
         Song: "Warm Blood",
         Artist: "Carly Rae Jepsen",
         icon: warmBlood,
+        number: "2",
       },
       {
         key: "3",
@@ -135,6 +180,7 @@ export class Playlist extends Component {
         Song: "Money On My Mind",
         Artist: "Sam Smith",
         icon: moneyOnMyMind,
+        number: "3",
       },
       {
         key: "4",
@@ -142,6 +188,7 @@ export class Playlist extends Component {
         Song: "Love Myself",
         Artist: "Hailee Steinfeld",
         icon: loveMyself,
+        number: "4",
       },
       {
         key: "5",
@@ -149,18 +196,11 @@ export class Playlist extends Component {
         Song: "Wake Me Up",
         Artist: "Avicii",
         icon: wakeMeUp,
+        number: "5",
       },
     ];
     return (
-      <div
-        style={{
-          height: "100vh",
-          //   display: "flex",
-          //   justifyContent: "center",
-          //   alignItems: "center",
-          backgroundColor: "#c6d5ad",
-        }}
-      >
+      <div>
         <Layout>
           <Header />
           <Layout
@@ -169,11 +209,10 @@ export class Playlist extends Component {
           >
             <Content
               style={{
-                height: "100vh",
-                backgroundColor: "#c6d5ad",
+                height: "90vh",
+                // backgroundColor: "#c6d5ad",
               }}
             >
-              <br />
               <Row>
                 <Col
                   span={24}
@@ -184,26 +223,42 @@ export class Playlist extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <Table
-                    style={{ width: "60vw" }}
-                    columns={columns}
-                    dataSource={data}
-                    title={() => (
-                      <h4
-                        style={{
-                          // height: "100vh",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        Music playlist
-                      </h4>
-                    )}
-                    // scroll={{ x: 0, y: 350 }}
-                    size={"Small"}
-                    pagination={(true, { defaultPageSize: 4 })}
-                  />
+                  <Card
+                    hoverable
+                    className="Card box"
+                    style={{
+                      // width: 900,
+                      // border: "solid black",
+                      // paddingLeft: 50,
+                      // paddingRight: 50,
+                      borderRadius: 30,
+                      fontWeight: "#2749a8",
+                      boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
+                    }}
+                  >
+                    <Table
+                      style={{
+                        width: "50vw",
+                      }}
+                      columns={columns}
+                      dataSource={data}
+                      title={() => (
+                        <h3
+                          style={{
+                            // height: "100vh",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          Music playlist
+                        </h3>
+                      )}
+                      // scroll={{ x: 0, y: 350 }}
+                      size={"middle"}
+                      pagination={(true, { defaultPageSize: 4 })}
+                    />
+                  </Card>
                 </Col>
               </Row>
             </Content>
@@ -222,15 +277,15 @@ export class Playlist extends Component {
   };
 
   setSong = (text) => {
-    if (text == "Confident") {
+    if (text == "Confident" || text == "1") {
       localStorage.setItem("song", confident);
-    } else if (text == "Warm Blood") {
+    } else if (text == "Warm Blood" || text == "2") {
       localStorage.setItem("song", warmBlood);
-    } else if (text == "Money On My Mind") {
+    } else if (text == "Money On My Mind" || text == "3") {
       localStorage.setItem("song", moneyOnMyMind);
-    } else if (text == "Love Myself") {
+    } else if (text == "Love Myself" || text == "4") {
       localStorage.setItem("song", loveMyself);
-    } else if (text == "Wake Me Up") {
+    } else if (text == "Wake Me Up" || text == "5") {
       localStorage.setItem("song", wakeMeUp);
     }
   };

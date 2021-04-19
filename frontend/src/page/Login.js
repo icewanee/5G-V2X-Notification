@@ -147,24 +147,25 @@ export class Login extends Component {
                     />
                   </label>
                 </div>
-                
               </div>
-              
+
               <div className="row">
-              <div className="col-md-2"></div>
-                
-                <div className="col-md-7"
+                <div className="col-md-2"></div>
+
+                <div
+                  className="col-md-7"
                   style={{
-                    paddingTop:"2px",
-                  }}>
-                    <h6 style={{ color: "#db1f2a",}}>{this.state.alert}</h6>
-                  </div>
+                    paddingTop: "2px",
+                  }}
+                >
+                  <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
+                </div>
               </div>
               <div className="row">
                 <div
                   className="col-md-12"
                   style={{
-                    paddingTop:"10px",
+                    paddingTop: "10px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -229,11 +230,11 @@ export class Login extends Component {
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
           history.push("/home");
-          this.setState({ alert:""});
+          this.setState({ alert: "" });
           window.location.reload();
         } else {
-          console.log(res.data.message)
-          this.setState({ alert: res.data.message});
+          console.log(res.data.message);
+          this.setState({ alert: res.data.message });
         }
       })
       .catch((err) => {

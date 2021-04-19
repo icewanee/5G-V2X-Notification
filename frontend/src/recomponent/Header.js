@@ -21,11 +21,12 @@ export class Header extends Component {
           // justifyContent: "center",
           alignItems: "center",
           // backgroundColor: "#c6d5ad",
+          height: "10vh",
         }}
       >
-        <h3 style={{ color: "white" }} onClick={() => this.onClick("/home")}>
-          Welcome to 5G-V2X : {localStorage.getItem("username")}
-        </h3>
+        <h1 style={{ color: "white" }} onClick={() => this.onClick("/home")}>
+          Welcome {localStorage.getItem("username")} to 5G-V2X
+        </h1>
       </Header>
     );
   }

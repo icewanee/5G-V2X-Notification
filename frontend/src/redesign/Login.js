@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Card } from "antd";
 import "../App.css";
 import history from "../history";
 import { config } from "../config/config";
@@ -44,10 +44,11 @@ export class Login extends Component {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#c6d5ad",
+          // backgroundColor: "#c6d5ad",
         }}
       >
-        <div
+        <Card
+          hoverable
           className="Card box"
           style={{
             width: 750,
@@ -55,11 +56,13 @@ export class Login extends Component {
             paddingLeft: 50,
             paddingRight: 50,
             borderRadius: 30,
+            fontWeight: "#2749a8",
+            boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
           }}
         >
           <br />
           <br />
-          <h1>5G-V2X</h1>
+          <h1 style={{ color: "#2292d4", fontWeight: "bold" }}>5G-V2X</h1>
           <br />
           <Form
             // onSubmit={(event) => this.onClickLogin(event)}
@@ -95,9 +98,7 @@ export class Login extends Component {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item>
-              <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
-            </Form.Item>
+
             <Form.Item {...tailLayout}>
               <Button
                 type="primary"
@@ -108,14 +109,19 @@ export class Login extends Component {
                   alignItems: "center",
                   // alignSelf: "flex-end",
                   width: "100%",
+                  backgroundColor: "#3277a8",
+                  border: "white",
                 }}
               >
                 Log in
               </Button>
             </Form.Item>
+            <Form.Item>
+              <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
+            </Form.Item>
           </Form>
-          <br />
-        </div>
+          {/* <br /> */}
+        </Card>
       </div>
     );
   }

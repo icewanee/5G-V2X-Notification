@@ -181,7 +181,7 @@ class App extends Component {
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
-          <button onClick={() => this.showModal()}>sound test</button>
+          {/* <button onClick={() => this.showModal()}>sound test</button> */}
         </div>
       </Router>
     );

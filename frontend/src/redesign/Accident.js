@@ -4,7 +4,7 @@ import { Form, Input, Button, Layout, Menu, Modal, notification } from "antd";
 import MapN from "../component/MapN";
 import { Row, Col } from "antd";
 import Header from "../recomponent/Header";
-import Sider from "../recomponent/Sider";
+import Sider from "../recomponent/MySider";
 
 import "../App.css";
 import history from "../history";
@@ -35,15 +35,7 @@ export class Accident extends Component {
       });
     };
     return (
-      <div
-        style={{
-          height: "100vh",
-          //   display: "flex",
-          //   justifyContent: "center",
-          //   alignItems: "center",
-          backgroundColor: "#c6d5ad",
-        }}
-      >
+      <div>
         <Layout>
           <Header />
           <Layout
@@ -52,8 +44,8 @@ export class Accident extends Component {
           >
             <Content
               style={{
-                height: "100vh",
-                backgroundColor: "#c6d5ad",
+                height: "90vh",
+                // backgroundColor: "#c6d5ad",
               }}
             >
               <Row>
