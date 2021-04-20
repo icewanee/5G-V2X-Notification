@@ -9,6 +9,10 @@ const acd_topic = config.KafkaAICTopic;
 let res_start = ''
 let islogin = false
 let musicName = "Confident"
+// test only
+let lat = 13.73826 
+let lng = 100.532413
+//
 module.exports = (
   app,
   client_redis,
@@ -112,7 +116,7 @@ module.exports = (
   app.post("/eyeNotFound", function (req, res) {
     // if(islogin){
       io.emit('eyeNotFound',{ data: "Drowsiness detection system : not found eye" })
-      console.log("DDS_post")
+      console.log("eyeNotFound")
       res.json({successful:true})
     // }
     // else{
@@ -120,6 +124,24 @@ module.exports = (
         // res.json({successful:false})
     // }
   });
+  app.post("/test/newAccident", function (req, res) {
+    let value = {
+      "lat": lat++,
+      "lng": lng++,
+    };
+    client_redis.setex(
+      JSON.stringify(value),
+      time,
+      "",
+      function (err, reply) {
+        if (err) {
+          console.log(err);
+        }
+        console.log(reply);
+      }
+    )
+      res.json({successful:true})
+  })
   app.post("/selectedSong", function (req, res) {
     let name = req.body.musicName 
     console.log("selected song: "+name)
@@ -128,6 +150,9 @@ module.exports = (
       res.json({successful:false})
     }
     res.json({successful:true})
+  });
+  app.get("/selectedSong", function (req, res) {
+    res.json({successful:true, data: musicName})
   });
   app.post("/newDrowsiness", function (req, res) {
     console.log("new Drowsiness")
@@ -190,7 +215,7 @@ module.exports = (
     res.json({successful:true, data: islogin})
   });
   app.post("/logout", async (req, res) => {
-    console.log(username1,": logout");
+    console.log("user logout");
     islogin = false
     setUsername("")
     res.json({ successful:true,islogin: false, message: "logout" })
