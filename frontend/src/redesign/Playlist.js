@@ -20,7 +20,9 @@ import confident from "../song/confident_demi.mp3";
 import loveMyself from "../song/LoveMyself_Hailee.mp3";
 import moneyOnMyMind from "../song/MoneyOnMyMind_Sam.mp3";
 import wakeMeUp from "../song/WakeMeUp_Avicii.mp3";
+import INeedYou from "../song/INeedYou_LiQWYD.mp3";
 import warmBlood from "../song/WarmBlood_Carly.mp3";
+import Avalon from "../song/Avalon.mp3";
 import Header from "../recomponent/Header";
 import Sider from "../recomponent/MySider";
 import { config } from "../config/config";
@@ -73,7 +75,12 @@ export class Playlist extends Component {
         selected = "Love my self";
       } else if (e.target.value == "5") {
         selected = "Wake me up";
+      } else if (e.target.value == "6") {
+        selected = "I need you";
+      } else if (e.target.value == "7") {
+        selected = "Avalon";
       }
+
       this.selectedSong(e.target.value);
       console.log("radio checked");
       this.setState({ value: e.target.value });
@@ -198,6 +205,22 @@ export class Playlist extends Component {
         icon: wakeMeUp,
         number: "5",
       },
+      {
+        key: "6",
+        // picture: "red",
+        Song: "I Need You",
+        Artist: "LiQWYD",
+        icon: INeedYou,
+        number: "6",
+      },
+      {
+        key: "7",
+        // picture: "red",
+        Song: "Avalon",
+        Artist: "Scandinavianz",
+        icon: Avalon,
+        number: "7",
+      },
     ];
     return (
       <div>
@@ -210,6 +233,9 @@ export class Playlist extends Component {
             <Content
               style={{
                 height: "90vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 // backgroundColor: "#c6d5ad",
               }}
             >
@@ -279,26 +305,38 @@ export class Playlist extends Component {
   setSong = (text) => {
     if (text == "Confident" || text == "1") {
       localStorage.setItem("song", confident);
+      return "Confident";
     } else if (text == "Warm Blood" || text == "2") {
       localStorage.setItem("song", warmBlood);
+      return "Warm Blood";
     } else if (text == "Money On My Mind" || text == "3") {
       localStorage.setItem("song", moneyOnMyMind);
+      return "Money On My Mind";
     } else if (text == "Love Myself" || text == "4") {
       localStorage.setItem("song", loveMyself);
+      return "Love Myself";
     } else if (text == "Wake Me Up" || text == "5") {
       localStorage.setItem("song", wakeMeUp);
+      return "Wake Me Up";
+    } else if (text == "I Need You" || text == "6") {
+      localStorage.setItem("song", INeedYou);
+      return "I Need You";
+    } else if (text == "Avalon" || text == "7") {
+      localStorage.setItem("song", Avalon);
+      return "Avalon";
     }
   };
 
   selectedSong = async (text) => {
-    this.setSong(text);
-    console.log("selected: " + text);
+    let name = this.setSong(text);
+
+    console.log("selected: " + name);
     await axios({
       method: "POST",
       url: "http://" + config.baseURL + ":4000/selectedSong", // change
       headers: {},
       data: {
-        musicName: text,
+        musicName: name,
       },
     })
       .then((res) => {

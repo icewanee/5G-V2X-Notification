@@ -10,6 +10,7 @@ import Login from "./redesign/Login";
 import MapN from "./component/MapN";
 import Playlist from "./redesign/Playlist";
 import axios from "axios";
+import INeedYou from "../src/song/INeedYou_LiQWYD.mp3";
 import confident from "../src/song/confident_demi.mp3";
 import loveMyself from "../src/song/LoveMyself_Hailee.mp3";
 import moneyOnMyMind from "../src/song/MoneyOnMyMind_Sam.mp3";
@@ -18,7 +19,7 @@ import warmBlood from "../src/song/WarmBlood_Carly.mp3";
 // import AudioPlayer from "react-audio-element";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-
+import { PauseOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Layout, Menu, Modal, message } from "antd";
 import { config } from "./config/config";
 class App extends Component {
@@ -32,10 +33,22 @@ class App extends Component {
       pause: true,
       auto: true,
       start: 0,
+      // selectedsong: confident,
     };
     this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
     this.socket = socketIOClient("http://" + config.baseURL + ":4000");
+    this.audio = new Audio(localStorage.getItem("song"));
   }
+  play = () => {
+    this.setState({ play: true, pause: false });
+    this.audio.play();
+  };
+
+  pause = () => {
+    this.setState({ play: false, pause: true });
+    this.audio.pause();
+    this.handleOk();
+  };
 
   // audio = new Audio(confident);
   loggedIn() {
@@ -73,41 +86,58 @@ class App extends Component {
       <Router history={history}>
         <div>
           <Modal
-            title="Drowsiness alert"
+            title={<h3>Drowsiness alert</h3>}
             visible={this.state.setIsModalVisible}
-            onOk={() => this.handleOk()}
-            onCancel={() => this.handleOk()}
-            // closable={false}
+            onOk={() => this.pause}
+            onCancel={() => this.pause}
+            closable={false}
             // cancelButtonProps={{ style: { display: "none" } }}
             footer={null}
           >
-            {/* <AudioPlayer
-              autoPlay
-              src={localStorage.getItem("song")}
-              onPlay={(e) => console.log("onPlay")}
-              autoPlay={true}
-              showJumpControls={false}
-              showFilledProgress={false}
-              showSkipControls={false}
-              showDownloadProgress={false}
-              onPause={() => this.handleOk()}
-              // other props here
-            /> */}
-            {/* <AudioPlayer src={localStorage.getItem("song")} autoPlay /> */}
-            <audio
-              id="player"
-              // ref={myRef}
-              src={localStorage.getItem("song")}
-              autoPlay={true}
-              controls={true}
-              onPause={() => this.handleOk()}
-              controlslist="nodownload"
-            ></audio>
-            {/*<button onclick={this.resetsong()}>Play</button> */}
-
-            {/* <button onclick="document.getElementById('player').pause()">
-            //     Pause
-            //   </button> */}
+            <br />
+            <h4
+              style={{
+                color: "red",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Click the button to stop the sound
+            </h4>
+            <br />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                type="primary"
+                shape="circle"
+                danger
+                style={{
+                  height: "20vh",
+                  width: "10vw",
+                  // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
+                  // borderColor: "gray",
+                  // borderRadius: "20",
+                  // backgroundColor: "#3277a8",
+                }}
+                onClick={this.pause}
+                icon={
+                  <PauseOutlined
+                    style={{
+                      fontSize: "70px",
+                    }}
+                    // color: "#08c"
+                  />
+                }
+              >
+                <h4 style={{ color: "white" }}>Pause</h4>
+              </Button>
+            </div>
           </Modal>
 
           <Switch>
@@ -173,6 +203,7 @@ class App extends Component {
                   <Playlist
                     currentLat={this.state.currentLat}
                     currentLng={this.state.currentLng}
+                    // selectedsong={this.state.selectedsong}
                   />
                 )}
               />
@@ -181,7 +212,7 @@ class App extends Component {
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
-          {/* <button onClick={() => this.showModal()}>sound test</button> */}
+          <button onClick={() => this.showModal()}>sound test</button>
         </div>
       </Router>
     );
@@ -193,6 +224,7 @@ class App extends Component {
     var start = d.getTime();
     console.log(start);
     this.setState({ start: start });
+    this.play();
   };
   handleOk = () => {
     this.setState({ setIsModalVisible: false });
