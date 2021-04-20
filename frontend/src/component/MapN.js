@@ -124,7 +124,7 @@ export class ClusterMap extends React.PureComponent {
     );
   }
 }
-const ENDPOINT = "http://"+config.baseURL+":4000";
+const ENDPOINT = "http://" + config.baseURL + ":4000";
 const socket = socketIOClient(ENDPOINT);
 export class MapN extends Component {
   constructor(props) {
@@ -194,10 +194,10 @@ export class MapN extends Component {
       console.log("distance", distance, dis);
       if (!isnear) {
         if (distance <= 20 && !isnear) {
-            isnear = true;
-            console.log("around", isnear, element, distance);
+          isnear = true;
+          console.log("around", isnear, element, distance);
 
-            ans = element;
+          ans = element;
         } else if (min >= distance) {
           min = distance;
         }
@@ -250,7 +250,7 @@ export class MapN extends Component {
 
   render() {
     return (
-      <div style={{ width: "87vw", height: "65vh" }}>
+      <div style={{ width: "90vw", height: "80vh" }}>
         <ClusterMap
           accidentlocation={this.state.accidentlocation}
           here={{ lat: this.state.currentLat, lng: this.state.currentLng }}

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Card } from "antd";
 import "../App.css";
 import history from "../history";
 import { config } from "../config/config";
+import confident from "../song/confident_demi.mp3";
+
 export class Login extends Component {
   constructor(props) {
     super(props);
@@ -42,10 +44,11 @@ export class Login extends Component {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#c6d5ad",
+          // backgroundColor: "#c6d5ad",
         }}
       >
-        <div
+        <Card
+          hoverable
           className="Card box"
           style={{
             width: 750,
@@ -53,11 +56,13 @@ export class Login extends Component {
             paddingLeft: 50,
             paddingRight: 50,
             borderRadius: 30,
+            fontWeight: "#2749a8",
+            boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
           }}
         >
           <br />
           <br />
-          <h1>5G-V2X</h1>
+          <h1 style={{ color: "#2292d4", fontWeight: "bold" }}>5G-V2X</h1>
           <br />
           <Form
             // onSubmit={(event) => this.onClickLogin(event)}
@@ -93,9 +98,7 @@ export class Login extends Component {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item>
-              <h6 style={{ color: "#db1f2a",}}>{this.state.alert}</h6>
-            </Form.Item>
+
             <Form.Item {...tailLayout}>
               <Button
                 type="primary"
@@ -106,14 +109,19 @@ export class Login extends Component {
                   alignItems: "center",
                   // alignSelf: "flex-end",
                   width: "100%",
+                  backgroundColor: "#3277a8",
+                  border: "white",
                 }}
               >
                 Log in
               </Button>
             </Form.Item>
+            <Form.Item>
+              <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
+            </Form.Item>
           </Form>
-          <br />
-        </div>
+          {/* <br /> */}
+        </Card>
       </div>
     );
   }
@@ -122,9 +130,13 @@ export class Login extends Component {
     // event.preventDefault();
     let username = event["username"];
     let password = event["password"];
+    console.log(username);
     await axios({
       method: "POST",
-      url: "http://"+config.baseURL+":4000/login",
+      url:
+        "http://" +
+        config.baseURL +
+        ":4000/login" /*"http://127.0.0.1:4000/login" */,
       headers: {},
       data: {
         username: username,
@@ -132,18 +144,19 @@ export class Login extends Component {
       },
     })
       .then((res) => {
+        console.log(res);
         localStorage.setItem("islogin", res.data.islogin);
         localStorage.setItem("username", username);
-        console.log(res);
+        localStorage.setItem("song", confident);
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
-          this.setState({ alert:""});
+          this.setState({ alert: "" });
           history.push("/home");
           // window.location.reload();
         } else {
           // window.location.reload();
-          this.setState({ alert: res.data.message});
+          this.setState({ alert: res.data.message });
         }
       })
       .catch((err) => {

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Form, Input, Button, Layout, Menu, Modal } from "antd";
+import { Form, Input, Button, Layout, Menu, Modal, notification } from "antd";
 import MapN from "../component/MapN";
 import { Row, Col } from "antd";
 import Header from "../recomponent/Header";
-import Sider from "../recomponent/Sider";
+import Sider from "../recomponent/MySider";
 
 import "../App.css";
 import history from "../history";
@@ -18,21 +18,24 @@ export class Accident extends Component {
   setAlert = (infor) => {
     this.setState({ alert: infor });
     console.log(infor);
+    this.openNotification(infor);
   };
 
   render() {
     const { Footer, Content } = Layout;
     const { SubMenu } = Menu;
+
+    const openNotification = (infor) => {
+      notification.open({
+        message: "Accident alert",
+        description: "New accident at" + infor,
+        onClick: () => {
+          console.log("Notification Clicked!");
+        },
+      });
+    };
     return (
-      <div
-        style={{
-          height: "100vh",
-          //   display: "flex",
-          //   justifyContent: "center",
-          //   alignItems: "center",
-          backgroundColor: "#c6d5ad",
-        }}
-      >
+      <div>
         <Layout>
           <Header />
           <Layout
@@ -41,8 +44,8 @@ export class Accident extends Component {
           >
             <Content
               style={{
-                height: "100vh",
-                backgroundColor: "#c6d5ad",
+                height: "90vh",
+                // backgroundColor: "#c6d5ad",
               }}
             >
               <Row>
@@ -59,7 +62,10 @@ export class Accident extends Component {
                 </Col>
               </Row>
             </Content>
-            <Sider />
+            <Sider
+              currentLat={this.props.currentLat}
+              currentLng={this.props.currentLng}
+            />
           </Layout>
 
           {/* <Footer>Footer</Footer> */}
