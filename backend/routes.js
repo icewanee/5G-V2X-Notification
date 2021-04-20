@@ -132,13 +132,10 @@ module.exports = (
   app.post("/newDrowsiness", function (req, res) {
     console.log("new Drowsiness")
     // if(islogin) {
-      console.log(req.data)
-      let d = new Date()
-      let response_time1 =  Math.abs(d - res_start)/1000 //req.data.response
-      res_start = ""
+      let response_time = req.body.response
       pushDataToKafka(dds_topic,{
         condition: 'DIC',
-        response_time: response_time1,
+        response_time: response_time,
       });
       res.json({successful:true})
     // }
@@ -174,25 +171,28 @@ module.exports = (
     //         });
     //         setUsername(username1)
     //         islogin = true
-    //         res.json({ islogin: true, username: username1 });
+    //         res.json({successful:true, islogin: true, username: username1 });
     //     }
     //     else{
     //       console.log(response.data.message)
-    //       res.json({ islogin: false, message: response.data.message });
+    //       res.json({ successful:false,islogin: false, message: response.data.message });
     //     }
         
     //   })
     //   .catch((err) => {
     //     console.log("error in request", err.response.data);
-    //     res.json({ islogin: false, message: err.response.data.message });
+    //     res.json({ successful:false,islogin: false, message: err.response.data.message });
     //   });
-    res.json({ islogin: true, username: username1 });
+    res.json({successful:true, islogin: true, username: username1 });
 
+  });
+  app.get("/isLogin", async(req, res) => {
+    res.json({successful:true, data: islogin})
   });
   app.post("/logout", async (req, res) => {
     console.log(username1,": logout");
     islogin = false
     setUsername("")
-    res.json({ islogin: false, message: "logout" })
+    res.json({ successful:true,islogin: false, message: "logout" })
   });
 };
