@@ -224,6 +224,7 @@ export class MySider extends Component {
       console.log(localStorage);
       localStorage.setItem("islogin", false);
       console.log(localStorage);
+      localStorage.clear();
       // delete all data
       axios({
         method: "POST",

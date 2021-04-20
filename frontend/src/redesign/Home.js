@@ -261,6 +261,7 @@ export class Home extends Component {
       localStorage.setItem("islogin", false);
       console.log(localStorage);
       history.push(page);
+      localStorage.clear();
     } else {
       history.push(page);
     }
