@@ -140,6 +140,15 @@ module.exports = (
         console.log(reply);
       }
     )
+    client_redis.keys("*", function (err, keys) {
+            if (err) return console.log(err);
+            if (keys) {
+              console.log("soc");
+              io.emit("sent_message", { data: keys });
+              console.log("hey");
+              // res.json({ data: keys });
+            }
+          });
       res.json({successful:true})
   })
   app.post("/selectedSong", function (req, res) {
