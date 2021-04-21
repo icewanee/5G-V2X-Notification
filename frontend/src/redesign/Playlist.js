@@ -102,10 +102,15 @@ export class Playlist extends Component {
     };
     const columns = [
       {
-        title: <div style={{ fontSize: "20px" }}>Song</div>,
+        title: (
+          <div style={{ fontSize: "20px", width: "100%", textAlign: "center" }}>
+            Song
+          </div>
+        ),
         dataIndex: "Song",
         key: "Song",
         render: (text) => text,
+        align: "center",
         // <Popconfirm
         //   title={"Are you sure to change alert song to " + text + " ?"}
         //   onConfirm={() => this.selectedSong(text)}
@@ -116,19 +121,29 @@ export class Playlist extends Component {
         // </Popconfirm>
       },
       {
-        title: <div style={{ fontSize: "20px" }}>Artist</div>,
+        title: (
+          <div style={{ fontSize: "20px", width: "100%", textAlign: "center" }}>
+            Artist
+          </div>
+        ),
         dataIndex: "Artist",
         key: "Artist",
         render: (text) =>
           text /*<a onClick={() => this.selectedSong(text)}></a>,*/,
+        align: "center",
       },
       {
-        title: "",
+        title: (
+          <div style={{ fontSize: "20px", width: "100%", textAlign: "center" }}>
+            Player
+          </div>
+        ),
         dataIndex: "icon",
         key: "icon",
         render: (icon) => (
           <div>
             <audio
+              style={{ width: "100%" }}
               // ref="audio_tag"
               autoPlay={this.state.audioPlay}
               controls={true}
@@ -141,9 +156,14 @@ export class Playlist extends Component {
           //   <PlayCircleOutlined />
           // </div>
         ),
+        width: "35%",
       },
       {
-        title: "",
+        title: (
+          <div style={{ fontSize: "20px", width: "100%", textAlign: "center" }}>
+            Status
+          </div>
+        ),
         // <div style={{ fontSize: "20px" }}>Select</div>
         dataIndex: "number",
         key: "number",
@@ -163,7 +183,9 @@ export class Playlist extends Component {
             >
               <Radio.Button style={{ borderRadius: 30 }} value={number}>
                 {number == localStorage.getItem("songnumber") ? (
-                  <div style={{ color: "#3277a8" }}>selected</div>
+                  <div style={{ color: "#3277a8", fontWeight: "bold" }}>
+                    selected
+                  </div>
                 ) : (
                   "select"
                 )}
@@ -270,11 +292,13 @@ export class Playlist extends Component {
                       borderRadius: 30,
                       fontWeight: "#2749a8",
                       boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
+                      overflowX: "hidden",
+                      overflowY: "auto",
                     }}
                   >
                     <Table
                       style={{
-                        width: "50vw",
+                        width: "70vw",
                       }}
                       columns={columns}
                       dataSource={data}
@@ -292,7 +316,8 @@ export class Playlist extends Component {
                       )}
                       // scroll={{ x: 0, y: 350 }}
                       size={"middle"}
-                      pagination={(true, { defaultPageSize: 4 })}
+                      scroll={{ y: "350px" }}
+                      pagination={false}
                     />
                   </Card>
                 </Col>
@@ -314,25 +339,25 @@ export class Playlist extends Component {
 
   setSong = (text) => {
     if (text == "Confident" || text == "1") {
-      localStorage.setItem("song", confident);
+      localStorage.setItem("song", "Confident");
       return "Confident";
     } else if (text == "Warm Blood" || text == "2") {
-      localStorage.setItem("song", warmBlood);
+      localStorage.setItem("song", "Warm Blood");
       return "Warm Blood";
     } else if (text == "Money On My Mind" || text == "3") {
-      localStorage.setItem("song", moneyOnMyMind);
+      localStorage.setItem("song", "Money On My Mind");
       return "Money On My Mind";
     } else if (text == "Love Myself" || text == "4") {
-      localStorage.setItem("song", loveMyself);
+      localStorage.setItem("song", "Love Myself");
       return "Love Myself";
     } else if (text == "Wake Me Up" || text == "5") {
-      localStorage.setItem("song", wakeMeUp);
+      localStorage.setItem("song", "Wake Me Up");
       return "Wake Me Up";
     } else if (text == "I Need You" || text == "6") {
-      localStorage.setItem("song", INeedYou);
+      localStorage.setItem("song", "I Need You");
       return "I Need You";
     } else if (text == "Avalon" || text == "7") {
-      localStorage.setItem("song", Avalon);
+      localStorage.setItem("song", "Avalon");
       return "Avalon";
     }
   };

@@ -42,10 +42,10 @@ class App extends Component {
     this.audio = new Audio(this.state.song);
   }
 
-  play = () => {
+  play = (songsrc) => {
     this.setState({ play: true, pause: false });
     console.log(this.state.song);
-    this.audio = new Audio(this.state.song);
+    this.audio.src = songsrc;
     this.audio.play();
   };
 
@@ -217,41 +217,57 @@ class App extends Component {
             <Route path="/" component={Login} />
             <Route component={PageNotFound} />
           </Switch>
-          <button onClick={() => this.showModal()}>sound test</button>
+          <button onClick={() => this.showModal(localStorage.getItem("song"))}>
+            sound test
+          </button>
         </div>
       </Router>
     );
   }
 
   showModal = (text) => {
-    if (text == "Confident") {
-      this.setState({ song: confident });
-      localStorage.setItem("songnumber", "1");
-    } else if (text == "Warm Blood") {
-      this.setState({ song: warmBlood });
-      localStorage.setItem("songnumber", "2");
-    } else if (text == "Money On My Mind") {
-      this.setState({ song: moneyOnMyMind });
-      localStorage.setItem("songnumber", "3");
-    } else if (text == "Love Myself") {
-      this.setState({ song: loveMyself });
-      localStorage.setItem("songnumber", "4");
-    } else if (text == "Wake Me Up") {
-      this.setState({ song: wakeMeUp });
-      localStorage.setItem("songnumber", "5");
-    } else if (text == "I Need You") {
-      this.setState({ song: INeedYou });
-      localStorage.setItem("songnumber", "6");
-    } else if (text == "Avalon") {
-      this.setState({ song: Avalon });
-      localStorage.setItem("songnumber", "7");
-    }
+    const playlist = {
+      Confident: {
+        number: "1",
+        src: confident,
+      },
+      "Warm Blood": {
+        number: "2",
+        src: warmBlood,
+      },
+      "Money On My Mind": {
+        number: "3",
+        src: moneyOnMyMind,
+      },
+      "Love Myself": {
+        number: "4",
+        src: loveMyself,
+      },
+      "Wake Me Up": {
+        number: "5",
+        src: wakeMeUp,
+      },
+      "I Need You": {
+        number: "6",
+        src: INeedYou,
+      },
+      Avalon: {
+        number: "7",
+        src: Avalon,
+      },
+    };
     this.setState({ setIsModalVisible: true });
     var d = new Date();
     var start = d.getTime();
     console.log(start);
     this.setState({ start: start });
-    this.play(this.state.song);
+    if (playlist[text] !== undefined) {
+      this.setState({ song: playlist[text].src });
+      localStorage.setItem("songnumber", playlist[text].number);
+      this.play(playlist[text].src);
+    } else {
+      this.play(this.state.song);
+    }
   };
   handleOk = () => {
     this.setState({ setIsModalVisible: false });
