@@ -267,6 +267,10 @@ class App extends Component {
       console.log(message);
       this.warning("This system can't detect eye");
     });
+    this.socket.on("this_car_accident", (message) => {
+      console.log(message);
+      this.warning("This car has an accident");
+    });
     // const socket2 = socketIOClient("http://"+config.ddsURL+":4000");
     // socket2.on("eyes_not_found", (message) => {
     //    console.log(message);

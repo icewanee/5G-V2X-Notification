@@ -69,15 +69,15 @@ const pushDataToKafka = (topic,dataToPush) => {
     { topic: topic, messages: JSON.stringify(dataToPush) },
   ];
   console.log(topic,payloadToKafkaTopic);
-  // producer.send(payloadToKafkaTopic, (err, data) => {
-  //   if (err) {
-  //     console.log("kafka-producer failed");
-  //     pushDataToKafka(topic,dataToPush)
-  //   }
-  //   else{
-  //     console.log("kafka-producer success");
-  //   }
-  // });
+//   producer.send(payloadToKafkaTopic, (err, data) => {
+//     if (err) {
+//       console.log("kafka-producer failed");
+//       pushDataToKafka(topic,dataToPush)
+//     }
+//     else{
+//       console.log("kafka-producer success");
+//     }
+//   });
 };
 
 // Init app
@@ -152,7 +152,7 @@ io.on("connection", (socket) => {
 //     if (condition.trim() == "ACS") {
 //       if(data.username == username && data.carID == car_id){
 //         console.log("This driver accident")
-//         io.emit('this_car_accident',{ data: "accident"})
+//         io.emit('this_car_accident',{ data: "this_car_accident"})
 //       }
 //       let value = {
 //         "lat": Number(data.lat),
