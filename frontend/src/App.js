@@ -16,6 +16,7 @@ import loveMyself from "../src/song/LoveMyself_Hailee.mp3";
 import moneyOnMyMind from "../src/song/MoneyOnMyMind_Sam.mp3";
 import wakeMeUp from "../src/song/WakeMeUp_Avicii.mp3";
 import warmBlood from "../src/song/WarmBlood_Carly.mp3";
+import Avalon from "../src/song/Avalon.mp3";
 // import AudioPlayer from "react-audio-element";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
@@ -33,14 +34,18 @@ class App extends Component {
       pause: true,
       auto: true,
       start: 0,
+      song: confident,
       // selectedsong: confident,
     };
     this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
     this.socket = socketIOClient("http://" + config.baseURL + ":4000");
-    this.audio = new Audio(localStorage.getItem("song"));
+    this.audio = new Audio(this.state.song);
   }
+
   play = () => {
     this.setState({ play: true, pause: false });
+    console.log(this.state.song);
+    this.audio = new Audio(this.state.song);
     this.audio.play();
   };
 
@@ -218,13 +223,35 @@ class App extends Component {
     );
   }
 
-  showModal = () => {
+  showModal = (text) => {
+    if (text == "Confident") {
+      this.setState({ song: confident });
+      localStorage.setItem("songnumber", "1");
+    } else if (text == "Warm Blood") {
+      this.setState({ song: warmBlood });
+      localStorage.setItem("songnumber", "2");
+    } else if (text == "Money On My Mind") {
+      this.setState({ song: moneyOnMyMind });
+      localStorage.setItem("songnumber", "3");
+    } else if (text == "Love Myself") {
+      this.setState({ song: loveMyself });
+      localStorage.setItem("songnumber", "4");
+    } else if (text == "Wake Me Up") {
+      this.setState({ song: wakeMeUp });
+      localStorage.setItem("songnumber", "5");
+    } else if (text == "I Need You") {
+      this.setState({ song: INeedYou });
+      localStorage.setItem("songnumber", "6");
+    } else if (text == "Avalon") {
+      this.setState({ song: Avalon });
+      localStorage.setItem("songnumber", "7");
+    }
     this.setState({ setIsModalVisible: true });
     var d = new Date();
     var start = d.getTime();
     console.log(start);
     this.setState({ start: start });
-    this.play();
+    this.play(this.state.song);
   };
   handleOk = () => {
     this.setState({ setIsModalVisible: false });
@@ -261,7 +288,7 @@ class App extends Component {
       console.log("message", message);
       // if (message == "request to alert") {
       console.log("pop up");
-      this.showModal();
+      this.showModal(message);
     });
     this.socket.on("eyeNotFound", (message) => {
       console.log(message);

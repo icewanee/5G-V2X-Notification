@@ -250,7 +250,7 @@ export class MapN extends Component {
 
   render() {
     return (
-      <div style={{ width: "90vw", height: "80vh" }}>
+      <div style={{ width: "100vw", height: "90vh" }}>
         <ClusterMap
           accidentlocation={this.state.accidentlocation}
           here={{ lat: this.state.currentLat, lng: this.state.currentLng }}

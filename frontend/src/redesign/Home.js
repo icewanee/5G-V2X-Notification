@@ -229,14 +229,14 @@ export class Home extends Component {
                   danger
                   icon={
                     <AlertOutlined
-                      style={{ fontSize: "90px" }}
+                      style={{ fontSize: "70px" }}
                       // color: "#08c"
                     />
                   }
                   shape="circle"
                   style={{
-                    height: "20vh",
-                    width: "10vw",
+                    height: "100px",
+                    width: "100px",
                     // fontSize: "30px",
                     // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
                   }}
@@ -244,10 +244,6 @@ export class Home extends Component {
                 ></Button>
               </div>
             </Modal>
-            {/* <Sider
-              currentLat={this.props.currentLat}
-              currentLng={this.props.currentLng}
-            /> */}
           </Layout>
           {/* <Footer>Footer</Footer> */}
         </Layout>
@@ -281,7 +277,7 @@ export class Home extends Component {
       url: "http://127.0.0.1:4000/newAccident", // change
       headers: {},
       data: {
-        username: "mock test" /*localStorage.getItem("username")*/,
+        username: localStorage.getItem("username"),
         lat: this.props.currentLat,
         lng: this.props.currentLng,
       },

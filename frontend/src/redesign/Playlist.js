@@ -67,18 +67,25 @@ export class Playlist extends Component {
       let selected = "";
       if (e.target.value == "1") {
         selected = "Confident";
+        localStorage.setItem("songnumber", "1");
       } else if (e.target.value == "2") {
         selected = "Warm blood";
+        localStorage.setItem("songnumber", "2");
       } else if (e.target.value == "3") {
         selected = "Money on my mind";
+        localStorage.setItem("songnumber", "3");
       } else if (e.target.value == "4") {
         selected = "Love my self";
+        localStorage.setItem("songnumber", "4");
       } else if (e.target.value == "5") {
         selected = "Wake me up";
+        localStorage.setItem("songnumber", "5");
       } else if (e.target.value == "6") {
         selected = "I need you";
+        localStorage.setItem("songnumber", "6");
       } else if (e.target.value == "7") {
         selected = "Avalon";
+        localStorage.setItem("songnumber", "7");
       }
 
       this.selectedSong(e.target.value);
@@ -152,11 +159,14 @@ export class Playlist extends Component {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              defaultValue="1"
               buttonStyle="solid"
             >
               <Radio.Button style={{ borderRadius: 30 }} value={number}>
-                select
+                {number == localStorage.getItem("songnumber") ? (
+                  <div style={{ color: "#3277a8" }}>selected</div>
+                ) : (
+                  "select"
+                )}
               </Radio.Button>
             </Radio.Group>
           </div>
