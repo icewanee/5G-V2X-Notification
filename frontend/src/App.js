@@ -123,8 +123,8 @@ class App extends Component {
                 shape="circle"
                 danger
                 style={{
-                  height: "20vh",
-                  width: "10vw",
+                  height: "100px",
+                  width: "100px",
                   // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
                   // borderColor: "gray",
                   // borderRadius: "20",
@@ -140,7 +140,7 @@ class App extends Component {
                   />
                 }
               >
-                <h4 style={{ color: "white" }}>Pause</h4>
+                <h4 style={{ color: "white" }}></h4>
               </Button>
             </div>
           </Modal>

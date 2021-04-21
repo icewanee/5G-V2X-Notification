@@ -8,7 +8,7 @@ import socketIOClient from "socket.io-client";
 import { getDistance } from "geolib";
 // import { bangkokCoords } from "../../mock/Coordinate";
 import { config } from "../config/config";
-
+import { LoadingOutlined } from "@ant-design/icons";
 const MAP = {
   defaultZoom: 15,
   //   defaultCenter: {
@@ -135,6 +135,7 @@ export class MapN extends Component {
       currentLng: "",
       input: "",
       message: [],
+      loading: true,
     };
     this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
   }
@@ -241,6 +242,7 @@ export class MapN extends Component {
       re.setState({
         currentLat: Number(position.coords.latitude),
         currentLng: Number(position.coords.longitude),
+        loading: false,
       });
 
       // console.log("Latitude is :", position.coords.latitude);
@@ -251,13 +253,38 @@ export class MapN extends Component {
   render() {
     return (
       <div style={{ width: "100vw", height: "90vh" }}>
-        <ClusterMap
-          accidentlocation={this.state.accidentlocation}
-          here={{ lat: this.state.currentLat, lng: this.state.currentLng }}
-          isShownHere
-          currentLat={this.state.currentLat}
-          currentLng={this.state.currentLng}
-        />
+        {this.state.loading ? (
+          <div>
+            <div
+              style={{
+                paddingTop: "20%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LoadingOutlined style={{ fontSize: "60px" }} />
+            </div>
+            <div
+              style={{
+                paddingTop: "30px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h3>Loading...</h3>
+            </div>{" "}
+          </div>
+        ) : (
+          <ClusterMap
+            accidentlocation={this.state.accidentlocation}
+            here={{ lat: this.state.currentLat, lng: this.state.currentLng }}
+            isShownHere
+            currentLat={this.state.currentLat}
+            currentLng={this.state.currentLng}
+          />
+        )}
       </div>
     );
   }
