@@ -143,6 +143,9 @@ export class MapN extends Component {
   geocode = async (inforAlert, locationDis) => {
     var lat = JSON.parse(locationDis)["lat"];
     var lng = JSON.parse(locationDis)["lng"];
+    // var lat = this.props.currentLat;
+    // var lng = this.props.currentLng;
+
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
@@ -152,6 +155,7 @@ export class MapN extends Component {
       })
       .then(function (response) {
         // console.log("tt", response.data.results);
+        console.log("res", response);
         var str = response.data.results[0].formatted_address;
         var last = str.indexOf(",");
         var res = str.substr(0, last);
@@ -161,6 +165,7 @@ export class MapN extends Component {
         } else {
           res = alert.concat(res);
         }
+        console.log("res", res);
         inforAlert(res);
         /*inforAlert(response.data.results[0].formatted_address);*/
       })
@@ -216,6 +221,7 @@ export class MapN extends Component {
       message.data.forEach((element) => {
         modMessage.push(JSON.parse(element));
       });
+
       // modMessage.push({
       //   lat: 13.877647,
       //   lng: 100.4,
@@ -225,12 +231,16 @@ export class MapN extends Component {
       //   "lat": 13.877647,
       //   "lng": 100.4,
       // }`);
-      var locationDis = this.around(message.data); //this.state.accidentlocation
+      console.log("this", modMessage);
+      var locationDis = this.around(this.state.accidentlocation); // message.data
+      console.log(locationDis);
       //this.displaylocation(message.data);// not used
       console.log("h", this.state.accidentlocation);
+      this.geocode(this.props.inforAlert, { lat: 13.877647, lng: 100.4 });
       if (locationDis) {
         this.geocode(this.props.inforAlert, locationDis);
       }
+      // locationDis
     });
   };
 
@@ -329,7 +339,7 @@ export class MapN extends Component {
     setInterval(() => {
       this.uploadcurrentlo();
       // console.log("haha");
-    }, 30000);
+    }, 300000);
   }
 }
 

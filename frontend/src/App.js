@@ -44,13 +44,15 @@ class App extends Component {
 
   play = (songsrc) => {
     this.setState({ play: true, pause: false });
-    console.log(this.state.song);
+    console.log("songsrc", songsrc);
+    // this.audio = new Audio(INeedYou);
     this.audio.src = songsrc;
     this.audio.play();
   };
 
   pause = () => {
     this.setState({ play: false, pause: true });
+    console.log("pause");
     this.audio.pause();
     this.handleOk();
   };
@@ -259,9 +261,11 @@ class App extends Component {
     this.setState({ setIsModalVisible: true });
     var d = new Date();
     var start = d.getTime();
-    console.log(start);
+    console.log("start", start);
+    console.log(playlist[text].src);
     this.setState({ start: start });
     if (playlist[text] !== undefined) {
+      console.log("here", playlist[text]);
       this.setState({ song: playlist[text].src });
       localStorage.setItem("songnumber", playlist[text].number);
       this.play(playlist[text].src);
@@ -301,10 +305,10 @@ class App extends Component {
   response() {
     // const socket = socketIOClient("http://" + config.baseURL + ":4000");
     this.socket.on("alert_sound", (message) => {
-      console.log("message", message);
+      console.log("message", message.data);
       // if (message == "request to alert") {
       console.log("pop up");
-      this.showModal(message);
+      // this.showModal(message.data);
     });
     this.socket.on("eyeNotFound", (message) => {
       console.log(message);

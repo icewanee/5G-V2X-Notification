@@ -1,20 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Layout, Menu, Row, Col, Card, Radio } from "antd";
-import {
-  Table,
-  Tag,
-  notification,
-  Typography,
-  Space,
-  Popconfirm,
-  message,
-} from "antd";
-import {
-  FontSizeOutlined,
-  PlayCircleOutlined,
-  SmallDashOutlined,
-} from "@ant-design/icons";
+import { Table, Tag, notification, Typography } from "antd";
 import red from "../pictureNvideo/redd.png";
 import confident from "../song/confident_demi.mp3";
 import loveMyself from "../song/LoveMyself_Hailee.mp3";
@@ -100,6 +87,7 @@ export class Playlist extends Component {
       });
       // setValue(e.target.value);
     };
+
     const columns = [
       {
         title: (
@@ -128,8 +116,7 @@ export class Playlist extends Component {
         ),
         dataIndex: "Artist",
         key: "Artist",
-        render: (text) =>
-          text /*<a onClick={() => this.selectedSong(text)}></a>,*/,
+        render: (text) => text,
         align: "center",
       },
       {
@@ -181,12 +168,16 @@ export class Playlist extends Component {
               }}
               buttonStyle="solid"
             >
-              <Radio.Button style={{ borderRadius: 30 }} value={number}>
+              <Radio.Button
+                style={{ borderRadius: 30, backgroundColor: "white" }}
+                value={number}
+              >
                 {number == localStorage.getItem("songnumber") ? (
-                  <div style={{ color: "#3277a8", fontWeight: "bold" }}>
+                  <div style={{ color: "black", fontWeight: "bold" }}>
                     selected
                   </div>
                 ) : (
+                  // color: "#3277a8",
                   "select"
                 )}
               </Radio.Button>
@@ -332,6 +323,25 @@ export class Playlist extends Component {
       </div>
     );
   }
+
+  // componentDidMount() {
+  //   let selected = localStorage.getItem("song");
+  //   if (selected == "Confident") {
+  //     localStorage.setItem("songnumber", "1");
+  //   } else if ((selected = "Warm blood")) {
+  //     localStorage.setItem("songnumber", "2");
+  //   } else if ((selected = "Money on my mind")) {
+  //     localStorage.setItem("songnumber", "3");
+  //   } else if ((selected = "Love my self")) {
+  //     localStorage.setItem("songnumber", "4");
+  //   } else if ((selected = "Wake me up")) {
+  //     localStorage.setItem("songnumber", "5");
+  //   } else if ((selected = "I need you")) {
+  //     localStorage.setItem("songnumber", "6");
+  //   } else if ((selected = "Avalon")) {
+  //     localStorage.setItem("songnumber", "7");
+  //   }
+  // }
 
   review = (text) => {
     console.log(text);

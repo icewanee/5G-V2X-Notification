@@ -11,7 +11,7 @@ export class Accident extends Component {
 
   setAlert = (infor) => {
     this.setState({ alert: infor });
-    console.log(infor);
+    console.log("this is info", infor);
   };
 
   render() {
@@ -45,7 +45,11 @@ export class Accident extends Component {
                 alignItems: "center",
               }}
             >
-              <MapN inforAlert={this.setAlert} />
+              <MapN
+                inforAlert={this.setAlert}
+                currentLat={this.state.currentLat}
+                currentLng={this.state.currentLng}
+              />
             </div>
           </div>
           <div className="row" style={{ paddingTop: 25 }}>

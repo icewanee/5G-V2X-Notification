@@ -98,6 +98,7 @@ export class Login extends Component {
             >
               <Input.Password />
             </Form.Item>
+            <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
 
             <Form.Item {...tailLayout}>
               <Button
@@ -116,15 +117,35 @@ export class Login extends Component {
                 Log in
               </Button>
             </Form.Item>
-            <Form.Item>
+            {/* <Form.Item>
               <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
-            </Form.Item>
+            </Form.Item> */}
           </Form>
           {/* <br /> */}
         </Card>
       </div>
     );
   }
+
+  setnumbersong(selected) {
+    if (selected == "Confident") {
+      localStorage.setItem("songnumber", "1");
+    } else if (selected == "Warm blood") {
+      localStorage.setItem("songnumber", "2");
+      console.log("is??");
+    } else if (selected == "Money on my mind") {
+      localStorage.setItem("songnumber", "3");
+    } else if (selected == "Love my self") {
+      localStorage.setItem("songnumber", "4");
+    } else if (selected == "Wake me up") {
+      localStorage.setItem("songnumber", "5");
+    } else if (selected == "I need you") {
+      localStorage.setItem("songnumber", "6");
+    } else if (selected == "Avalon") {
+      localStorage.setItem("songnumber", "7");
+    }
+  }
+
   onClickLogin = async (event) => {
     // console.log(event["username"]);
     // event.preventDefault();
@@ -146,11 +167,14 @@ export class Login extends Component {
       .then((res) => {
         console.log(res);
         localStorage.setItem("islogin", res.data.islogin);
-        localStorage.setItem("username", username);
-        localStorage.setItem("song", confident);
+
         console.log(localStorage);
         if (localStorage.getItem("islogin") === "true") {
           console.log("this", localStorage.getItem("islogin"));
+          localStorage.setItem("username", username);
+          localStorage.setItem("song", res.data.selectedsong);
+          console.log("login data", res.data.selectedsong);
+          this.setnumbersong(res.data.selectedsong);
           this.setState({ alert: "" });
           history.push("/home");
           // window.location.reload();
