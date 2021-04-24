@@ -19,7 +19,7 @@ export class Accident extends Component {
     // this.openNotification(infor);
     notification.open({
       message: "Accident alert",
-      description: "New accident at" + infor,
+      description: "New accident occurred at" + infor,
       onClick: () => {
         console.log("Notification Clicked!");
       },
@@ -59,8 +59,8 @@ export class Accident extends Component {
                     color: "white",
                   }}
                 >
-                  * The marks of accident location show the accident that has
-                  been occurred within an hour *
+                  * The mark shows the accident that has been occurred within an
+                  hour *
                 </Col>
                 <Col
                   span={24}

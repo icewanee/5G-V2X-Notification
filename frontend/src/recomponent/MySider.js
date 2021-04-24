@@ -173,7 +173,7 @@ export class MySider extends Component {
       },
     })
       .then((res) => {
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => {
         console.log("error in request", err);

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Layout, Row, Col, Card, Radio } from "antd";
 import { Table, notification } from "antd";
-import red from "../pictureNvideo/redd.png";
 import confident from "../song/confident_demi.mp3";
 import loveMyself from "../song/LoveMyself_Hailee.mp3";
 import moneyOnMyMind from "../song/MoneyOnMyMind_Sam.mp3";
@@ -102,7 +101,7 @@ export class Playlist extends Component {
               style={{ width: "100%" }}
               autoPlay={this.state.audioPlay}
               controls={true}
-              controlslist="nodownload"
+              controlsList="nodownload"
             >
               <source type="audio/mp3" src={icon} />
             </audio>
@@ -169,7 +168,8 @@ export class Playlist extends Component {
       },
       {
         key: "1",
-        picture: `url(${red})`,
+        picture: "",
+        // `url(${red})`
         Song: "Confident ⓒ",
         Artist: "Demi Lovato",
         icon: confident,

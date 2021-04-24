@@ -237,11 +237,10 @@ export class MapN extends Component {
       console.log(locationDis);
       //this.displaylocation(message.data);// not used
       console.log("h", this.state.accidentlocation);
-      // this.geocode(this.props.inforAlert, { lat: 13.877647, lng: 100.4 });
+
       if (locationDis) {
         this.geocode(this.props.inforAlert, locationDis);
       }
-      // locationDis
     });
   };
 
@@ -263,7 +262,7 @@ export class MapN extends Component {
 
   render() {
     return (
-      <div style={{ width: "100vw" }}>
+      <div style={{ width: "100vw", height: "86vh" }}>
         {/* height: "90vh" */}
         {this.state.loading ? (
           <div>
@@ -368,7 +367,6 @@ export class MapN extends Component {
   componentDidUpdate() {
     setInterval(() => {
       this.uploadcurrentlo();
-      // console.log("haha");
     }, 300000);
   }
 }
