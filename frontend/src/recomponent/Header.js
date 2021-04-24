@@ -32,7 +32,7 @@ export class Header extends Component {
   }
   onClick = async (page) => {
     //page.preventDefault();
-    if (page == "/") {
+    if (page === "/") {
       console.log(localStorage);
       localStorage.setItem("islogin", false);
       console.log(localStorage);

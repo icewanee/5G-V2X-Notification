@@ -6,9 +6,10 @@ import ClusterMarker from "./ClusterMarker";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
 import { getDistance } from "geolib";
-// import { bangkokCoords } from "../../mock/Coordinate";
+
 import { config } from "../config/config";
 import { LoadingOutlined } from "@ant-design/icons";
+
 const MAP = {
   defaultZoom: 15,
   //   defaultCenter: {
@@ -38,7 +39,7 @@ export class ClusterMap extends React.PureComponent {
   }
 
   getClusters = () => {
-    // console.log("check", this.props.accidentlocation);
+    console.log("check", this.props.accidentlocation);
     const clusters = supercluster(this.props.accidentlocation, {
       minZoom: 0,
       maxZoom: 19,
@@ -125,7 +126,7 @@ export class ClusterMap extends React.PureComponent {
   }
 }
 const ENDPOINT = "http://" + config.baseURL + ":4000";
-const socket = socketIOClient(ENDPOINT);
+// const socket = socketIOClient(ENDPOINT);
 export class MapN extends Component {
   constructor(props) {
     super(props);
@@ -141,10 +142,9 @@ export class MapN extends Component {
   }
 
   geocode = async (inforAlert, locationDis) => {
+    // async
     var lat = JSON.parse(locationDis)["lat"];
     var lng = JSON.parse(locationDis)["lng"];
-    // var lat = this.props.currentLat;
-    // var lng = this.props.currentLng;
 
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
@@ -154,15 +154,16 @@ export class MapN extends Component {
         },
       })
       .then(function (response) {
-        // console.log("tt", response.data.results);
+        console.log("tt", response.data.results);
         console.log("res", response);
         var str = response.data.results[0].formatted_address;
         var last = str.indexOf(",");
         var res = str.substr(0, last);
         var alert = "accident alert: ";
-        if (res === "") {
-          res = res;
-        } else {
+        // if (res === "") {
+        //   res = res;
+        // } else
+        if (res !== "") {
           res = alert.concat(res);
         }
         console.log("res", res);
@@ -236,7 +237,7 @@ export class MapN extends Component {
       console.log(locationDis);
       //this.displaylocation(message.data);// not used
       console.log("h", this.state.accidentlocation);
-      this.geocode(this.props.inforAlert, { lat: 13.877647, lng: 100.4 });
+      // this.geocode(this.props.inforAlert, { lat: 13.877647, lng: 100.4 });
       if (locationDis) {
         this.geocode(this.props.inforAlert, locationDis);
       }
@@ -262,12 +263,41 @@ export class MapN extends Component {
 
   render() {
     return (
-      <div style={{ width: "100vw", height: "90vh" }}>
+      <div style={{ width: "100vw" }}>
+        {/* height: "90vh" */}
         {this.state.loading ? (
           <div>
+            {/* <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                paddingTop: 10,
+                paddingRight: 10,
+              }}
+            >
+              <Button
+                type="primary"
+                icon={
+                  <InfoOutlined
+                    style={{ fontSize: "30px" }}
+                    // color: "#08c"
+                  />
+                }
+                shape="circle"
+                style={{
+                  height: "40px",
+                  width: "40px",
+                  backgroundColor: "#3277a8",
+                  border: "white",
+
+                  // fontSize: "30px",
+                  // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
+                }}
+              ></Button>
+            </div> */}
             <div
               style={{
-                paddingTop: "20%",
+                paddingTop: "10%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",

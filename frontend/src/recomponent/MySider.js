@@ -1,24 +1,18 @@
 import React, { Component } from "react";
-// import { Layout } from "antd";
 import { Modal } from "antd";
-// Menu,
 import { config } from "../config/config";
 import axios from "axios";
 import "../App.css";
 import history from "../history";
 
-import { Layout, Menu, Breadcrumb, Button } from "antd";
+import { Layout, Menu, Button } from "antd";
 import {
   AlertOutlined,
   HomeOutlined,
   EnvironmentOutlined,
-  BellOutlined,
   LogoutOutlined,
   SoundOutlined,
 } from "@ant-design/icons";
-
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
 
 export class MySider extends Component {
   constructor(props) {
@@ -30,76 +24,9 @@ export class MySider extends Component {
     this.setState({ collapsed });
   };
   render() {
-    const { Footer, Sider, Content } = Layout;
+    const { Sider } = Layout;
     const { collapsed } = this.state;
     return (
-      // <Sider
-      //   className="site-layout-background"
-      //   width={200}
-      //   style={{
-      //     //   display: "flex",
-      //     //   justifyContent: "center",
-      //     //   alignItems: "center",
-      //     backgroundColor: "white",
-      //     height: "100%",
-      //   }}
-      // >
-      //   <Menu
-      //     mode="inline"
-      //     defaultSelectedKeys={["1"]}
-      //     defaultOpenKeys={["sub1"]}
-      //     style={{ height: "100%" }}
-      //   >
-      //     <Menu.Item key="6" onClick={() => this.onClick("/home")}>
-      //       Home
-      //     </Menu.Item>
-      //     <Menu.Item
-      //       style={{ background: "#e03d4d" }}
-      //       key="2"
-      //       onClick={() => this.showModal()}
-      //     >
-      //       SOS
-      //     </Menu.Item>
-      //     <Modal
-      //       title={<h3>Emergency accident report</h3>}
-      //       visible={this.state.setIsModalVisible}
-      //       onOk={() => this.handleOk()}
-      //       onCancel={() => this.handleCancel()}
-      //     >
-      //       <p>Police (General Emergency Call) 191</p>
-      //       <p>Ambulance and Rescue 1554</p>
-      //       <p>Medical Emergency Call 1669</p>
-      //       <br />
-      //       <h4 style={{ color: "red" }}>report accident now </h4>
-      //       <p>
-      //         location Latitude, Longitude : ( {this.props.currentLat},{" "}
-      //         {this.props.currentLng} )
-      //       </p>
-      //     </Modal>
-      //     <Menu.Item key="3" onClick={() => this.onClick("/accident")}>
-      //       Map
-      //     </Menu.Item>
-      //     <Menu.Item key="4" onClick={() => this.onClick("/playlist")}>
-      //       Playlist
-      //     </Menu.Item>
-      //     <Footer></Footer>
-      //     <Footer></Footer>
-      //     <Footer></Footer>
-      //     <Footer></Footer>
-      //     <Footer></Footer>
-      //     <Footer></Footer>
-      //     {/* <Footer></Footer> */}
-      //     <Menu.Item
-      //       key="5"
-      //       // style={{ background: "#609cbf" }}
-      //       onClick={() => this.onClick("/")}
-      //     >
-      //       Logout
-      //     </Menu.Item>
-      //     {/* <Footer>Footer</Footer> */}
-      //   </Menu>
-      // </Sider>
-
       <Sider
         reverseArrow={true}
         collapsible
@@ -107,19 +34,7 @@ export class MySider extends Component {
         onCollapse={this.onCollapse}
       >
         <div className="logo" />
-        {/* <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item key="1" icon={<PieChartOutlined />}>
-            Option 1
-          </Menu.Item>
-          <Menu.Item key="2" icon={<DesktopOutlined />}>
-            Option 2
-          </Menu.Item>
 
-          <Menu.Item key="9" icon={<FileOutlined />}>
-            Files
-          </Menu.Item>
-          
-        </Menu> */}
         <Menu
           mode="inline"
           theme="dark"
@@ -163,13 +78,9 @@ export class MySider extends Component {
             >
               report accident now{" "}
             </h3>
-            {/* <p>
-                location Latitude, Longitude : ( {this.props.currentLat},{" "}
-                {this.props.currentLng} )
-              </p> */}
+
             <div
               style={{
-                // height: "80vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -178,18 +89,11 @@ export class MySider extends Component {
               <Button
                 type="primary"
                 danger
-                icon={
-                  <AlertOutlined
-                    style={{ fontSize: "70px" }}
-                    // color: "#08c"
-                  />
-                }
+                icon={<AlertOutlined style={{ fontSize: "70px" }} />}
                 shape="circle"
                 style={{
                   height: "100px",
                   width: "100px",
-                  // fontSize: "30px",
-                  // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
                 }}
                 onClick={() => this.handleOk()}
               ></Button>
@@ -213,7 +117,6 @@ export class MySider extends Component {
           <Menu.Item
             icon={<LogoutOutlined style={{ fontSize: "25px" }} />}
             key="5"
-            // style={{ background: "#609cbf" }}
             onClick={() => this.onClick("/")}
           >
             Logout
@@ -225,12 +128,12 @@ export class MySider extends Component {
 
   onClick = async (page) => {
     //page.preventDefault();
-    if (page == "/") {
+    if (page === "/") {
       console.log(localStorage);
       localStorage.setItem("islogin", false);
       console.log(localStorage);
       localStorage.clear();
-      // delete all data
+
       axios({
         method: "POST",
         url: "http://" + config.baseURL + ":4000/logout", // change
@@ -258,10 +161,10 @@ export class MySider extends Component {
   };
   handleOk = () => {
     this.setState({ setIsModalVisible: false });
-    //  (page == "accidentAlert") {
+
     axios({
       method: "POST",
-      url: "http://127.0.0.1:4000/newAccident", // change
+      url: "http://127.0.0.1:4000/newAccident",
       headers: {},
       data: {
         username: localStorage.getItem("username"),

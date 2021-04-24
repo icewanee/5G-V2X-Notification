@@ -4,7 +4,7 @@ import { Form, Input, Button, Card } from "antd";
 import "../App.css";
 import history from "../history";
 import { config } from "../config/config";
-import confident from "../song/confident_demi.mp3";
+import carbackground from "../pictureNvideo/Picture.jpg";
 
 export class Login extends Component {
   constructor(props) {
@@ -21,9 +21,8 @@ export class Login extends Component {
           span: 24,
         },
         sm: {
-          offset: 20,
-          span: 4,
-          // span: 24,
+          offset: 18,
+          span: 10,
         },
       },
     };
@@ -40,24 +39,24 @@ export class Login extends Component {
     return (
       <div
         style={{
-          height: "100vh",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          // backgroundColor: "#c6d5ad",
+          justifyContent: "flex-end",
+          backgroundImage: `url(${carbackground})`,
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Card
           hoverable
           className="Card box"
           style={{
-            width: 750,
-            // border: "solid black",
+            width: 450,
+            height: "100vh",
+
             paddingLeft: 50,
             paddingRight: 50,
-            borderRadius: 30,
+
             fontWeight: "#2749a8",
-            boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
+            paddingTop: "5%",
           }}
         >
           <br />
@@ -65,7 +64,6 @@ export class Login extends Component {
           <h1 style={{ color: "#2292d4", fontWeight: "bold" }}>5G-V2X</h1>
           <br />
           <Form
-            // onSubmit={(event) => this.onClickLogin(event)}
             name="basic"
             initialValues={{
               remember: true,
@@ -117,32 +115,29 @@ export class Login extends Component {
                 Log in
               </Button>
             </Form.Item>
-            {/* <Form.Item>
-              <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
-            </Form.Item> */}
           </Form>
-          {/* <br /> */}
         </Card>
       </div>
     );
   }
 
   setnumbersong(selected) {
-    if (selected == "Confident") {
+    if (selected === "Confident") {
       localStorage.setItem("songnumber", "1");
-    } else if (selected == "Warm blood") {
+    } else if (selected === "Warm Blood") {
       localStorage.setItem("songnumber", "2");
       console.log("is??");
-    } else if (selected == "Money on my mind") {
+    } else if (selected === "Money On My Mind") {
       localStorage.setItem("songnumber", "3");
-    } else if (selected == "Love my self") {
+    } else if (selected === "Love Myself") {
       localStorage.setItem("songnumber", "4");
-    } else if (selected == "Wake me up") {
+    } else if (selected === "Wake Me Up") {
       localStorage.setItem("songnumber", "5");
-    } else if (selected == "I need you") {
+    } else if (selected === "I Need You") {
       localStorage.setItem("songnumber", "6");
-    } else if (selected == "Avalon") {
+    } else if (selected === "Avalon") {
       localStorage.setItem("songnumber", "7");
+      console.log("got");
     }
   }
 
@@ -173,11 +168,12 @@ export class Login extends Component {
           console.log("this", localStorage.getItem("islogin"));
           localStorage.setItem("username", username);
           localStorage.setItem("song", res.data.selectedsong);
-          console.log("login data", res.data.selectedsong);
+
           this.setnumbersong(res.data.selectedsong);
           this.setState({ alert: "" });
+          console.log("login data", localStorage);
           history.push("/home");
-          // window.location.reload();
+          window.location.reload();
         } else {
           // window.location.reload();
           this.setState({ alert: res.data.message });

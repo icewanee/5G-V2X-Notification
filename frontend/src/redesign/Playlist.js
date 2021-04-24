@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Layout, Menu, Row, Col, Card, Radio } from "antd";
-import { Table, Tag, notification, Typography } from "antd";
+import { Layout, Row, Col, Card, Radio } from "antd";
+import { Table, notification } from "antd";
 import red from "../pictureNvideo/redd.png";
 import confident from "../song/confident_demi.mp3";
 import loveMyself from "../song/LoveMyself_Hailee.mp3";
@@ -15,7 +15,6 @@ import Sider from "../recomponent/MySider";
 import { config } from "../config/config";
 
 import "../App.css";
-import history from "../history";
 
 export class Playlist extends Component {
   constructor(props) {
@@ -27,50 +26,29 @@ export class Playlist extends Component {
   }
 
   render() {
-    const { Footer, Content } = Layout;
-    const { SubMenu } = Menu;
-    const { Text, Link } = Typography;
-    // const confirm = (text)=> {
-    //   console.log(text);
-    //   this.selectedSong(text);
-    //   message.success('Alert sound:'+text);
-    // }
-    // const showPopconfirm = () => {
-    //   this.setState(visible,);
-    // };
-    // const openNotification = (text) => {
-    // notification.open({
-    //   message: "Notification",
-    //   description: "Alert sound is changed  ( using : " + text + " )",
-    //   onClick: () => {
-    //     console.log("Notification Clicked!");
-    //     this.selectedSong(text);
-    //   },
-    // });
-    // };
-    // const [value, setValue] = React.useState(1);
+    const { Content } = Layout;
 
     const onChange = (e) => {
       let selected = "";
-      if (e.target.value == "1") {
+      if (e.target.value === "1") {
         selected = "Confident";
         localStorage.setItem("songnumber", "1");
-      } else if (e.target.value == "2") {
-        selected = "Warm blood";
+      } else if (e.target.value === "2") {
+        selected = "Warm Blood";
         localStorage.setItem("songnumber", "2");
-      } else if (e.target.value == "3") {
-        selected = "Money on my mind";
+      } else if (e.target.value === "3") {
+        selected = "Money On My Mind";
         localStorage.setItem("songnumber", "3");
-      } else if (e.target.value == "4") {
-        selected = "Love my self";
+      } else if (e.target.value === "4") {
+        selected = "Love Myself";
         localStorage.setItem("songnumber", "4");
-      } else if (e.target.value == "5") {
-        selected = "Wake me up";
+      } else if (e.target.value === "5") {
+        selected = "Wake Me Up";
         localStorage.setItem("songnumber", "5");
-      } else if (e.target.value == "6") {
-        selected = "I need you";
+      } else if (e.target.value === "6") {
+        selected = "I Need You";
         localStorage.setItem("songnumber", "6");
-      } else if (e.target.value == "7") {
+      } else if (e.target.value === "7") {
         selected = "Avalon";
         localStorage.setItem("songnumber", "7");
       }
@@ -85,7 +63,6 @@ export class Playlist extends Component {
           console.log("Notification Clicked!");
         },
       });
-      // setValue(e.target.value);
     };
 
     const columns = [
@@ -99,14 +76,6 @@ export class Playlist extends Component {
         key: "Song",
         render: (text) => text,
         align: "center",
-        // <Popconfirm
-        //   title={"Are you sure to change alert song to " + text + " ?"}
-        //   onConfirm={() => this.selectedSong(text)}
-        //   okText="Yes"
-        //   cancelText="No"
-        // >
-        //   <a href="#">{text}</a>
-        // </Popconfirm>
       },
       {
         title: (
@@ -131,7 +100,6 @@ export class Playlist extends Component {
           <div>
             <audio
               style={{ width: "100%" }}
-              // ref="audio_tag"
               autoPlay={this.state.audioPlay}
               controls={true}
               controlslist="nodownload"
@@ -139,9 +107,6 @@ export class Playlist extends Component {
               <source type="audio/mp3" src={icon} />
             </audio>
           </div>
-          // <div onClick={() => this.review(text)}>
-          //   <PlayCircleOutlined />
-          // </div>
         ),
         width: "35%",
       },
@@ -151,7 +116,7 @@ export class Playlist extends Component {
             Status
           </div>
         ),
-        // <div style={{ fontSize: "20px" }}>Select</div>
+
         dataIndex: "number",
         key: "number",
         render: (number) => (
@@ -161,7 +126,6 @@ export class Playlist extends Component {
               onChange={onChange}
               value={this.state.value}
               style={{
-                // height: "100vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -172,12 +136,11 @@ export class Playlist extends Component {
                 style={{ borderRadius: 30, backgroundColor: "white" }}
                 value={number}
               >
-                {number == localStorage.getItem("songnumber") ? (
+                {number === localStorage.getItem("songnumber") ? (
                   <div style={{ color: "black", fontWeight: "bold" }}>
                     selected
                   </div>
                 ) : (
-                  // color: "#3277a8",
                   "select"
                 )}
               </Radio.Button>
@@ -189,84 +152,79 @@ export class Playlist extends Component {
 
     const data = [
       {
-        key: "1",
-        picture: `url(${red})`,
-        Song: "Confident",
-        Artist: "Demi Lovato",
-        icon: confident,
-        number: "1",
-      },
-      {
-        key: "2",
-        // picture: "red",
-        Song: "Warm Blood",
-        Artist: "Carly Rae Jepsen",
-        icon: warmBlood,
-        number: "2",
-      },
-      {
-        key: "3",
-        // picture: "red",
-        Song: "Money On My Mind",
-        Artist: "Sam Smith",
-        icon: moneyOnMyMind,
-        number: "3",
-      },
-      {
-        key: "4",
-        // picture: "red",
-        Song: "Love Myself",
-        Artist: "Hailee Steinfeld",
-        icon: loveMyself,
-        number: "4",
-      },
-      {
-        key: "5",
-        // picture: "red",
-        Song: "Wake Me Up",
-        Artist: "Avicii",
-        icon: wakeMeUp,
-        number: "5",
-      },
-      {
         key: "6",
-        // picture: "red",
-        Song: "I Need You",
+
+        Song: "I Need You ",
         Artist: "LiQWYD",
         icon: INeedYou,
         number: "6",
       },
       {
         key: "7",
-        // picture: "red",
+
         Song: "Avalon",
         Artist: "Scandinavianz",
         icon: Avalon,
         number: "7",
+      },
+      {
+        key: "1",
+        picture: `url(${red})`,
+        Song: "Confident ⓒ",
+        Artist: "Demi Lovato",
+        icon: confident,
+        number: "1",
+      },
+      {
+        key: "2",
+
+        Song: "Warm Blood ⓒ",
+        Artist: "Carly Rae Jepsen",
+        icon: warmBlood,
+        number: "2",
+      },
+      {
+        key: "3",
+
+        Song: "Money On My Mind ⓒ",
+        Artist: "Sam Smith",
+        icon: moneyOnMyMind,
+        number: "3",
+      },
+      {
+        key: "4",
+
+        Song: "Love Myself ⓒ",
+        Artist: "Hailee Steinfeld",
+        icon: loveMyself,
+        number: "4",
+      },
+      {
+        key: "5",
+
+        Song: "Wake Me Up ⓒ",
+        Artist: "Avicii",
+        icon: wakeMeUp,
+        number: "5",
       },
     ];
     return (
       <div>
         <Layout>
           <Header />
-          <Layout
-            className="site-layout-background"
-            // style={{ padding: "24px 0" }}
-          >
+          <Layout className="site-layout-background">
             <Content
               style={{
                 height: "90vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                // backgroundColor: "#c6d5ad",
               }}
             >
               <Row>
                 <Col
                   span={24}
                   style={{
-                    // height: "100vh",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -276,10 +234,6 @@ export class Playlist extends Component {
                     hoverable
                     className="Card box"
                     style={{
-                      // width: 900,
-                      // border: "solid black",
-                      // paddingLeft: 50,
-                      // paddingRight: 50,
                       borderRadius: 30,
                       fontWeight: "#2749a8",
                       boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
@@ -296,7 +250,6 @@ export class Playlist extends Component {
                       title={() => (
                         <h3
                           style={{
-                            // height: "100vh",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -305,7 +258,6 @@ export class Playlist extends Component {
                           Music playlist
                         </h3>
                       )}
-                      // scroll={{ x: 0, y: 350 }}
                       size={"middle"}
                       scroll={{ y: "350px" }}
                       pagination={false}
@@ -324,49 +276,30 @@ export class Playlist extends Component {
     );
   }
 
-  // componentDidMount() {
-  //   let selected = localStorage.getItem("song");
-  //   if (selected == "Confident") {
-  //     localStorage.setItem("songnumber", "1");
-  //   } else if ((selected = "Warm blood")) {
-  //     localStorage.setItem("songnumber", "2");
-  //   } else if ((selected = "Money on my mind")) {
-  //     localStorage.setItem("songnumber", "3");
-  //   } else if ((selected = "Love my self")) {
-  //     localStorage.setItem("songnumber", "4");
-  //   } else if ((selected = "Wake me up")) {
-  //     localStorage.setItem("songnumber", "5");
-  //   } else if ((selected = "I need you")) {
-  //     localStorage.setItem("songnumber", "6");
-  //   } else if ((selected = "Avalon")) {
-  //     localStorage.setItem("songnumber", "7");
-  //   }
-  // }
-
   review = (text) => {
     console.log(text);
   };
 
   setSong = (text) => {
-    if (text == "Confident" || text == "1") {
+    if (text === "Confident" || text === "1") {
       localStorage.setItem("song", "Confident");
       return "Confident";
-    } else if (text == "Warm Blood" || text == "2") {
+    } else if (text === "Warm Blood" || text === "2") {
       localStorage.setItem("song", "Warm Blood");
       return "Warm Blood";
-    } else if (text == "Money On My Mind" || text == "3") {
+    } else if (text === "Money On My Mind" || text === "3") {
       localStorage.setItem("song", "Money On My Mind");
       return "Money On My Mind";
-    } else if (text == "Love Myself" || text == "4") {
+    } else if (text === "Love Myself" || text === "4") {
       localStorage.setItem("song", "Love Myself");
       return "Love Myself";
-    } else if (text == "Wake Me Up" || text == "5") {
+    } else if (text === "Wake Me Up" || text === "5") {
       localStorage.setItem("song", "Wake Me Up");
       return "Wake Me Up";
-    } else if (text == "I Need You" || text == "6") {
+    } else if (text === "I Need You" || text === "6") {
       localStorage.setItem("song", "I Need You");
       return "I Need You";
-    } else if (text == "Avalon" || text == "7") {
+    } else if (text === "Avalon" || text === "7") {
       localStorage.setItem("song", "Avalon");
       return "Avalon";
     }
@@ -378,7 +311,7 @@ export class Playlist extends Component {
     console.log("selected: " + name);
     await axios({
       method: "POST",
-      url: "http://" + config.baseURL + ":4000/selectedSong", // change
+      url: "http://" + config.baseURL + ":4000/selectedSong",
       headers: {},
       data: {
         musicName: name,
@@ -390,18 +323,6 @@ export class Playlist extends Component {
       .catch((err) => {
         console.log("error in request", err);
       });
-  };
-  onClick = async (page) => {
-    //page.preventDefault();
-
-    if (page == "/") {
-      console.log(localStorage);
-      localStorage.setItem("islogin", false);
-      console.log(localStorage);
-      history.push(page);
-    } else {
-      history.push(page);
-    }
   };
 }
 export default Playlist;

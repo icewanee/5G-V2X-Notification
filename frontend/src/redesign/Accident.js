@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import axios from "axios";
-import { Form, Input, Button, Layout, Menu, Modal, notification } from "antd";
+import { Layout, notification } from "antd";
 import MapN from "../component/MapN";
 import { Row, Col } from "antd";
 import Header from "../recomponent/Header";
 import Sider from "../recomponent/MySider";
 
 import "../App.css";
-import history from "../history";
 
 export class Accident extends Component {
   constructor(props) {
@@ -18,41 +16,55 @@ export class Accident extends Component {
   setAlert = (infor) => {
     this.setState({ alert: infor });
     console.log(infor);
-    this.openNotification(infor);
+    // this.openNotification(infor);
+    notification.open({
+      message: "Accident alert",
+      description: "New accident at" + infor,
+      onClick: () => {
+        console.log("Notification Clicked!");
+      },
+    });
   };
 
   render() {
-    const { Footer, Content } = Layout;
-    const { SubMenu } = Menu;
+    const { Content } = Layout;
 
-    const openNotification = (infor) => {
-      notification.open({
-        message: "Accident alert",
-        description: "New accident at" + infor,
-        onClick: () => {
-          console.log("Notification Clicked!");
-        },
-      });
-    };
+    // const openNotification = (infor) => {
+    //   notification.open({
+    //     message: "Accident alert",
+    //     description: "New accident at" + infor,
+    //     onClick: () => {
+    //       console.log("Notification Clicked!");
+    //     },
+    //   });
+    // };
     return (
       <div>
         <Layout>
           <Header />
-          <Layout
-            className="site-layout-background"
-            // style={{ padding: "24px 0" }}
-          >
+          <Layout className="site-layout-background">
             <Content
               style={{
                 height: "90vh",
-                // backgroundColor: "#c6d5ad",
               }}
             >
               <Row>
                 <Col
                   span={24}
                   style={{
-                    // height: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#3277a8",
+                    color: "white",
+                  }}
+                >
+                  * The marks of accident location show the accident that has
+                  been occurred within an hour *
+                </Col>
+                <Col
+                  span={24}
+                  style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -67,8 +79,6 @@ export class Accident extends Component {
               currentLng={this.props.currentLng}
             />
           </Layout>
-
-          {/* <Footer>Footer</Footer> */}
         </Layout>
       </div>
     );

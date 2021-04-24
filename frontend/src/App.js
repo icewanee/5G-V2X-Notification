@@ -1,13 +1,10 @@
-import React, { Component, useRef } from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from "react";
 import { Route, Switch, Router } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import history from "./history";
 import Accident from "./redesign/Accident";
 import Home from "./redesign/Home";
-import PageNotFound from "./page/PageNotFound";
 import Login from "./redesign/Login";
-import MapN from "./component/MapN";
 import Playlist from "./redesign/Playlist";
 import axios from "axios";
 import INeedYou from "../src/song/INeedYou_LiQWYD.mp3";
@@ -17,11 +14,9 @@ import moneyOnMyMind from "../src/song/MoneyOnMyMind_Sam.mp3";
 import wakeMeUp from "../src/song/WakeMeUp_Avicii.mp3";
 import warmBlood from "../src/song/WarmBlood_Carly.mp3";
 import Avalon from "../src/song/Avalon.mp3";
-// import AudioPlayer from "react-audio-element";
-import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { PauseOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Layout, Menu, Modal, message } from "antd";
+import { Button, Modal, message } from "antd";
 import { config } from "./config/config";
 class App extends Component {
   constructor(props) {
@@ -35,7 +30,6 @@ class App extends Component {
       auto: true,
       start: 0,
       song: confident,
-      // selectedsong: confident,
     };
     this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
     this.socket = socketIOClient("http://" + config.baseURL + ":4000");
@@ -45,7 +39,7 @@ class App extends Component {
   play = (songsrc) => {
     this.setState({ play: true, pause: false });
     console.log("songsrc", songsrc);
-    // this.audio = new Audio(INeedYou);
+
     this.audio.src = songsrc;
     this.audio.play();
   };
@@ -57,9 +51,7 @@ class App extends Component {
     this.handleOk();
   };
 
-  // audio = new Audio(confident);
   loggedIn() {
-    //return true;
     if (localStorage.getItem("islogin") === "true") {
       console.log("hh");
       return true;
@@ -69,24 +61,9 @@ class App extends Component {
     }
   }
 
-  // alertDrowsy() {
-  //   var d = new Date();
-  //   var start = d.getTime();
-  //   this.showModal();
-
-  //   var end = d.getTime();
-  //   var response = start - end;
-  //   return response;
-  // }
   warning = (text) => {
     message.warning(text);
   };
-  resetsong() {
-    {
-      // document.getElementById("player").load();
-      console.log(document.getElementById("player"));
-    }
-  }
 
   render() {
     return (
@@ -98,7 +75,6 @@ class App extends Component {
             onOk={() => this.pause}
             onCancel={() => this.pause}
             closable={false}
-            // cancelButtonProps={{ style: { display: "none" } }}
             footer={null}
           >
             <br />
@@ -127,10 +103,6 @@ class App extends Component {
                 style={{
                   height: "100px",
                   width: "100px",
-                  // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
-                  // borderColor: "gray",
-                  // borderRadius: "20",
-                  // backgroundColor: "#3277a8",
                 }}
                 onClick={this.pause}
                 icon={
@@ -138,12 +110,9 @@ class App extends Component {
                     style={{
                       fontSize: "70px",
                     }}
-                    // color: "#08c"
                   />
                 }
-              >
-                <h4 style={{ color: "white" }}></h4>
-              </Button>
+              ></Button>
             </div>
           </Modal>
 
@@ -159,16 +128,7 @@ class App extends Component {
                 )}
               />
             ) : (
-              <Route
-                path="/home"
-                render={() => (
-                  <Home
-                    currentLat={this.state.currentLat}
-                    currentLng={this.state.currentLng}
-                  />
-                )}
-              />
-              // <Route path="/home" component={Login} />
+              <Route path="/home" component={Login} />
             )}
             {this.loggedIn() ? (
               <Route
@@ -181,16 +141,7 @@ class App extends Component {
                 )}
               />
             ) : (
-              // <Route path="/accident" component={PageNotFound} />
-              <Route
-                path="/accident"
-                render={() => (
-                  <Accident
-                    currentLat={this.state.currentLat}
-                    currentLng={this.state.currentLng}
-                  />
-                )}
-              />
+              <Route path="/accident" component={Login} />
             )}
             {this.loggedIn() ? (
               <Route
@@ -203,25 +154,15 @@ class App extends Component {
                 )}
               />
             ) : (
-              // <Route path="/playlist" component={PageNotFound} />
-              <Route
-                path="/playlist"
-                render={() => (
-                  <Playlist
-                    currentLat={this.state.currentLat}
-                    currentLng={this.state.currentLng}
-                    // selectedsong={this.state.selectedsong}
-                  />
-                )}
-              />
+              <Route path="/playlist" component={Login} />
             )}
-            <Route path="/test" component={Accident} />
+
             <Route path="/" component={Login} />
-            <Route component={PageNotFound} />
+            <Route component={Login} />
           </Switch>
-          <button onClick={() => this.showModal(localStorage.getItem("song"))}>
+          {/* <button onClick={() => this.showModal(localStorage.getItem("song"))}>
             sound test
-          </button>
+          </button> */}
         </div>
       </Router>
     );
@@ -308,7 +249,7 @@ class App extends Component {
       console.log("message", message.data);
       // if (message == "request to alert") {
       console.log("pop up");
-      // this.showModal(message.data);
+      this.showModal(message.data);
     });
     this.socket.on("eyeNotFound", (message) => {
       console.log(message);
