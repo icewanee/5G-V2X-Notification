@@ -11,9 +11,9 @@ let res_start = "";
 let islogin = false;
 let musicName = "Confident";
 // test only
-let lat = 13.73826;
-let lng = 100.532413;
-//
+let lat = 13.861358;
+let lng = 100.416126;
+//13.861358, 13.73826
 module.exports = (
   app,
   client_redis,
@@ -30,7 +30,7 @@ module.exports = (
       setFirstTime();
       await axios({
         method: "GET",
-        url: "http://" + config.CloundSever + ":8080/api/car/accident",
+        url: "http://" + config.CloundSever + "/api/car/accident",
         headers: {},
         data: {},
       })
@@ -132,8 +132,8 @@ module.exports = (
   });
   app.post("/test/newAccident", function (req, res) {
     let value = {
-      lat: lat++,
-      lng: lng++,
+      lat: lat,
+      lng: lng,
     };
     client_redis.setex(JSON.stringify(value), time, "", function (err, reply) {
       if (err) {

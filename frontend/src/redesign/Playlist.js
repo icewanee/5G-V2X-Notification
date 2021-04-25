@@ -73,7 +73,16 @@ export class Playlist extends Component {
         ),
         dataIndex: "Song",
         key: "Song",
-        render: (text) => text,
+        render: (text) =>
+          text === "I Need You" || text === "Avalon" ? (
+            <div>
+              <div>{text}</div>
+              <div style={{ fontSize: 7 }}>( No copyright )</div>
+            </div>
+          ) : (
+            text
+          ),
+
         align: "center",
       },
       {
@@ -152,8 +161,7 @@ export class Playlist extends Component {
     const data = [
       {
         key: "6",
-
-        Song: "I Need You ",
+        Song: "I Need You",
         Artist: "LiQWYD",
         icon: INeedYou,
         number: "6",
@@ -170,7 +178,7 @@ export class Playlist extends Component {
         key: "1",
         picture: "",
         // `url(${red})`
-        Song: "Confident ⓒ",
+        Song: "Confident",
         Artist: "Demi Lovato",
         icon: confident,
         number: "1",
@@ -178,7 +186,7 @@ export class Playlist extends Component {
       {
         key: "2",
 
-        Song: "Warm Blood ⓒ",
+        Song: "Warm Blood",
         Artist: "Carly Rae Jepsen",
         icon: warmBlood,
         number: "2",
@@ -186,7 +194,7 @@ export class Playlist extends Component {
       {
         key: "3",
 
-        Song: "Money On My Mind ⓒ",
+        Song: "Money On My Mind",
         Artist: "Sam Smith",
         icon: moneyOnMyMind,
         number: "3",
@@ -194,7 +202,7 @@ export class Playlist extends Component {
       {
         key: "4",
 
-        Song: "Love Myself ⓒ",
+        Song: "Love Myself",
         Artist: "Hailee Steinfeld",
         icon: loveMyself,
         number: "4",
@@ -202,7 +210,7 @@ export class Playlist extends Component {
       {
         key: "5",
 
-        Song: "Wake Me Up ⓒ",
+        Song: "Wake Me Up",
         Artist: "Avicii",
         icon: wakeMeUp,
         number: "5",
