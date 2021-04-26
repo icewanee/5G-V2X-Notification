@@ -19,7 +19,7 @@ export class Accident extends Component {
     // this.openNotification(infor);
     notification.open({
       message: "Accident alert",
-      description: "New accident occurred at" + infor,
+      description: "New accident occurred at " + infor,
       onClick: () => {
         console.log("Notification Clicked!");
       },

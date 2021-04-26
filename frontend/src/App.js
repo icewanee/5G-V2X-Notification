@@ -159,7 +159,7 @@ class App extends Component {
               <Route path="/playlist" component={Login} />
             )}
             {this.loggedIn() ? (
-              <Route
+              <Route exact
                 path="/"
                 render={() => (
                   <Home
@@ -169,9 +169,9 @@ class App extends Component {
                 )}
               />
             ) : (
-              <Route path="/" component={Login} />
+              <Route exact path="/" component={Login} />
             )}
-            <Route component={PageNotFound} />
+            <Route path="*" component={PageNotFound} />
           </Switch>
         </div>
       </Router>
@@ -286,7 +286,6 @@ class App extends Component {
   //         lng: Number(position.coords.longitude),
   //       };
 
-  //       this.socket.emit("position", response);
 
   //       this.setState({
   //         currentLat: Number(position.coords.latitude),
@@ -315,6 +314,11 @@ class App extends Component {
       currentLat: Number(position.coords.latitude),
       currentLng: Number(position.coords.longitude),
     });
+    let response = {
+      lat: Number(position.coords.latitude),
+      lng: Number(position.coords.longitude),
+    };
+    // this.socket.emit("position", response);
     console.log(this.state.currentLat);
   };
 

@@ -94,7 +94,7 @@ export class ClusterMap extends React.PureComponent {
         onChange={this.handleMapChange}
         yesIWantToUseGoogleMapApiInternals
         bootstrapURLKeys={{
-          key: "",
+          key: config.googleMapAPI,
           libraries: ["visualization"],
           // config.googleMapAPI
         }}
