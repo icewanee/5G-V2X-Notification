@@ -94,8 +94,9 @@ export class ClusterMap extends React.PureComponent {
         onChange={this.handleMapChange}
         yesIWantToUseGoogleMapApiInternals
         bootstrapURLKeys={{
-          key: config.googleMapAPI,
+          key: "",
           libraries: ["visualization"],
+          // config.googleMapAPI
         }}
       >
         {this.props.isShownHere && (
@@ -132,20 +133,19 @@ export class MapN extends Component {
     super(props);
     this.state = {
       accidentlocation: "",
-      currentLat: "",
-      currentLng: "",
+      currentLat: props.currentLat,
+      currentLng: props.currentLng,
       input: "",
       message: [],
-      loading: true,
+      loading: false,
     };
-    this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
+    // this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
   }
 
   geocode = async (inforAlert, locationDis) => {
     // async
-    var lat = JSON.parse(locationDis)["lat"];
-    var lng = JSON.parse(locationDis)["lng"];
-
+    var lat = locationDis["lat"];
+    var lng = locationDis["lng"];
     axios
       .get("https://maps.googleapis.com/maps/api/geocode/json", {
         params: {
@@ -176,38 +176,43 @@ export class MapN extends Component {
   };
 
   around = (dataLocation) => {
-    var min = 0;
+    // var min = 0;
+    console.log("around");
     var ans = false;
     var distance = 0;
     let isnear = false;
     dataLocation.reverse().forEach((element) => {
       // .toString()
       // .slice()
+      console.log(element);
+
       var dis = getDistance(
         {
           latitude: Number(
-            this.state.currentLat
-          ) /*localStorage.getItem("currentLat")*/,
+            this.props.currentLat
+          ) /*localStorage.getItem("currentLat")this.state.currentLat*/,
           longitude: Number(
-            this.state.currentLng
-          ) /*localStorage.getItem("currentLng")*/,
+            this.props.currentLng
+          ) /*localStorage.getItem("currentLng")this.state.currentLng*/,
         },
         {
-          latitude: Number(JSON.parse(element)["lat"]),
-          longitude: Number(JSON.parse(element)["lng"]),
+          latitude: Number(element["lat"]),
+          longitude: Number(element["lng"]),
         }
       );
+
       distance = Number(dis) / 1000;
       console.log("distance", distance, dis);
       if (!isnear) {
         if (distance <= 20 && !isnear) {
           isnear = true;
           console.log("around", isnear, element, distance);
-
           ans = element;
-        } else if (min >= distance) {
-          min = distance;
+          console.log("ans", ans);
         }
+        // else if (min >= distance) {
+        //   min = distance;
+        // }
       }
     });
     return ans;
@@ -219,6 +224,7 @@ export class MapN extends Component {
     socket.on("sent_message", (message) => {
       console.log("message", message);
       var modMessage = [];
+      this.setState({ loading: true });
       message.data.forEach((element) => {
         modMessage.push(JSON.parse(element));
       });
@@ -227,17 +233,16 @@ export class MapN extends Component {
       //   lat: 13.877647,
       //   lng: 100.4,
       // });
-      this.setState({ accidentlocation: modMessage });
+      this.setState({ accidentlocation: modMessage, loading: false });
       // message.data.push(`{
       //   "lat": 13.877647,
       //   "lng": 100.4,
       // }`);
-      console.log("this", modMessage);
+      console.log("this", this.state.accidentlocation);
       var locationDis = this.around(this.state.accidentlocation); // message.data
       console.log(locationDis);
       //this.displaylocation(message.data);// not used
       console.log("h", this.state.accidentlocation);
-
       if (locationDis) {
         this.geocode(this.props.inforAlert, locationDis);
       }
@@ -259,69 +264,45 @@ export class MapN extends Component {
       // console.log("Longitude is :", position.coords.longitude);
     });
   };
-
+  Loading = () => {
+    return (
+      <div>
+        <div
+          style={{
+            paddingTop: "10%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <LoadingOutlined style={{ fontSize: "60px" }} />
+        </div>
+        <div
+          style={{
+            paddingTop: "30px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <h3>Loading...</h3>
+        </div>{" "}
+      </div>
+    );
+  };
   render() {
     return (
-      <div style={{ width: "100vw", height: "86vh" }}>
+      <div style={{ width: "100vw", height: "calc(90vh - 20px)" }}>
         {/* height: "90vh" */}
-        {this.state.loading ? (
-          <div>
-            {/* <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                paddingTop: 10,
-                paddingRight: 10,
-              }}
-            >
-              <Button
-                type="primary"
-                icon={
-                  <InfoOutlined
-                    style={{ fontSize: "30px" }}
-                    // color: "#08c"
-                  />
-                }
-                shape="circle"
-                style={{
-                  height: "40px",
-                  width: "40px",
-                  backgroundColor: "#3277a8",
-                  border: "white",
-
-                  // fontSize: "30px",
-                  // boxShadow: "5px 8px 24px 5px rgba(50, 50, 93, 0.25)",
-                }}
-              ></Button>
-            </div> */}
-            <div
-              style={{
-                paddingTop: "10%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <LoadingOutlined style={{ fontSize: "60px" }} />
-            </div>
-            <div
-              style={{
-                paddingTop: "30px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <h3>Loading...</h3>
-            </div>{" "}
-          </div>
+        {this.state.loading && false ? (
+          <div></div>
         ) : (
           <ClusterMap
-            accidentlocation={this.state.accidentlocation}
+            accidentlocation={this.state.accidentlocation || []}
             here={{ lat: this.state.currentLat, lng: this.state.currentLng }}
             isShownHere
-            currentLat={this.state.currentLat}
-            currentLng={this.state.currentLng}
+            currentLat={this.props.currentLat}
+            currentLng={this.props.currentLng}
           />
         )}
       </div>
@@ -364,11 +345,11 @@ export class MapN extends Component {
     this.response();
   }
 
-  componentDidUpdate() {
-    setInterval(() => {
-      this.uploadcurrentlo();
-    }, 300000);
-  }
+  // componentDidUpdate() {
+  //   setInterval(() => {
+  //     this.uploadcurrentlo();
+  //   }, 300000);
+  // }
 }
 
 export default MapN;

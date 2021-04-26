@@ -57,6 +57,7 @@ export class Accident extends Component {
                     alignItems: "center",
                     backgroundColor: "#3277a8",
                     color: "white",
+                    height: "20px",
                   }}
                 >
                   * The mark shows the accident that has been occurred within an
@@ -70,7 +71,11 @@ export class Accident extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <MapN inforAlert={this.setAlert} />
+                  <MapN
+                    inforAlert={this.setAlert}
+                    currentLat={this.props.currentLat}
+                    currentLng={this.props.currentLng}
+                  />
                 </Col>
               </Row>
             </Content>

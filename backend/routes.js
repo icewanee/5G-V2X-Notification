@@ -131,9 +131,11 @@ module.exports = (
     // }
   });
   app.post("/test/newAccident", function (req, res) {
+    let new_lat = lat + 0.0000088;
+    let new_lng = lng + 0.0200054;
     let value = {
-      lat: lat,
-      lng: lng,
+      lat: new_lat,
+      lng: new_lng,
     };
     client_redis.setex(JSON.stringify(value), time, "", function (err, reply) {
       if (err) {

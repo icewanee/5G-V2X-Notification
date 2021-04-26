@@ -6,6 +6,7 @@ import Accident from "./redesign/Accident";
 import Home from "./redesign/Home";
 import Login from "./redesign/Login";
 import Playlist from "./redesign/Playlist";
+import PageNotFound from "./page/PageNotFound";
 import axios from "axios";
 import INeedYou from "../src/song/INeedYou_LiQWYD.mp3";
 import confident from "../src/song/confident_demi.mp3";
@@ -19,6 +20,10 @@ import { PauseOutlined } from "@ant-design/icons";
 import { Button, Modal, message } from "antd";
 import { config } from "./config/config";
 class App extends Component {
+  static geolocationWatchID = undefined;
+  static geolocationPositionOptions = {
+    useSignificantChanges: true,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +36,7 @@ class App extends Component {
       start: 0,
       song: confident,
     };
-    this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
+    // this.uploadcurrentlo = this.uploadcurrentlo.bind(this);
     this.socket = socketIOClient("http://" + config.baseURL + ":4000");
     this.audio = new Audio(this.state.song);
   }
@@ -138,7 +143,7 @@ class App extends Component {
                 )}
               />
             ) : (
-              <Route path="/accident" component={Login} />
+              <Route path="/accident" component={PageNotFound} />
             )}
             {this.loggedIn() ? (
               <Route
@@ -151,11 +156,11 @@ class App extends Component {
                 )}
               />
             ) : (
-              <Route path="/playlist" component={Login} />
+              <Route path="/playlist" component={PageNotFound} />
             )}
 
             <Route path="/" component={Login} />
-            <Route component={Login} />
+            <Route component={PageNotFound} />
           </Switch>
         </div>
       </Router>
@@ -253,35 +258,59 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.uploadcurrentlo();
+    // this.uploadcurrentlo();
+    App.geolocationWatchID = navigator.geolocation.watchPosition(
+      this.onGeolocation,
+      this.onGeolocationError,
+      App.geolocationPositionOptions
+    );
     this.response();
   }
 
-  uploadcurrentlo() {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        let response = {
-          lat: Number(position.coords.latitude),
-          lng: Number(position.coords.longitude),
-        };
+  // uploadcurrentlo() {
+  //   navigator.geolocation.getCurrentPosition(
+  //     function (position) {
+  //       let response = {
+  //         lat: Number(position.coords.latitude),
+  //         lng: Number(position.coords.longitude),
+  //       };
 
-        this.socket.emit("position", response);
+  //       this.socket.emit("position", response);
 
-        this.setState({
-          currentLat: Number(position.coords.latitude),
-          currentLng: Number(position.coords.longitude),
-        });
-      }.bind(this)
-    );
-    // const Socket = socketIOClient("http://" + config.baseURL + ":4000");
-  }
+  //       this.setState({
+  //         currentLat: Number(position.coords.latitude),
+  //         currentLng: Number(position.coords.longitude),
+  //       });
+  //     }.bind(this)
+  //   );
+  //   // const Socket = socketIOClient("http://" + config.baseURL + ":4000");
+  // }
 
   // componentDidUpdate() {
   //   setInterval(() => {
   //     console.log("didup");
-  //     this.uploadcurrentlo();
+  //     // this.uploadcurrentlo();
   //   }, 30000);
   // }
+
+  componentWillUnmount() {
+    if (App.geolocationWatchID !== undefined) {
+      navigator.geolocation.clearWatch(App.geolocationWatchID);
+    }
+  }
+
+  onGeolocation = (position) => {
+    this.setState({
+      currentLat: Number(position.coords.latitude),
+      currentLng: Number(position.coords.longitude),
+    });
+    console.log(this.state.currentLat);
+  };
+
+  onGeolocationError = (positionError) => {
+    // Alert.alert("Geolocation error", JSON.stringify(positionError));
+    console.log("Geolocation error", JSON.stringify(positionError));
+  };
 }
 
 export default App;

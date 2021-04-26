@@ -43,6 +43,7 @@ export class Login extends Component {
           justifyContent: "flex-end",
           backgroundImage: `url(${carbackground})`,
           backgroundRepeat: "no-repeat",
+          backgroundSize: "80% 100%",
         }}
       >
         <Card
