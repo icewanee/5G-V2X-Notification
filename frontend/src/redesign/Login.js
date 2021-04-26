@@ -97,7 +97,7 @@ export class Login extends Component {
             >
               <Input.Password />
             </Form.Item>
-            <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
+            <h6 style={{ color: "#db1f2a" , fontSize: 15}}>{this.state.alert}</h6>
 
             <Form.Item {...tailLayout}>
               <Button

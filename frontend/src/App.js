@@ -143,7 +143,7 @@ class App extends Component {
                 )}
               />
             ) : (
-              <Route path="/accident" component={PageNotFound} />
+              <Route path="/accident" component={Login} />
             )}
             {this.loggedIn() ? (
               <Route
@@ -156,10 +156,21 @@ class App extends Component {
                 )}
               />
             ) : (
-              <Route path="/playlist" component={PageNotFound} />
+              <Route path="/playlist" component={Login} />
             )}
-
-            <Route path="/" component={Login} />
+            {this.loggedIn() ? (
+              <Route
+                path="/"
+                render={() => (
+                  <Home
+                    currentLat={this.state.currentLat}
+                    currentLng={this.state.currentLng}
+                  />
+                )}
+              />
+            ) : (
+              <Route path="/" component={Login} />
+            )}
             <Route component={PageNotFound} />
           </Switch>
         </div>

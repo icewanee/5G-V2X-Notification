@@ -223,6 +223,18 @@ export class Home extends Component {
       localStorage.setItem("islogin", false);
       console.log(localStorage);
       history.push(page);
+      axios({
+        method: "POST",
+        url: "http://127.0.0.1:4000/logout",
+        headers: {},
+        data: {},
+      })
+        .then((res) => {
+          console.log("error in request", res);
+        })
+        .catch((err) => {
+          console.log("error in request", err);
+        });
       localStorage.clear();
     } else {
       history.push(page);
