@@ -131,8 +131,8 @@ module.exports = (
     // }
   });
   app.post("/test/newAccident", function (req, res) {
-    let new_lat = lat + 0.0000088;
-    let new_lng = lng + 0.0200054;
+    let new_lat = lat - 0.16050388;
+    let new_lng = lng - 0.160000054;
     let value = {
       lat: new_lat,
       lng: new_lng,
