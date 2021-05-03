@@ -132,15 +132,12 @@ export class MySider extends Component {
       console.log(localStorage);
       localStorage.setItem("islogin", false);
       console.log(localStorage);
-      localStorage.clear();
-
+      history.push(page);
       axios({
         method: "POST",
-        url: "http://" + config.baseURL + ":4000/logout", // change
+        url: "http://127.0.0.1:4000/logout",
         headers: {},
-        data: {
-          username: "ee",
-        },
+        data: {},
       })
         .then((res) => {
           window.location.reload();
@@ -148,7 +145,7 @@ export class MySider extends Component {
         .catch((err) => {
           console.log("error in request", err);
         });
-      history.push(page);
+      localStorage.clear();
     } else {
       history.push(page);
     }

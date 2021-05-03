@@ -22,7 +22,7 @@ import { config } from "./config/config";
 class App extends Component {
   static geolocationWatchID = undefined;
   static geolocationPositionOptions = {
-    useSignificantChanges: true,
+    enableHighAccuracy: true,
   };
   constructor(props) {
     super(props);
@@ -261,6 +261,10 @@ class App extends Component {
     this.socket.on("this_car_accident", (message) => {
       this.warning("This car has an accident");
     });
+    this.socket.on("disconnect", (message) => {
+      this.warning("Network isn't disconnect");
+    });
+    
     // const socket2 = socketIOClient("http://"+config.ddsURL+":4000");
     // socket2.on("eyes_not_found", (message) => {
     //    console.log(message);
@@ -318,8 +322,8 @@ class App extends Component {
       lat: Number(position.coords.latitude),
       lng: Number(position.coords.longitude),
     };
-    // this.socket.emit("position", response);
-    console.log(this.state.currentLat);
+    this.socket.emit("position", response);
+    console.log(this.state.currentLat,this.state.currentLng);
   };
 
   onGeolocationError = (positionError) => {

@@ -230,7 +230,7 @@ export class Home extends Component {
         data: {},
       })
         .then((res) => {
-          console.log("error in request", res);
+          window.location.reload();
         })
         .catch((err) => {
           console.log("error in request", err);

@@ -36,7 +36,7 @@ const setUsername = (n)=>{
 //kafka
 const time = config.TimeDisappearAcs;
 const Producer = Kafka.Producer;
-const client = new Kafka.KafkaClient({
+var client = new Kafka.KafkaClient({
   // kafkaServer: 'localhost:2181',
   kafkaHost: config.KafkaHost,
   idleConnection: 24 * 60 * 60 * 1000,
@@ -129,10 +129,12 @@ io.on("connection", (socket) => {
   });
   // socket.on("")
 });
+var timeToRetryConnection = 12*1000; // 12 seconds
+var reconnectInterval = null;
+var kafkaConnected = false;
 
-const Consumer = Kafka.Consumer;
 
-let consumer = new Consumer(
+var consumer = new Kafka.Consumer(
   client,
   [{ topic: config.KafkaActTopic, partition: 0 }],
   {
@@ -140,6 +142,8 @@ let consumer = new Consumer(
     fetchMaxWaitMs: 1000,
     fetchMaxBytes: 1024 * 1024,
     encoding: "utf8",
+    "session.timeout.ms":   50000,
+    "reconnect.backoff.ms": 50000,
     fromOffset: false,
   }
 );
@@ -150,8 +154,8 @@ consumer.on("message", async function (message) {
 
   if (!isFirstTime && condition) {
     if (condition.trim() == "ACS") {
-      if(data.username == username && data.carID == car_id){
-        console.log("This driver accident")
+      if(data.carID == car_id){
+        console.log("This car accident")
         io.emit('this_car_accident',{ data: "this_car_accident"})
       }
       let value = {
@@ -172,22 +176,54 @@ consumer.on("message", async function (message) {
     } else {
       console.log("kafka not in condition", data);
     }
-    //redis ice
     client_redis.keys("*", function (err, keys) {
       if (err) return console.log(err);
       if (keys) {
         console.log("soc");
         io.emit("sent_message", { data: keys });
         console.log("hey");
-        // res.json({ data: keys });
       }
     });
   }
 });
 
 consumer.on("error", function (error) {
-  console.log("error kafka consumer", error);
+  // io.emit("disconnect","Your network isn't connect")
+  console.log('consumer error')
 });
+client.on('connect',function(){
+  console.log('client connect')
+})
+client.on('error',function(err){
+  console.log('client error')
+  kafkaConnected = false;
+  // client.close(); // Comment out for client on close
+  if ( reconnectInterval == null) { // Multiple Error Events may fire, only set one connection retry.
+      reconnectInterval =
+      setTimeout(function () {
+            console.log("reconnect is called on client error event");
+            client = new Kafka.KafkaClient({
+              kafkaHost: config.KafkaHost,
+              idleConnection: 24 * 60 * 60 * 1000,
+              sasl: {mechanism: 'plain', username:config.KafkaUsernameOnCln , password: config.KafkaPasswordOnCln},
+            });
+            consumer = new Kafka.Consumer(
+              client,
+              [{ topic: config.KafkaActTopic, partition: 0 }],
+              {
+                autoCommit: true,
+                fetchMaxWaitMs: 1000,
+                fetchMaxBytes: 1024 * 1024,
+                encoding: "utf8",
+                "session.timeout.ms":   50000,
+                "reconnect.backoff.ms": 50000,
+                fromOffset: false,
+              }
+            );
+      }, timeToRetryConnection);
+  }
+});
+
 
 server.listen(port, function () {
   console.log("Server started on port " + port);
@@ -202,3 +238,4 @@ server.listen(port, function () {
     io,
   );
 });
+

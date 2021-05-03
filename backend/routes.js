@@ -10,8 +10,11 @@ const username_topic = config.KafkaUsernameTopic;
 let islogin = false;
 let musicName = "I Need You";
 // test only
-let lat = 13.861358;
-let lng = 100.416126;
+// let lat = 13.66422;
+// let lng = 100.695135;
+//13.3621 100.9837
+let lat = 13.3621;
+let lng = 100.9837;
 //13.861358, 13.73826
 module.exports = (
   app,
@@ -68,22 +71,30 @@ module.exports = (
                 console.log(results);
               }
             );
+            client_redis.keys("*", function (err, keys) {
+              if (err) return console.log(err);
+              if (keys) {
+                res.json({ successful: true ,message:"success to get data",data: keys });
+              }
+            });
           } else {
             console.log(response.data.message);
             res.json({ successful: false, message: response.data.message });
           }
         })
         .catch((err) => {
-          console.log("error in request /api/car/accident", err.response.data);
-          res.json({ successful: false, message: err.response.data});
+          console.log("error in request /api/car/accident", err.response);
+          res.json({ successful: false, message:"Promblem with internet"});
         });
     }
+  else{    
     client_redis.keys("*", function (err, keys) {
       if (err) return console.log(err);
       if (keys) {
         res.json({ successful: true ,message:"success to get data",data: keys });
       }
     });
+  }
   });
 
   app.post("/", function (req, res) {
@@ -100,7 +111,7 @@ module.exports = (
     }
     else{
       console.log("Driver isn't login")
-      res.status(403)
+      res.json({ successful: false ,message:"Driver isn't login"})
     }
   });
   app.post("/dds", function (req, res) {
@@ -179,7 +190,7 @@ module.exports = (
       res.json({ successful: true });
       }
     else{
-      res.status(403);
+      res.json({ successful: false ,message:"Driver isn't login"})
     }
   });
   app.get("/position", function (req, res) {
@@ -228,9 +239,9 @@ module.exports = (
         }
       })
       .catch((err) => {
-        console.log("error in request", err.response.data);
+        console.log("error in request", err.response.data.message);
         res.json({ successful: false, islogin: false, username: null,
-          selectedsong: null, message: err.response.data.message });
+          selectedsong: null, message: err.response&&err.response.data.message});
       });
   });
   app.get("/isLogin", async (req, res) => {
