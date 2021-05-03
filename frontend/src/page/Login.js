@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import history from "../history";
 
 export class Login extends Component {
@@ -7,6 +8,7 @@ export class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      alert: "",
     };
   }
   render() {
@@ -33,7 +35,7 @@ export class Login extends Component {
         >
           <div className="row">
             <div className="col-md-7 ">
-              <h1
+              {/* <h1
                 className="card-title"
                 style={{
                   fontFamily: "Courier New",
@@ -43,12 +45,13 @@ export class Login extends Component {
                 }}
               >
                 Logo here
-              </h1>
+              </h1> */}
+              <br />
             </div>
             <div className="col-md-5 "></div>
           </div>
           <br />
-          <div className="Card box" style={{ width: "87vw", height: "60vh" }}>
+          <div className="Card box" style={{ width: "87vw", height: "62vh" }}>
             <br />
             <form
               className="needs-validation"
@@ -67,7 +70,7 @@ export class Login extends Component {
                     className="card-title"
                     style={{
                       fontFamily: "Courier New",
-                      fontSize: 45,
+                      fontSize: 46,
                       fontWeight: "bold",
                     }}
                   >
@@ -77,7 +80,14 @@ export class Login extends Component {
               </div>
               <div className="row">
                 <div className="col-md-2"></div>
-                <div className="col-md-8">
+                <div
+                  className="col-md-8"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <label
                     className="text"
                     style={{ fontFamily: "Courier New", fontSize: 30 }}
@@ -86,7 +96,7 @@ export class Login extends Component {
                     <br />
                     <input
                       type="text"
-                      id="userName"
+                      id="username"
                       className="field"
                       style={{
                         width: 600,
@@ -95,7 +105,7 @@ export class Login extends Component {
                         border: " solid white",
                       }}
                       onChange={(e) => {
-                        this.setState({ userName: e.target.value });
+                        this.setState({ username: e.target.value });
                       }}
                       required
                     />
@@ -103,7 +113,14 @@ export class Login extends Component {
                 </div>
                 <div className="col-md-2"></div>
                 <div className="col-md-2"></div>
-                <div className="col-md-8">
+                <div
+                  className="col-md-8"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <label
                     className="text"
                     style={{
@@ -130,13 +147,25 @@ export class Login extends Component {
                     />
                   </label>
                 </div>
-                <div className="col-md-2"></div>
               </div>
-              <br />
+
+              <div className="row">
+                <div className="col-md-2"></div>
+
+                <div
+                  className="col-md-7"
+                  style={{
+                    paddingTop: "2px",
+                  }}
+                >
+                  <h6 style={{ color: "#db1f2a" }}>{this.state.alert}</h6>
+                </div>
+              </div>
               <div className="row">
                 <div
                   className="col-md-12"
                   style={{
+                    paddingTop: "10px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -171,23 +200,51 @@ export class Login extends Component {
     );
   }
 
+  /*onClickLogin = async (event) => {
+    event.preventDefault();
+    localStorage.clear();
+    localStorage.setItem("islogin", "true");
+    console.log("hi");
+    history.push("/home");
+    //window.location.reload();
+  };*/
+
   onClickLogin = async (event) => {
     event.preventDefault();
-    history.push("/home");
-    /*let username = this.state.username;
+    let username = this.state.username;
     let password = this.state.password;
-    let data = await Util.login(username, password);
-    console.log(data);
-    if (!data.success) {
-      window.alert(data.message);
-      this.setState({ password: "" });
-    } else {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", data.user.username);
-
-      history.push("/post");
-      window.location.reload();
-    }*/
+    console.log(this.state);
+    await axios({
+      method: "POST",
+      url: "http://127.0.0.1:4000/login",
+      headers: {},
+      data: {
+        username: username,
+        password: password,
+      },
+    })
+      .then((res) => {
+        localStorage.setItem("islogin", res.data.islogin);
+        console.log(res);
+        console.log(localStorage);
+        if (localStorage.getItem("islogin") === "true") {
+          console.log("this", localStorage.getItem("islogin"));
+          history.push("/home");
+          this.setState({ alert: "" });
+          window.location.reload();
+        } else {
+          console.log(res.data.message);
+          this.setState({ alert: res.data.message });
+        }
+      })
+      .catch((err) => {
+        console.log("error in request", err);
+      });
   };
+
+  /*componentDidMount() {
+    localStorage.clear();
+    console.log("first", localStorage);
+  }*/
 }
 export default Login;

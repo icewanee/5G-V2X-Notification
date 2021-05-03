@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import { GoogleMap, withScriptjs, withGoogleMap } from "react-google-maps";
-import Map from "../component/Map";
+import MapN from "../component/MapN";
 import history from "../history";
 
 export class Accident extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { alert: "" };
   }
+
+  setAlert = (infor) => {
+    this.setState({ alert: infor });
+    console.log("this is info", infor);
+  };
+
   render() {
     return (
       <div
@@ -39,7 +45,11 @@ export class Accident extends Component {
                 alignItems: "center",
               }}
             >
-              <Map />
+              <MapN
+                inforAlert={this.setAlert}
+                currentLat={this.state.currentLat}
+                currentLng={this.state.currentLng}
+              />
             </div>
           </div>
           <div className="row" style={{ paddingTop: 25 }}>
@@ -57,8 +67,10 @@ export class Accident extends Component {
                   >
                     <h3
                       className="card-title"
-                      style={{ fontFamily: "Courier New" }}
-                    ></h3>
+                      style={{ fontFamily: "Courier New", fontSize: 20 }}
+                    >
+                      {this.state.alert}
+                    </h3>
                   </div>
                 </div>
                 <div className="col-md-2" style={{ display: "flex" }}>
